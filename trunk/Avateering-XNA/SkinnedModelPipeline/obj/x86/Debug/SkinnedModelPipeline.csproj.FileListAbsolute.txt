@@ -1,0 +1,7 @@
+D:\workspace\Avateering-XNA\SkinnedModelPipeline\bin\x86\Debug\SkinnedModelPipeline.dll
+D:\workspace\Avateering-XNA\SkinnedModelPipeline\bin\x86\Debug\SkinnedModelPipeline.pdb
+D:\workspace\Avateering-XNA\SkinnedModelPipeline\bin\x86\Debug\SkinnedModel.dll
+D:\workspace\Avateering-XNA\SkinnedModelPipeline\bin\x86\Debug\SkinnedModel.pdb
+D:\workspace\Avateering-XNA\SkinnedModelPipeline\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\workspace\Avateering-XNA\SkinnedModelPipeline\obj\x86\Debug\SkinnedModelPipeline.dll
+D:\workspace\Avateering-XNA\SkinnedModelPipeline\obj\x86\Debug\SkinnedModelPipeline.pdb
