@@ -3,7 +3,7 @@
   <Asset Type="Graphics:NodeContent">
     <Name>Scene_Root</Name>
     <Identity>
-      <SourceFilename>D:\workspace\Avateering-XNA\Avateering\Content\tiny.x</SourceFilename>
+      <SourceFilename>D:\googlecodeworkspace\Avateering-XNA\Avateering\Content\tiny.x</SourceFilename>
       <SourceTool>XImporter</SourceTool>
     </Identity>
     <Transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</Transform>
@@ -11613,7 +11613,7 @@
   <Resources>
     <Resource ID="#Resource1" Type="Graphics:BasicMaterialContent">
       <Identity>
-        <SourceFilename>D:\workspace\Avateering-XNA\Avateering\Content\tiny.x</SourceFilename>
+        <SourceFilename>D:\googlecodeworkspace\Avateering-XNA\Avateering\Content\tiny.x</SourceFilename>
         <SourceTool>XImporter</SourceTool>
       </Identity>
       <OpaqueData>
