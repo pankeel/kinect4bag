@@ -1,2 +1,0 @@
-D:\workspace\Avateering-XNA\Avateering\Content\obj\x86\Debug\ResolveAssemblyReference.cache
-D:\googlecodeworkspace\Avateering-XNA\Avateering\Content\obj\x86\Debug\ResolveAssemblyReference.cache
