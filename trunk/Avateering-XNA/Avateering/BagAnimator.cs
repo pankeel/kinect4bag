@@ -45,7 +45,7 @@ namespace Microsoft.Samples.Kinect.Avateering
             : base(game)
         {
             // TODO: Construct any child components here
-            float axisHalfLength = 10.0f;
+            float axisHalfLength = 3.0f;
             if (0.0f == axisHalfLength)
             {
                 return;
@@ -152,9 +152,10 @@ namespace Microsoft.Samples.Kinect.Avateering
             }
             if (this.leftHandSkin != null && this.leftHandWorld != null)
             {
-                view = this.leftHandSkin * view;
-                //world = this.leftHandWorld * view;
+                //view = this.leftHandSkin * view;
+                //Matrix temp = Matrix.CreateTranslation(this.leftHandWorld.Translation);
 
+                world = this.leftHandWorld * world;
             }
             this.effect.World = world;
             this.effect.View = view;

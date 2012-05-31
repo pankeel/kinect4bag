@@ -79,9 +79,17 @@ namespace Microsoft.Samples.Kinect.Avateering
 
         public Matrix GetLeftHandWorldMatrix()
         {
+            Matrix currMatrix = Matrix.Identity;
             if (worldTransforms != null && worldTransforms[15] != null)
-                return worldTransforms[15];
-            return Matrix.Identity;
+            {
+                currMatrix = worldTransforms[15];
+                Vector3 translation = currMatrix.Translation;
+                translation.Y -= 8.0f;
+                Vector3 forward = currMatrix.Forward;
+                forward.Y = 0.0f;
+                currMatrix = Matrix.CreateWorld(translation, forward, new Vector3(0, 1, 0));
+            }
+            return currMatrix;
         }
 
         /// <summary>
@@ -203,7 +211,7 @@ namespace Microsoft.Samples.Kinect.Avateering
             this.AvatarHipCenterHeight = 0;
 
             // Create local axes inside the model to draw at each joint
-            this.localAxes = new CoordinateCross(this.Game, 2f);
+            this.localAxes = new CoordinateCross(this.Game, 20.0f);
             this.drawLocalAxes = false;
             game.Components.Add(this.localAxes);
 
@@ -510,7 +518,15 @@ namespace Microsoft.Samples.Kinect.Avateering
                 foreach (Matrix boneWorldTrans in this.worldTransforms)
                 {
                     // re-use the coordinate cross instance for each localAxes draw
-                    this.localAxes.Draw(gameTime, boneWorldTrans * world, view, projection);
+                    //if (Array.IndexOf(this.worldTransforms, boneWorldTrans) > 15 &&
+                    //    Array.IndexOf(this.worldTransforms, boneWorldTrans)<31)
+                    //    this.localAxes.Draw(gameTime, boneWorldTrans * world, view, projection);
+                    if (Array.IndexOf(this.worldTransforms, boneWorldTrans) == 15)
+                    {
+
+                        Matrix temp = this.GetLeftHandWorldMatrix();
+                        this.localAxes.Draw(gameTime, temp * world, view, projection);
+                    }
                 }
 
                 // Re-enable the depth buffer
