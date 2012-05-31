@@ -1,6 +1,0 @@
-D:\workspace\Avateering-XNA\SkinnedModel\bin\x86\Debug\SkinnedModel.dll
-D:\workspace\Avateering-XNA\SkinnedModel\bin\x86\Debug\SkinnedModel.pdb
-D:\workspace\Avateering-XNA\SkinnedModel\obj\x86\Debug\ResolveAssemblyReference.cache
-D:\workspace\Avateering-XNA\SkinnedModel\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
-D:\workspace\Avateering-XNA\SkinnedModel\obj\x86\Debug\SkinnedModel.dll
-D:\workspace\Avateering-XNA\SkinnedModel\obj\x86\Debug\SkinnedModel.pdb
