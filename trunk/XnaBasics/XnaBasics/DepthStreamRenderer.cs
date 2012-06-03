@@ -21,6 +21,10 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         private readonly SkeletonStreamRenderer skeletonStream;
 
         /// <summary>
+        /// 
+        /// </summary>
+        public BagAnimator bagAnimator;
+        /// <summary>
         /// The back buffer where the depth frame is scaled as requested by the Size.
         /// </summary>
         private RenderTarget2D backBuffer;
@@ -54,6 +58,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         {
             this.skeletonStream = new SkeletonStreamRenderer(game, this.SkeletonToDepthMap);
             this.Size = new Vector2(160, 120);
+            this.bagAnimator = new BagAnimator(game);
         }
 
         /// <summary>
@@ -98,7 +103,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                         frame.Height,
                         false,
                         SurfaceFormat.Color,
-                        DepthFormat.None,
+                        //DepthFormat.None,
+                        DepthFormat.Depth16,
                         this.Game.GraphicsDevice.PresentationParameters.MultiSampleCount,
                         RenderTargetUsage.PreserveContents);
                 }
@@ -109,6 +115,9 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             // Update the skeleton renderer
             this.skeletonStream.Update(gameTime);
+
+            // Update the bag renderer
+            this.bagAnimator.Update(gameTime);
         }
 
         /// <summary>
@@ -136,6 +145,9 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 this.SharedSpriteBatch.Draw(this.depthTexture, Vector2.Zero, Color.White);
                 this.SharedSpriteBatch.End();
 
+                // Draw the bag in depth image
+                this.bagAnimator.Draw(gameTime);
+
                 // Draw the skeleton
                 this.skeletonStream.Draw(gameTime);
 
@@ -154,6 +166,9 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 null,
                 Color.White);
             this.SharedSpriteBatch.End();
+
+
+
 
             base.Draw(gameTime);
         }

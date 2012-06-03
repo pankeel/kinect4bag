@@ -111,7 +111,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BagAnimator.cs" />
     <Compile Include="ColorStreamRenderer.cs" />
+    <Compile Include="SkeletonJointsMirror.cs" />
     <Compile Include="SkeletonStreamRenderer.cs" />
     <Compile Include="DepthStreamRenderer.cs" />
     <Compile Include="KinectChooser.cs" />
