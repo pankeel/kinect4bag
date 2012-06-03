@@ -10,6 +10,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
+    using System;
 
     /// <summary>
     /// The main Xna game implementation.
@@ -30,7 +31,32 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// The graphics device manager provided by Xna.
         /// </summary>
         private readonly GraphicsDeviceManager graphics;
-        
+
+        /// <summary>
+        /// Viewing Camera arc.
+        /// </summary>
+        private float cameraArc = 0;
+
+        /// <summary>
+        /// Viewing Camera current rotation.
+        /// The virtual camera starts where Kinect is looking i.e. looking along the Z axis, with +X left, +Y up, +Z forward
+        /// </summary>
+        private float cameraRotation = 0;
+
+        /// <summary>
+        /// Viewing Camera distance from origin.
+        /// The "Dude" model is defined in centimeters, hence all the units we use here are cm.
+        /// </summary>
+        private float cameraDistance = 90.0f;
+        /// <summary>
+        /// Viewing Camera view matrix.
+        /// </summary>
+        private Matrix view;
+
+        /// <summary>
+        /// Viewing Camera projection matrix.
+        /// </summary>
+        private Matrix projection;
         /// <summary>
         /// This control selects a sensor, and displays a notice if one is
         /// not connected.
@@ -46,6 +72,11 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// This manages the rendering of the depth stream.
         /// </summary>
         private readonly DepthStreamRenderer depthStream;
+
+        /// <summary>
+        /// The 3D bag mesh animator
+        /// </summary>
+        private BagAnimator bagAnimator;
 
         /// <summary>
         /// This is the location of the color stream when minimized.
@@ -66,6 +97,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// This is the viewport of the streams.
         /// </summary>
         private readonly Rectangle viewPortRectangle;
+        
 
         /// <summary>
         /// This is the SpriteBatch used for rendering the header/footer.
@@ -126,6 +158,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.chooser = new KinectChooser(this, ColorImageFormat.RgbResolution640x480Fps30, DepthImageFormat.Resolution640x480Fps30);
             this.Services.AddService(typeof(KinectChooser), this.chooser);
 
+
+            
             // Default size is the full viewport
             this.colorStream = new ColorStreamRenderer(this);
 
@@ -138,6 +172,11 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.minSize = this.depthStream.Size;
             this.depthSmallPosition = this.depthStream.Position;
             this.colorSmallPosition = new Vector2(15, 85);
+
+
+            // Create the bag animator
+            this.bagAnimator = new BagAnimator(this);
+            
 
             this.Components.Add(this.chooser);
 
@@ -165,7 +204,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         {
             this.Components.Add(this.depthStream);
             this.Components.Add(this.colorStream);
-
+            //this.Components.Add(this.bagAnimator);
             base.Initialize();
         } 
 
@@ -205,11 +244,14 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 }
             }
 
+            //this.bagAnimator.ViewPortRectangle = this.viewPortRectangle;
+
             // Animate the stream positions and sizes
             this.colorStream.Position = Vector2.SmoothStep(
                 new Vector2(this.viewPortRectangle.X, this.viewPortRectangle.Y),
                 this.colorSmallPosition, 
                 (float)(this.transition / TransitionDuration));
+            
             this.colorStream.Size = Vector2.SmoothStep(
                 new Vector2(this.viewPortRectangle.Width, this.viewPortRectangle.Height),
                 this.minSize, 
@@ -233,6 +275,9 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <param name="gameTime">The elapsed game time.</param>
         protected override void Draw(GameTime gameTime)
         {
+            // Set the 3D Object Camera Postion
+            //this.UpdateViewingCamera();
+
             // Clear the screen
             GraphicsDevice.Clear(Color.White);
 
@@ -245,18 +290,51 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // Render the streams with respect to focus
             if (this.colorHasFocus)
             {
-                this.colorStream.DrawOrder = 1;
-                this.depthStream.DrawOrder = 2;
+                this.colorStream.DrawOrder = 2;
+                this.depthStream.DrawOrder = 3;
+                this.bagAnimator.DrawOrder = 1;
             }
             else
             {
-                this.colorStream.DrawOrder = 2;
-                this.depthStream.DrawOrder = 1;
+                this.colorStream.DrawOrder = 3;
+                this.depthStream.DrawOrder = 2;
+                this.bagAnimator.DrawOrder = 1;
             }
 
             base.Draw(gameTime);
         }
 
+
+        /// <summary>
+        /// Create the viewing camera.
+        /// </summary>
+        protected void UpdateViewingCamera()
+        {
+            GraphicsDevice device = this.graphics.GraphicsDevice;
+
+            // Compute camera matrices.
+            this.view = Matrix.CreateTranslation(0, - 40.0f, 0) *
+                          Matrix.CreateRotationY(MathHelper.ToRadians(this.cameraRotation)) *
+                          Matrix.CreateRotationX(MathHelper.ToRadians(this.cameraArc)) *
+                          Matrix.CreateLookAt(
+                                                new Vector3(0, 0, -this.cameraDistance),
+                                                new Vector3(0, 0, 0),
+                                                Vector3.Up);
+
+            // Kinect vertical FOV in degrees
+            float nominalVerticalFieldOfView = 45.6f;
+
+            if (null != this.chooser && null != this.chooser.Sensor && this.chooser.Sensor.IsRunning && KinectStatus.Connected == this.chooser.Sensor.Status)
+            {
+                nominalVerticalFieldOfView = this.chooser.Sensor.DepthStream.NominalVerticalFieldOfView;
+            }
+
+            this.projection = Matrix.CreatePerspectiveFieldOfView(
+                                                                (nominalVerticalFieldOfView * (float)Math.PI / 180.0f),
+                                                                device.Viewport.AspectRatio,
+                                                                1,
+                                                                10000);
+        }
         /// <summary>
         /// This method ensures that we can render to the back buffer without
         /// losing the data we already had in our previous back buffer.  This

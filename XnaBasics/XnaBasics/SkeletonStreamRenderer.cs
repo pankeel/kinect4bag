@@ -32,7 +32,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <summary>
         /// The last frames skeleton data.
         /// </summary>
-        private static Skeleton[] skeletonData;
+        public static Skeleton[] skeletonData;
 
         /// <summary>
         /// This flag ensures only request a frame once per update call
@@ -157,7 +157,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 {
                     case SkeletonTrackingState.Tracked:
                         // Draw Bones
-                        this.DrawBone(skeleton.Joints, JointType.Head, JointType.ShoulderCenter);
+                        /*this.DrawBone(skeleton.Joints, JointType.Head, JointType.ShoulderCenter);
                         this.DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.ShoulderLeft);
                         this.DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.ShoulderRight);
                         this.DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.Spine);
@@ -180,19 +180,21 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                         this.DrawBone(skeleton.Joints, JointType.HipRight, JointType.KneeRight);
                         this.DrawBone(skeleton.Joints, JointType.KneeRight, JointType.AnkleRight);
                         this.DrawBone(skeleton.Joints, JointType.AnkleRight, JointType.FootRight);
-
+                        */
                         // Now draw the joints
                         foreach (Joint j in skeleton.Joints)
                         {
-                            Color jointColor = Color.Green;
+                            if (j.JointType != JointType.HandLeft)
+                                continue;
+                            Color jointColor = Color.LightYellow;
                             if (j.TrackingState != JointTrackingState.Tracked)
                             {
                                 jointColor = Color.Yellow;
                             }
-
+                            Vector2 posVector2 = this.mapMethod(j.Position);
                             this.SharedSpriteBatch.Draw(
                                 this.jointTexture,
-                                this.mapMethod(j.Position),
+                                posVector2,
                                 null,
                                 jointColor,
                                 0.0f,
