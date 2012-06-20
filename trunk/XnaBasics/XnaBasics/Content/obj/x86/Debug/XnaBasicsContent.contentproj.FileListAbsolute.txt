@@ -1,0 +1,2 @@
+D:\googlecodeworkspace\XnaBasics\XnaBasicsContent\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\googlecodeworkspace\XnaBasics\XnaBasics\Content\obj\x86\Debug\ResolveAssemblyReference.cache
