@@ -6,6 +6,7 @@
 
 namespace Microsoft.Samples.Kinect.XnaBasics
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -14,7 +15,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
     using Microsoft.Xna.Framework.Graphics;
 
     /// <summary>
-    /// This class will pick a kinect sensor if available.
+    /// This class will pick a Kinect sensor, if available.
     /// </summary>
     public class KinectChooser : DrawableGameComponent
     {
@@ -37,16 +38,21 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// The chooser background texture.
         /// </summary>
         private Texture2D chooserBackground;
-        
-        /// <summary>
-        /// The SpriteBatch used for rendering.
-        /// </summary>
-        private SpriteBatch spriteBatch;
-        
+
         /// <summary>
         /// The font for rendering the state text.
         /// </summary>
         private SpriteFont font;
+
+        /// <summary>
+        /// Gets or sets near mode.
+        /// </summary>
+        private bool nearMode;
+
+        /// <summary>
+        /// Gets or sets seated mode.
+        /// </summary>
+        private bool seatedMode;
 
         /// <summary>
         /// Initializes a new instance of the KinectChooser class.
@@ -60,9 +66,13 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.colorImageFormat = colorFormat;
             this.depthImageFormat = depthFormat;
 
+            this.nearMode = false;
+            this.seatedMode = false;
+
             KinectSensor.KinectSensors.StatusChanged += this.KinectSensors_StatusChanged;
             this.DiscoverSensor();
 
+            this.statusMap.Add(KinectStatus.Undefined, "Required");
             this.statusMap.Add(KinectStatus.Connected, string.Empty);
             this.statusMap.Add(KinectStatus.DeviceNotGenuine, "Device Not Genuine");
             this.statusMap.Add(KinectStatus.DeviceNotSupported, "Device Not Supported");
@@ -72,6 +82,17 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.statusMap.Add(KinectStatus.InsufficientBandwidth, "Insufficient Bandwidth");
             this.statusMap.Add(KinectStatus.NotPowered, "Not Powered");
             this.statusMap.Add(KinectStatus.NotReady, "Not Ready");
+        }
+
+        /// <summary>
+        /// Gets the SpriteBatch from the services.
+        /// </summary>
+        public SpriteBatch SharedSpriteBatch
+        {
+            get
+            {
+                return (SpriteBatch)this.Game.Services.GetService(typeof(SpriteBatch));
+            }
         }
 
         /// <summary>
@@ -85,13 +106,60 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         public KinectStatus LastStatus { get; private set; }
 
         /// <summary>
-        /// This method initializes necessary objects.
+        /// Gets or sets a value indicating whether near mode is enabled.
+        /// Near mode enables depth between 0.4 to 3m, default is between 0.8 to 4m.
         /// </summary>
-        public override void Initialize()
+        public bool NearMode
         {
-            base.Initialize();
+            get
+            {
+                return this.nearMode;
+            }
 
-            this.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            set
+            {
+                if (null != this.Sensor)
+                {
+                    try
+                    {
+                        this.Sensor.DepthStream.Range = value ? DepthRange.Near : DepthRange.Default;   // set near or default mode
+                        this.nearMode = value;
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // not valid for this camera
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether seated mode is enabled for skeletal tracking.
+        /// Seated mode tracks only the upper body skeleton,
+        /// returning the 10 joints of the arms, shoulders and head.
+        /// </summary>
+        public bool SeatedMode
+        {
+            get
+            {
+                return this.seatedMode;
+            }
+
+            set
+            {
+                if (null != this.Sensor)
+                {
+                    try
+                    {
+                        this.Sensor.SkeletonStream.TrackingMode = value ? SkeletonTrackingMode.Seated : SkeletonTrackingMode.Default; // Set seated or default mode
+                        this.seatedMode = value;
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // not valid for this camera
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -100,26 +168,25 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Draw(GameTime gameTime)
         {
-            // If the spritebatch is null, call initialize
-            if (this.spriteBatch == null)
-            {
-                this.Initialize();
-            }
-
             // If the background is not loaded, load it now
-            if (this.chooserBackground == null)
+            if (null == this.chooserBackground)
             {
                 this.LoadContent();
             }
 
+            if (null == this.SharedSpriteBatch)
+            {
+                return;
+            }
+
             // If we don't have a sensor, or the sensor we have is not connected
             // then we will display the information text
-            if (this.Sensor == null || this.LastStatus != KinectStatus.Connected)
+            if (null == this.Sensor || this.LastStatus != KinectStatus.Connected)
             {
-                this.spriteBatch.Begin();
+                this.SharedSpriteBatch.Begin();
 
                 // Render the background
-                this.spriteBatch.Draw(
+                this.SharedSpriteBatch.Draw(
                     this.chooserBackground,
                     new Vector2(Game.GraphicsDevice.Viewport.Width / 2, Game.GraphicsDevice.Viewport.Height / 2),
                     null,
@@ -131,7 +198,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     0);
 
                 // Determine the text
-                string txt = "Required";
+                string txt = this.statusMap[KinectStatus.Undefined];
                 if (this.Sensor != null)
                 {
                     txt = this.statusMap[this.LastStatus];
@@ -139,12 +206,12 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
                 // Render the text
                 Vector2 size = this.font.MeasureString(txt);
-                this.spriteBatch.DrawString(
+                this.SharedSpriteBatch.DrawString(
                     this.font,
                     txt,
                     new Vector2((Game.GraphicsDevice.Viewport.Width - size.X) / 2, (Game.GraphicsDevice.Viewport.Height / 2) + size.Y),
                     Color.White);
-                this.spriteBatch.End();
+                this.SharedSpriteBatch.End();
             }
 
             base.Draw(gameTime);
@@ -169,7 +236,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             base.UnloadContent();
 
             // Always stop the sensor when closing down
-            if (this.Sensor != null)
+            if (null != this.Sensor)
             {
                 this.Sensor.Stop();
             }
@@ -185,23 +252,39 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // Grab any available sensor
             this.Sensor = KinectSensor.KinectSensors.FirstOrDefault();
 
-            if (this.Sensor != null)
+            if (null != this.Sensor)
             {
                 this.LastStatus = this.Sensor.Status;
 
                 // If this sensor is connected, then enable it
                 if (this.LastStatus == KinectStatus.Connected)
                 {
-                    this.Sensor.SkeletonStream.Enable();
+                    // For many applications we would enable the
+                    // automatic joint smoothing, however, in this
+                    // Avateering sample, we perform skeleton joint
+                    // position corrections, so we will manually
+                    // filter when these are complete.
+
+                    // Typical smoothing parameters for the joints:
+                    var parameters = new TransformSmoothParameters
+                    {
+                        Smoothing = 0.4f,
+                        Correction = 0.4f,
+                        Prediction = 0.4f,
+                        JitterRadius = 0.1f,
+                        MaxDeviationRadius = 0.04f
+                    };
+                    this.Sensor.SkeletonStream.Enable(parameters);
                     this.Sensor.ColorStream.Enable(this.colorImageFormat);
                     this.Sensor.DepthStream.Enable(this.depthImageFormat);
-
+                    this.Sensor.SkeletonStream.EnableTrackingInNearRange = true; // Enable skeleton tracking in near mode
+                    
                     try
                     {
                         this.Sensor.Start();
                     }
                     catch (IOException)
-                    {                       
+                    {
                         // sensor is in use by another application
                         // will treat as disconnected for display purposes
                         this.Sensor = null;

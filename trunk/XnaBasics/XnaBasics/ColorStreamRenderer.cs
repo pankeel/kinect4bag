@@ -25,6 +25,25 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         private byte[] colorData;
 
+        public Model Model3DAvata
+        {
+            set
+            {
+                bagRender.Model3DAvatar = value;
+            }
+        }
+
+        public Model BodyModel
+        {
+            set
+            {
+                bodyRender.Model3DAvatar = value;
+            }
+        }
+
+        public Texture2D cloth;
+  
+
         /// <summary>
         /// The color frame as a texture.
         /// </summary>
@@ -46,6 +65,11 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         private bool needToRedrawBackBuffer = true;
 
         /// <summary>
+        /// Render the Bag In the Color map
+        /// </summary>
+        private BagRender bagRender;
+        private BodyRender bodyRender;
+        /// <summary>
         /// Initializes a new instance of the ColorStreamRenderer class.
         /// </summary>
         /// <param name="game">The related game object.</param>
@@ -53,6 +77,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             : base(game)
         {
             this.skeletonStream = new SkeletonStreamRenderer(game, this.SkeletonToColorMap);
+            this.bagRender = new BagRender(game);
+            this.bodyRender = new BodyRender(game);
         }
 
         /// <summary>
@@ -115,6 +141,9 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 this.needToRedrawBackBuffer = true;
             }
 
+
+            this.bagRender.Update(gameTime);
+            this.bodyRender.Update(gameTime);
             // Update the skeleton renderer
             this.skeletonStream.Update(gameTime);
         }
@@ -146,13 +175,15 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 this.colorTexture.SetData<byte>(this.colorData);
 
                 // Draw the color image
-                this.SharedSpriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, this.kinectColorVisualizer);
+                this.SharedSpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, this.kinectColorVisualizer);
                 this.SharedSpriteBatch.Draw(this.colorTexture, Vector2.Zero, Color.White);
                 this.SharedSpriteBatch.End();
 
                 // Draw the skeleton
-                this.skeletonStream.Draw(gameTime);
-
+                this.skeletonStream.Draw(gameTime, cloth);
+                // Draw the bag 3d model
+                this.bagRender.Draw(gameTime);
+                this.bodyRender.Draw(gameTime);
                 // Reset the render target and prepare to draw scaled image
                 this.Game.GraphicsDevice.SetRenderTargets(null);
 
@@ -161,14 +192,14 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             }
 
             // Draw the scaled texture
-            this.SharedSpriteBatch.Begin();
+
+            this.SharedSpriteBatch.Begin(SpriteSortMode.Texture,BlendState.AlphaBlend);
             this.SharedSpriteBatch.Draw(
                 this.backBuffer,
                 new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y),
-                null,
                 Color.White);
             this.SharedSpriteBatch.End();
-
+            
             base.Draw(gameTime);
         }
 

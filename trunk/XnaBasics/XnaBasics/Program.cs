@@ -8,10 +8,10 @@ using System;
 
 [assembly: CLSCompliant(true)]
 
-namespace Microsoft.Samples.Kinect.XnaBasics
+namespace Microsoft.Samples.Kinect.Avateering
 {
     /// <summary>
-    /// The base Xna program.
+    /// The base XNA program.
     /// </summary>
     public static class Program
     {
@@ -20,10 +20,24 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         public static void Main()
         {
-            using (XnaBasics game = new XnaBasics())
+            //ModelViewer.App app = new ModelViewer.App();
+            //app.Run();
+            //using (XnaBasics.AvateeringXNA game = new XnaBasics.AvateeringXNA())
+            using (XnaBasics.XnaBasics game = new XnaBasics.XnaBasics())
             {
                 game.Run();
             }
         }
+
+        /// <summary>
+        /// Application Entry Point.
+        /// </summary>
+        //[System.STAThreadAttribute()]
+        //[System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        //public static void Main()
+        //{
+        //    ModelViewer.App app = new ModelViewer.App();
+        //    app.Run();
+        //}
     }
 }
