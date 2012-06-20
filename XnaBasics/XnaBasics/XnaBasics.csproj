@@ -10,7 +10,8 @@
     <RootNamespace>Microsoft.Samples.Kinect.XnaBasics</RootNamespace>
     <AssemblyName>XnaBasics</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaProfile>Reach</XnaProfile>
@@ -60,7 +61,12 @@
     <XnaCompressContent>true</XnaCompressContent>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Kinect, Version=1.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -94,9 +100,16 @@
     <Reference Include="mscorlib">
       <Private>False</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml">
       <Private>False</Private>
     </Reference>
@@ -109,17 +122,64 @@
     <Reference Include="System.Net">
       <Private>False</Private>
     </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BagAnimator.cs" />
+    <Compile Include="ModelRender\AvatarAnimator.cs" />
+    <Compile Include="AvateeringXNA.cs" />
+    <Compile Include="CoordinateCross.cs" />
+    <Compile Include="Filters\BoneOrientationConstraints.cs" />
+    <Compile Include="Filters\BoneOrientationDoubleExponentialFilter.cs" />
+    <Compile Include="Filters\NativeMethods.cs" />
+    <Compile Include="Filters\SkeletonJointsFilterClippedLegs.cs" />
+    <Compile Include="Filters\SkeletonJointsMirror.cs" />
+    <Compile Include="Filters\SkeletonJointsPositionDoubleExponentialFilter.cs" />
+    <Compile Include="Filters\SkeletonJointsSelfIntersectionConstraint.cs" />
+    <Compile Include="Filters\SkeletonJointsSensorOffsetCorrection.cs" />
+    <Compile Include="Filters\SkeletonJointsSensorTiltCorrection.cs" />
+    <Compile Include="Filters\TimedLerp.cs" />
+    <Compile Include="Filters\Timer.cs" />
+    <Compile Include="GridXZ.cs" />
+    <Compile Include="KinectHelper.cs" />
+    <Compile Include="ModelRender\BodyRender.cs" />
+    <Compile Include="ModelRender\Object3D.cs" />
+    <Compile Include="ModelRender\BagRender.cs" />
     <Compile Include="ColorStreamRenderer.cs" />
-    <Compile Include="SkeletonJointsMirror.cs" />
-    <Compile Include="SkeletonStreamRenderer.cs" />
+    <Compile Include="ModelRender\TrousersRender.cs" />
+    <Compile Include="ModelRender\SkeletonStreamRenderer.cs" />
     <Compile Include="DepthStreamRenderer.cs" />
     <Compile Include="KinectChooser.cs" />
+    <Compile Include="ModelViewer\ArcBallCamera.cs" />
+    <Compile Include="ModelViewer\BoundingBoxRenderer.cs" />
+    <Compile Include="ModelViewer\BoundingSphereRenderer.cs" />
+    <Compile Include="ModelViewer\Controls\GraphicsDeviceControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ModelViewer\Controls\ModelViewControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ModelViewer\Grid.cs" />
+    <Compile Include="ModelViewer\Input.cs" />
+    <Compile Include="ModelViewer\OnScreenMessages\DragAndDropMessageState.cs" />
+    <Compile Include="ModelViewer\OnScreenMessages\FrameCounter.cs" />
+    <Compile Include="ModelViewer\OnScreenMessages\LoadingMessageState.cs" />
+    <Compile Include="ModelViewer\OnScreenMessages\Message.cs" />
+    <Compile Include="ModelViewer\OnScreenMessages\MessageState.cs" />
+    <Compile Include="ModelViewer\ReferenceAxis.cs" />
+    <Compile Include="ModelViewer\Services\ContentBuilder.cs" />
+    <Compile Include="ModelViewer\Services\ErrorLogger.cs" />
+    <Compile Include="ModelViewer\Services\GraphicsDeviceService.cs" />
+    <Compile Include="ModelViewer\Services\ServiceContainer.cs" />
+    <Compile Include="ModelViewer\State.cs" />
+    <Compile Include="ModelViewer\Utils.cs" />
+    <Compile Include="ModelViewer\ViewModeLabel.cs" />
+    <Compile Include="ModelViewer\WorldAxes.cs" />
     <Compile Include="Object2D.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GUI\SimpleButton.cs" />
+    <Compile Include="GUI\SimpleGUI.cs" />
     <Compile Include="XnaBasicsGame.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -154,11 +214,18 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XnaBasicsContent\XnaBasicsContent.contentproj">
+    <ProjectReference Include="..\SkinnedModel\SkinnedModelWindows.csproj">
+      <Project>{0D41E29B-829F-4255-BCA5-64DC2677DA6D}</Project>
+      <Name>SkinnedModelWindows</Name>
+    </ProjectReference>
+    <ProjectReference Include="Content\XnaBasicsContent.contentproj">
       <Project>{EDD1E44F-7A6A-4EEF-81BA-C2AE70414025}</Project>
-      <Name>KinectXnaDemoContent %28Content%29</Name>
+      <Name>XnaBasicsContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

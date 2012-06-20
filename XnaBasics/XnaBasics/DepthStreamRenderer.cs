@@ -20,10 +20,18 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         private readonly SkeletonStreamRenderer skeletonStream;
 
+
+        public Model Model3DAvata
+        {
+            set
+            {
+                bagAnimator.Model3DAvatar = value;
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
-        public BagAnimator bagAnimator;
+        public BagRender bagAnimator;
         /// <summary>
         /// The back buffer where the depth frame is scaled as requested by the Size.
         /// </summary>
@@ -58,7 +66,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         {
             this.skeletonStream = new SkeletonStreamRenderer(game, this.SkeletonToDepthMap);
             this.Size = new Vector2(160, 120);
-            this.bagAnimator = new BagAnimator(game);
+            this.bagAnimator = new BagRender(game);
         }
 
         /// <summary>
@@ -103,8 +111,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                         frame.Height,
                         false,
                         SurfaceFormat.Color,
-                        //DepthFormat.None,
-                        DepthFormat.Depth16,
+                        DepthFormat.None,
                         this.Game.GraphicsDevice.PresentationParameters.MultiSampleCount,
                         RenderTargetUsage.PreserveContents);
                 }

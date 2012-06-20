@@ -20,7 +20,26 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <summary>
         /// This is used to adjust the window size.
         /// </summary>
-        private const int Width = 800;
+        private int Width = 1024;
+        private int Height = 600;
+        //private const int selection_panel_w = 200;
+        //private const int selection_panel_h = Width / 4 * 3;
+
+        /// <summary>
+        /// The 3D bag mesh.
+        /// </summary>
+        public Model bagModel;
+        public Model bodyModel;
+
+
+
+        /// <summary>
+        /// The 3D avatar mesh animator.
+        /// </summary>
+        private AvatarAnimator animator;
+
+        SimpleGUI ui;
+        public static Vector2 LeftHand, RightHand;
 
         /// <summary>
         /// This controls the transition time for the resize animation.
@@ -74,11 +93,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         private readonly DepthStreamRenderer depthStream;
 
         /// <summary>
-        /// The 3D bag mesh animator
-        /// </summary>
-        private BagAnimator bagAnimator;
-
-        /// <summary>
         /// This is the location of the color stream when minimized.
         /// </summary>
         private readonly Vector2 colorSmallPosition;
@@ -97,7 +111,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// This is the viewport of the streams.
         /// </summary>
         private readonly Rectangle viewPortRectangle;
-        
+
 
         /// <summary>
         /// This is the SpriteBatch used for rendering the header/footer.
@@ -122,11 +136,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         private double transition;
 
         /// <summary>
-        /// This is the texture for the header.
-        /// </summary>
-        private Texture2D header;
-
-        /// <summary>
         /// This is the font for the footer.
         /// </summary>
         private SpriteFont font;
@@ -139,16 +148,22 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.IsFixedTimeStep = false;
             this.IsMouseVisible = true;
             this.Window.Title = "Xna Basics";
-
+            this.Window.AllowUserResizing = true;
+            Width = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
+            Height = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
             // This sets the width to the desired width
             // It also forces a 4:3 ratio for height
             // Adds 110 for header/footer
             this.graphics = new GraphicsDeviceManager(this);
             this.graphics.PreferredBackBufferWidth = Width;
-            this.graphics.PreferredBackBufferHeight = ((Width / 4) * 3) + 110;
+            //this.graphics.PreferredBackBufferHeight = ((Width / 4) * 3) + 110;
+            this.graphics.PreferredBackBufferHeight = Height;
             this.graphics.PreparingDeviceSettings += this.GraphicsDevicePreparingDeviceSettings;
             this.graphics.SynchronizeWithVerticalRetrace = true;
-            this.viewPortRectangle = new Rectangle(10, 80, Width - 20, ((Width - 2) / 4) * 3);
+            //this.viewPortRectangle = new Rectangle(10, 80, Width - 20, ((Width - 2) / 4) * 3);
+            this.viewPortRectangle = new Rectangle(0, 0, Width, Height);
+            this.graphics.IsFullScreen = false;
+            this.IsMouseVisible = false;
 
             Content.RootDirectory = "Content";
 
@@ -159,28 +174,27 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.Services.AddService(typeof(KinectChooser), this.chooser);
 
 
-            
+
             // Default size is the full viewport
             this.colorStream = new ColorStreamRenderer(this);
 
             // Calculate the minimized size and location
             this.depthStream = new DepthStreamRenderer(this);
             this.depthStream.Size = new Vector2(this.viewPortRectangle.Width / 4, this.viewPortRectangle.Height / 4);
-            this.depthStream.Position = new Vector2(Width - this.depthStream.Size.X - 15, 85);
+            this.depthStream.Position = new Vector2(Width - this.depthStream.Size.X - 15, 10);
 
             // Store the values so we can animate them later
             this.minSize = this.depthStream.Size;
             this.depthSmallPosition = this.depthStream.Position;
-            this.colorSmallPosition = new Vector2(15, 85);
+            this.colorSmallPosition = new Vector2(15, 10);
 
-
-            // Create the bag animator
-            this.bagAnimator = new BagAnimator(this);
-            
 
             this.Components.Add(this.chooser);
 
             this.previousKeyboard = Keyboard.GetState();
+
+            LeftHand = new Vector2();
+            RightHand = new Vector2();
         }
 
         /// <summary>
@@ -191,8 +205,15 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
             this.Services.AddService(typeof(SpriteBatch), this.spriteBatch);
 
-            this.header = Content.Load<Texture2D>("Header");
             this.font = Content.Load<SpriteFont>("Segoe16");
+
+            this.bagModel = Content.Load<Model>("bag");
+
+            this.bodyModel = Content.Load<Model>("yifu");
+            this.colorStream.BodyModel = this.bodyModel;
+
+            this.colorStream.Model3DAvata = this.bagModel;
+
 
             base.LoadContent();
         }
@@ -202,11 +223,20 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         protected override void Initialize()
         {
-            this.Components.Add(this.depthStream);
+            //this.Components.Add(this.depthStream);
             this.Components.Add(this.colorStream);
-            //this.Components.Add(this.bagAnimator);
+
+
+            // Create the avatar animator
+            this.animator = new AvatarAnimator(this, null);
+            this.Components.Add(this.animator);
+
+            this.ui = new SimpleGUI(this);
+            this.ui.DrawOrder = 1000;
+            Components.Add(this.ui);
+
             base.Initialize();
-        } 
+        }
 
         /// <summary>
         /// This method updates the game state. Including monitoring
@@ -215,8 +245,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <param name="gameTime">The elapsed game time.</param>
         protected override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
             // If the spacebar has been pressed, toggle the focus
             KeyboardState newState = Keyboard.GetState();
             if (this.previousKeyboard.IsKeyUp(Keys.Space) && newState.IsKeyDown(Keys.Space))
@@ -249,20 +277,22 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // Animate the stream positions and sizes
             this.colorStream.Position = Vector2.SmoothStep(
                 new Vector2(this.viewPortRectangle.X, this.viewPortRectangle.Y),
-                this.colorSmallPosition, 
+                this.colorSmallPosition,
                 (float)(this.transition / TransitionDuration));
-            
+
             this.colorStream.Size = Vector2.SmoothStep(
                 new Vector2(this.viewPortRectangle.Width, this.viewPortRectangle.Height),
-                this.minSize, 
+                this.minSize,
                 (float)(this.transition / TransitionDuration));
+
+            
 
             this.depthStream.Position = Vector2.SmoothStep(
                 this.depthSmallPosition,
                 new Vector2(this.viewPortRectangle.X, this.viewPortRectangle.Y),
                 (float)(this.transition / TransitionDuration));
             this.depthStream.Size = Vector2.SmoothStep(
-                this.minSize, 
+                this.minSize,
                 new Vector2(this.viewPortRectangle.Width, this.viewPortRectangle.Height),
                 (float)(this.transition / TransitionDuration));
 
@@ -275,33 +305,24 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <param name="gameTime">The elapsed game time.</param>
         protected override void Draw(GameTime gameTime)
         {
-            // Set the 3D Object Camera Postion
-            //this.UpdateViewingCamera();
-
             // Clear the screen
             GraphicsDevice.Clear(Color.White);
 
-            // Render header/footer
-            this.spriteBatch.Begin();
-            this.spriteBatch.Draw(this.header, Vector2.Zero, null, Color.White);
-            this.spriteBatch.DrawString(this.font, "Press [Space] to switch between color and depth.", new Vector2(10, this.viewPortRectangle.Y + this.viewPortRectangle.Height + 3), Color.Black);
-            this.spriteBatch.End();
+            base.Draw(gameTime);
+
 
             // Render the streams with respect to focus
             if (this.colorHasFocus)
             {
-                this.colorStream.DrawOrder = 2;
-                this.depthStream.DrawOrder = 3;
-                this.bagAnimator.DrawOrder = 1;
+                this.colorStream.DrawOrder = 1;
+                this.depthStream.DrawOrder = 2;
             }
             else
             {
-                this.colorStream.DrawOrder = 3;
-                this.depthStream.DrawOrder = 2;
-                this.bagAnimator.DrawOrder = 1;
+                this.colorStream.DrawOrder = 2;
+                this.depthStream.DrawOrder = 1;
             }
 
-            base.Draw(gameTime);
         }
 
 
@@ -313,7 +334,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             GraphicsDevice device = this.graphics.GraphicsDevice;
 
             // Compute camera matrices.
-            this.view = Matrix.CreateTranslation(0, - 40.0f, 0) *
+            this.view = Matrix.CreateTranslation(0, -40.0f, 0) *
                           Matrix.CreateRotationY(MathHelper.ToRadians(this.cameraRotation)) *
                           Matrix.CreateRotationX(MathHelper.ToRadians(this.cameraArc)) *
                           Matrix.CreateLookAt(
@@ -346,6 +367,15 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         {
             // This is necessary because we are rendering to back buffer/render targets and we need to preserve the data
             e.GraphicsDeviceInformation.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
+        }
+
+        public void ChangeClothTex(Texture2D newTex)
+        {
+            this.colorStream.cloth = newTex;
+            
+            foreach (ModelMesh mesh in this.bodyModel.Meshes)
+                foreach (BasicEffect effect in mesh.Effects)
+                    effect.Texture = this.colorStream.cloth;
         }
     }
 }
