@@ -576,11 +576,11 @@ Objects:  {
 	Video: 358330752, "Video::file6", "Clip" {
 		Type: "Clip"
 		Properties70:  {
-			P: "Path", "KString", "XRefUrl", "", "J:\boy_ma\uvs.jpg"
+			P: "Path", "KString", "XRefUrl", "", "uvs.jpg"
 		}
 		UseMipMap: 0
-		Filename: "J:\boy_ma\uvs.jpg"
-		RelativeFilename: "J:\boy_ma\uvs.jpg"
+		Filename: "uvs.jpg"
+		RelativeFilename: "uvs.jpg"
 	}
 	Texture: 368307536, "Texture::file6", "" {
 		Type: "TextureVideoClip"
@@ -592,8 +592,8 @@ Objects:  {
 			P: "UseMaterial", "bool", "", "",1
 		}
 		Media: "Video::file6"
-		FileName: "J:\boy_ma\uvs.jpg"
-		RelativeFilename: "J:\boy_ma\uvs.jpg"
+		FileName: "uvs.jpg"
+		RelativeFilename: "uvs.jpg"
 		ModelUVTranslation: 0,0
 		ModelUVScaling: 1,1
 		Texture_Alpha_Source: "None"

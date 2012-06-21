@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkinnedModelPipeline", "SkinnedModelPipeline\SkinnedModelPipeline.csproj", "{4636C7E1-B845-4B83-B96D-64A11B8A4515}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0D41E29B-829F-4255-BCA5-64DC2677DA6D} = {0D41E29B-829F-4255-BCA5-64DC2677DA6D}
@@ -14,10 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XnaBasics", "XnaBasics\XnaB
 	ProjectSection(ProjectDependencies) = postProject
 		{0D41E29B-829F-4255-BCA5-64DC2677DA6D} = {0D41E29B-829F-4255-BCA5-64DC2677DA6D}
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avateering-XNA", "Avateering\Avateering-XNA.csproj", "{BD59C960-D9EA-4385-A88C-43F1C267B73B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipelineDebuging", "PipelineDebuging\PipelineDebuging.csproj", "{0F63C68A-08B8-4ED2-B998-B904D5D7D5C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,18 +49,6 @@ Global
 		{6566B35B-3CCE-4D9E-AD01-B380644126EB}.Release|x86.ActiveCfg = Release|x86
 		{6566B35B-3CCE-4D9E-AD01-B380644126EB}.Release|x86.Build.0 = Release|x86
 		{6566B35B-3CCE-4D9E-AD01-B380644126EB}.Release|Xbox 360.ActiveCfg = Release|x86
-		{BD59C960-D9EA-4385-A88C-43F1C267B73B}.Debug|x86.ActiveCfg = Debug|x86
-		{BD59C960-D9EA-4385-A88C-43F1C267B73B}.Debug|x86.Build.0 = Debug|x86
-		{BD59C960-D9EA-4385-A88C-43F1C267B73B}.Debug|Xbox 360.ActiveCfg = Debug|x86
-		{BD59C960-D9EA-4385-A88C-43F1C267B73B}.Release|x86.ActiveCfg = Release|x86
-		{BD59C960-D9EA-4385-A88C-43F1C267B73B}.Release|x86.Build.0 = Release|x86
-		{BD59C960-D9EA-4385-A88C-43F1C267B73B}.Release|Xbox 360.ActiveCfg = Release|x86
-		{0F63C68A-08B8-4ED2-B998-B904D5D7D5C8}.Debug|x86.ActiveCfg = Debug|x86
-		{0F63C68A-08B8-4ED2-B998-B904D5D7D5C8}.Debug|x86.Build.0 = Debug|x86
-		{0F63C68A-08B8-4ED2-B998-B904D5D7D5C8}.Debug|Xbox 360.ActiveCfg = Debug|x86
-		{0F63C68A-08B8-4ED2-B998-B904D5D7D5C8}.Release|x86.ActiveCfg = Release|x86
-		{0F63C68A-08B8-4ED2-B998-B904D5D7D5C8}.Release|x86.Build.0 = Release|x86
-		{0F63C68A-08B8-4ED2-B998-B904D5D7D5C8}.Release|Xbox 360.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

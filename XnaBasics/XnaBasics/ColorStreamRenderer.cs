@@ -41,6 +41,15 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             }
         }
 
+        public Model LegModel
+        {
+            set
+            {
+                legRender.Model3DAvatar = value;
+            }
+        }
+
+
         public Texture2D cloth;
   
 
@@ -69,6 +78,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         private BagRender bagRender;
         private BodyRender bodyRender;
+        private LegRender legRender;
+
         /// <summary>
         /// Initializes a new instance of the ColorStreamRenderer class.
         /// </summary>
@@ -79,6 +90,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.skeletonStream = new SkeletonStreamRenderer(game, this.SkeletonToColorMap);
             this.bagRender = new BagRender(game);
             this.bodyRender = new BodyRender(game);
+            this.legRender = new LegRender(game);
         }
 
         /// <summary>
@@ -144,6 +156,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             this.bagRender.Update(gameTime);
             this.bodyRender.Update(gameTime);
+            this.legRender.Update(gameTime);
             // Update the skeleton renderer
             this.skeletonStream.Update(gameTime);
         }
@@ -184,6 +197,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 // Draw the bag 3d model
                 this.bagRender.Draw(gameTime);
                 this.bodyRender.Draw(gameTime);
+                this.legRender.Draw(gameTime);
                 // Reset the render target and prepare to draw scaled image
                 this.Game.GraphicsDevice.SetRenderTargets(null);
 
