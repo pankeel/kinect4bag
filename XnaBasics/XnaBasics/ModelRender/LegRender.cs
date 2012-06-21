@@ -56,7 +56,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // Create World Matrix
             //
             DepthImagePoint trousersDepthPoint = Chooser.Sensor.MapSkeletonPointToDepth(trousersTarget.Position, Chooser.Sensor.DepthStream.Format);
-            float scaleFactor = (float)trousersDepthPoint.Depth / 700;
+            float scaleFactor = (float)trousersDepthPoint.Depth / 900;
 
             Matrix transformMatrix = Matrix.CreateTranslation(-320.0f, -240.0f, 0.0f)
                 * Matrix.CreateScale(scaleFactor, scaleFactor, 1.0f);
