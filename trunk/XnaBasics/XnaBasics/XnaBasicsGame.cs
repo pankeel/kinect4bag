@@ -30,8 +30,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         public Model bagModel;
         public Model bodyModel;
-
-
+        public Model legModel;
 
         /// <summary>
         /// The 3D avatar mesh animator.
@@ -208,12 +207,11 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.font = Content.Load<SpriteFont>("Segoe16");
 
             this.bagModel = Content.Load<Model>("bag");
-
-            this.bodyModel = Content.Load<Model>("yifu");
-            this.colorStream.BodyModel = this.bodyModel;
-
+            this.bodyModel = Content.Load<Model>("yifu_bone");
+            this.legModel = Content.Load<Model>("kuzi");
             this.colorStream.Model3DAvata = this.bagModel;
-
+            this.colorStream.BodyModel = this.bodyModel;
+            this.colorStream.LegModel = this.legModel;
 
             base.LoadContent();
         }
