@@ -8,9 +8,9 @@ using Microsoft.Kinect;
 
 namespace Microsoft.Samples.Kinect.XnaBasics
 {
-    class BodyRender : Object3D
+    class LegRender : Object3D
     {
-        public BodyRender(Game game)
+        public LegRender(Game game)
             : base(game)
         {
             // TODO: Construct any child components here
@@ -47,32 +47,32 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <returns></returns>
         protected override Matrix CreateWorldMatrix(Skeleton skeleton)
         {
-            Joint leftShoulder = skeleton.Joints[JointType.ShoulderLeft],
-                rightShoulder = skeleton.Joints[JointType.ShoulderRight],
-                centerShoulder = skeleton.Joints[JointType.ShoulderCenter],
-                clothTarget = centerShoulder;
+            Joint leftHip = skeleton.Joints[JointType.HipLeft],
+                rightHip = skeleton.Joints[JointType.HipRight],
+                centerHip = skeleton.Joints[JointType.HipCenter],
+                trousersTarget = centerHip;
 
             //
             // Create World Matrix
             //
-            DepthImagePoint clothDepthPoint = Chooser.Sensor.MapSkeletonPointToDepth(clothTarget.Position, Chooser.Sensor.DepthStream.Format);
-            float scaleFactor = (float)clothDepthPoint.Depth / 600;
+            DepthImagePoint trousersDepthPoint = Chooser.Sensor.MapSkeletonPointToDepth(trousersTarget.Position, Chooser.Sensor.DepthStream.Format);
+            float scaleFactor = (float)trousersDepthPoint.Depth / 700;
 
             Matrix transformMatrix = Matrix.CreateTranslation(-320.0f, -240.0f, 0.0f)
                 * Matrix.CreateScale(scaleFactor, scaleFactor, 1.0f);
 
-            Vector3 originalVector = new Vector3(clothDepthPoint.X, clothDepthPoint.Y, clothDepthPoint.Depth);
+            Vector3 originalVector = new Vector3(trousersDepthPoint.X, trousersDepthPoint.Y, trousersDepthPoint.Depth);
             Vector3 certainVector = Vector3.Transform(originalVector, transformMatrix);
 
             float rotationYaxi = 0.0f;
 
-            Vector2 shoulderNormal = Vector2.Normalize(new Vector2(rightShoulder.Position.X, rightShoulder.Position.Z) - new Vector2(leftShoulder.Position.X, leftShoulder.Position.Z)),
-                shoulderXYPorjNormal = Vector2.Normalize(new Vector2(1, 0));
-            Vector3 shoulderV3 = new Vector3(shoulderNormal.X, shoulderNormal.Y, 0),
-                shoulderXYProjV3 = new Vector3(shoulderXYPorjNormal.X, shoulderXYPorjNormal.Y, 0);
+            Vector2 hipNormal = Vector2.Normalize(new Vector2(rightHip.Position.X, rightHip.Position.Z) - new Vector2(leftHip.Position.X, leftHip.Position.Z)),
+                hipXYPorjNormal = Vector2.Normalize(new Vector2(1, 0));
+            Vector3 hipV3 = new Vector3(hipNormal.X, hipNormal.Y, 0),
+                hipXYProjV3 = new Vector3(hipXYPorjNormal.X, hipXYPorjNormal.Y, 0);
 
-            rotationYaxi = (float)(Math.PI - Math.Acos(Vector2.Dot(shoulderXYPorjNormal, shoulderNormal)));
-            Vector3 sign = Vector3.Cross(shoulderV3, shoulderXYProjV3);
+            rotationYaxi = (float)(Math.PI - Math.Acos(Vector2.Dot(hipXYPorjNormal, hipNormal)));
+            Vector3 sign = Vector3.Cross(hipV3, hipXYProjV3);
             rotationYaxi = sign.Z < 0 ? -rotationYaxi : rotationYaxi;
 
             Matrix world = Matrix.CreateScale(this.scaleFactor, this.scaleFactor, this.scaleFactor)
@@ -134,8 +134,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             }
             skeletonDrawn = true;
         }
-
-
 
         protected override void LoadContent()
         {
