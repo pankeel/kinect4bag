@@ -207,7 +207,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.font = Content.Load<SpriteFont>("Segoe16");
 
             this.bagModel = Content.Load<Model>("bag");
-            this.bodyModel = Content.Load<Model>("yifu_bone");
+            this.bodyModel = Content.Load<Model>("yifu");
             this.legModel = Content.Load<Model>("kuzi");
             this.colorStream.Model3DAvata = this.bagModel;
             this.colorStream.BodyModel = this.bodyModel;
