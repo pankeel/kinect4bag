@@ -1233,7 +1233,23 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             {
                 this.nuiJointToAvatarBoneIndex = new Dictionary<JointType, int>();
             }
-
+            this.nuiJointToAvatarBoneIndex.Add(JointType.HipCenter, 1);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.Spine, 4);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.ShoulderCenter, 5);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.Head, 7);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.ElbowLeft, 9);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.WristLeft, 10);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.HandLeft, 11);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.ElbowRight, 13);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.WristRight, 14);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.HandRight, 15);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.KneeLeft, 16);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.AnkleLeft, 17);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.FootLeft, 18);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.KneeRight, 20);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.AnkleRight, 21);
+            this.nuiJointToAvatarBoneIndex.Add(JointType.FootRight, 22);
+            /*
             // Note: the actual hip center joint in the Avatar mesh has a root node (index 0) as well, which we ignore here for rotation.
             this.nuiJointToAvatarBoneIndex.Add(JointType.HipCenter, 1);
             this.nuiJointToAvatarBoneIndex.Add(JointType.Spine, 4);
@@ -1251,6 +1267,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.nuiJointToAvatarBoneIndex.Add(JointType.KneeRight, 54);
             this.nuiJointToAvatarBoneIndex.Add(JointType.AnkleRight, 55);
             this.nuiJointToAvatarBoneIndex.Add(JointType.FootRight, 56);
+             * */
         }
 
 
@@ -1340,7 +1357,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         protected void UpdateViewingCamera()
         {
-
             GraphicsDevice device = this.Game.GraphicsDevice;
 
             // Compute camera matrices.
@@ -1371,7 +1387,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         {
 
             // Load the model.
-            Model avatar = this.Game.Content.Load<Model>("dude");
+            Model avatar = this.Game.Content.Load<Model>("yifu_bone");
 
             if (null == avatar)
             {
