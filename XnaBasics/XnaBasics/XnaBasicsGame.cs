@@ -26,13 +26,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         //private const int selection_panel_h = Width / 4 * 3;
 
         /// <summary>
-        /// The 3D bag mesh.
-        /// </summary>
-        public Model bagModel;
-        public Model bodyModel;
-        public Model legModel;
-
-        /// <summary>
         /// The 3D avatar mesh animator.
         /// </summary>
         private AvatarAnimator animator;
@@ -205,15 +198,9 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.Services.AddService(typeof(SpriteBatch), this.spriteBatch);
 
             this.font = Content.Load<SpriteFont>("Segoe16");
-
-            this.bagModel = Content.Load<Model>("bag");
-            this.bodyModel = Content.Load<Model>("yifu");
-            this.legModel = Content.Load<Model>("kuzi");
-            this.colorStream.Model3DAvata = this.bagModel;
-            this.colorStream.BodyModel = this.bodyModel;
-            this.colorStream.LegModel = this.legModel;
-
             base.LoadContent();
+
+            this.ui.ObjectRender = this.colorStream.BodyModelRender;
         }
 
         /// <summary>
@@ -226,7 +213,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
 
             // Create the avatar animator
-            this.animator = new AvatarAnimator(this, null);
+            this.animator = new AvatarAnimator(this);
             this.Components.Add(this.animator);
 
             this.ui = new SimpleGUI(this);
@@ -365,15 +352,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         {
             // This is necessary because we are rendering to back buffer/render targets and we need to preserve the data
             e.GraphicsDeviceInformation.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
-        }
-
-        public void ChangeClothTex(Texture2D newTex)
-        {
-            this.colorStream.cloth = newTex;
-            
-            foreach (ModelMesh mesh in this.bodyModel.Meshes)
-                foreach (BasicEffect effect in mesh.Effects)
-                    effect.Texture = this.colorStream.cloth;
         }
     }
 }

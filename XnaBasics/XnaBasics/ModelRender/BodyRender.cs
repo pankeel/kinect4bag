@@ -8,7 +8,7 @@ using Microsoft.Kinect;
 
 namespace Microsoft.Samples.Kinect.XnaBasics
 {
-    class BodyRender : Object3D
+    public class BodyRender : Object3D
     {
         public BodyRender(Game game)
             : base(game)
@@ -128,10 +128,11 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             }
 
             // Now draw the bag at the left hand joint
-            if (trackedSkeleton.Joints[JointType.HandLeft] != null)
+            if (trackedSkeleton.Joints[JointType.ShoulderCenter].TrackingState == JointTrackingState.Tracked)
             {
                 base.Draw(gameTime);
             }
+            
             skeletonDrawn = true;
         }
 

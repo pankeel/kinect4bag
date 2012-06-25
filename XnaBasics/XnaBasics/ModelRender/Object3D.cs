@@ -27,6 +27,12 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             set;
         }
 
+        public Texture2D TargetTexture
+        {
+            get;
+            set;
+        }
+
         protected DateTime lastChangeTicks;
 
         /// <summary>
@@ -126,7 +132,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     foreach (BasicEffect effect in mesh.Effects)
                     {
                         //effect.SetBoneTransforms(this.skinTransforms);
-
+                        if (TargetTexture != null && effect.Texture != TargetTexture)
+                            effect.Texture = TargetTexture;
                         effect.World = world;
                         effect.View = view;
                         effect.Projection = projection;

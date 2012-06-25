@@ -8,7 +8,7 @@ using Microsoft.Kinect;
 
 namespace Microsoft.Samples.Kinect.XnaBasics
 {
-    class LegRender : Object3D
+    public class LegRender : Object3D
     {
         public LegRender(Game game)
             : base(game)

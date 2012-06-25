@@ -16,14 +16,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
     using System.Linq;
 
     /// <summary>
-    /// A delegate method used by the animator to re-target the orientations to the model.
-    /// </summary>
-    /// <param name="skeleton">The Skeleton to retarget.</param>
-    /// <param name="bindRoot">The bind root matrix of the avatar mesh.</param>
-    /// <param name="boneTransforms">The avatar mesh rotation matrices.</param>
-    public delegate void RetargetMatrixHierarchyToAvatarMesh(Skeleton skeleton, Matrix bindRoot, Matrix[] boneTransforms);
-
-    /// <summary>
     /// This class is responsible for animating an avatar using a skeleton stream.
     /// </summary>
     [CLSCompliant(true)]
@@ -39,11 +31,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// This tracks the current keyboard state.
         /// </summary>
         private KeyboardState currentKeyboard;
-        /// <summary>
-        /// This is the map method called when re-targeting from
-        /// Nui skeleton to the avatar mesh.
-        /// </summary>
-        private readonly RetargetMatrixHierarchyToAvatarMesh retargetMethod;
+
 
         private bool bSupress = false;
 
@@ -292,8 +280,28 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         /// <param name="game">The related game object.</param>
         /// <param name="retarget">The avatar mesh re-targeting method to convert from the Kinect skeleton.</param>
-        public AvatarAnimator(Game game, 
-            RetargetMatrixHierarchyToAvatarMesh retarget)
+        /// 
+
+        private int ModelType = 0;
+
+        private bool isDebug = true;
+        private Vector3 debugRotationVector = new Vector3();
+
+        private String _DebugText = "sx";
+        private String DebugText
+        {
+            get
+            {
+                return _DebugText;
+            }
+            set
+            {
+                if (isDebug)
+                    _DebugText = value;
+            }
+        }
+
+        public AvatarAnimator(Game game)
             : base(game)
         {
             
@@ -301,13 +309,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             {
                 return;
             }
-            if (retarget == null)
-                this.retargetMethod = this.RetargetMatrixHierarchyToAvatarMesh;
-            else
-            {
-                this.bSupress = true;
-                this.retargetMethod = retarget;
-            }
+
             this.SkeletonDrawn = true;
             this.useKinectAvateering = true;
             this.AvatarHipCenterHeight = 0;
@@ -603,11 +605,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     this.boneOrientationFilter.UpdateFilter(this.skeleton);
                 }
 
-                if (null != this.retargetMethod)
-                {
-                    // Adapt the rotation matrices to the avatar mesh joint local coordinate systems
-                    this.retargetMethod(this.skeleton, this.skinningDataValue.BindPose[0], this.boneTransforms);
-                }
+                this.RetargetMatrixHierarchyToAvatarMesh(this.skeleton, this.skinningDataValue.BindPose[0], this.boneTransforms);
 
                 // Calculate the Avatar world transforms from the relative bone transforms of Kinect skeleton
                 this.UpdateWorldTransforms(Matrix.Identity);
@@ -876,6 +874,482 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             }
         }
 
+        /// <summary>
+        /// Set the bone transform in the avatar mesh.
+        /// </summary>
+        /// <param name="bone">Nui Joint/bone orientation</param>
+        /// <param name="skeleton">The Kinect skeleton.</param>
+        /// <param name="bindRoot">The bind root matrix of the avatar mesh.</param>
+        /// <param name="boneTransforms">The avatar mesh rotation matrices.</param>
+        private void SetJointTransformationByCloth(BoneOrientation bone, Skeleton skeleton, Matrix bindRoot, ref Matrix[] boneTransforms)
+        {
+            if (bone.EndJoint == JointType.ElbowLeft)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+
+                // The Dude appears to lean back too far compared to a real person, so here we adjust this lean.
+                //CorrectBackwardsLean(skeleton, ref tempMat);
+
+                Vector3 rotationVector = RotationHelper.GetInstance().MatrixToEulerAngleVector3(tempMat);
+                //DebugText += String.Format("Joint{0}:(x={1},y={2},z={3})\n", bone.EndJoint, rotationVector.X, rotationVector.Y, rotationVector.Z);
+
+                // Kinect = +Y along arm, +X down, +Z forward in body coordinate system
+                // Avatar = +X along arm, +Y down, +Z backwards
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat);    // XYZ
+                Quaternion avatarRotation = new Quaternion(kinectRotation.Y, -kinectRotation.Z, -kinectRotation.X, kinectRotation.W); // transform from Kinect to avatar coordinate system
+
+                DebugText += String.Format("JointOrientation{0}:({1},{2},{3})\n", bone.EndJoint, rotationVector.X, rotationVector.Y, rotationVector.Z);
+                this.DebugText += String.Format("Debug Vector=({0},{1},{2})\n",
+                    this.debugRotationVector.X,
+                    this.debugRotationVector.Y,
+                    this.debugRotationVector.Z
+                    );
+                //Debug according to the keyboard input
+                if (bone.EndJoint == JointType.ElbowLeft && this.isDebug)
+                {
+                    tempMat = tempMat
+                        * Matrix.CreateRotationX(this.debugRotationVector.Z)
+                        * Matrix.CreateRotationY(this.debugRotationVector.X)
+                        * Matrix.CreateRotationZ(this.debugRotationVector.Y);
+                }
+
+                // Set the corresponding matrix in the avatar using the translation table we specified.
+                // Note for the spine and shoulder center rotations, we could also try to spread the angle
+                // over all the Avatar skeleton spine joints, causing a more curved back, rather than apply
+                // it all to one joint, as we do here.
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+            }
+        }
+
+        private void SetJointTransformationByDube(BoneOrientation bone, Skeleton skeleton, Matrix bindRoot, ref Matrix[] boneTransforms)
+        {
+            // Always look at the skeleton root
+            if (bone.StartJoint == JointType.HipCenter && bone.EndJoint == JointType.HipCenter)
+            {
+                // Unless in seated mode, the hip center is special - it is the root of the NuiSkeleton and describes the skeleton orientation in the world
+                // (camera) coordinate system. All other bones/joint orientations in the hierarchy have hip center as one of their parents.
+                // However, if in seated mode, the shoulder center then holds the skeleton orientation in the world (camera) coordinate system.
+                bindRoot.Translation = Vector3.Zero;
+                Matrix invBindRoot = Matrix.Invert(bindRoot);
+
+                Matrix hipOrientation = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+                // ensure pure rotation, as we set world translation from the Kinect camera below
+                Matrix hipCenter = boneTransforms[1];
+                hipCenter.Translation = Vector3.Zero;
+                Matrix invPelvis = Matrix.Invert(hipCenter);
+
+                Matrix combined = (invBindRoot * hipOrientation) * invPelvis;
+
+                this.ReplaceBoneMatrix(JointType.HipCenter, combined, true, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.ShoulderCenter)
+            {
+                // This contains an absolute rotation if we are in seated mode, or the hip center is not tracked, as the HipCenter will be identity
+                if (this.Chooser.SeatedMode || (this.Chooser.SeatedMode == false && skeleton.Joints[JointType.HipCenter].TrackingState == JointTrackingState.NotTracked))
+                {
+                    bindRoot.Translation = Vector3.Zero;
+                    Matrix invBindRoot = Matrix.Invert(bindRoot);
+
+                    Matrix hipOrientation = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+                    // ensure pure rotation, as we set world translation from the Kinect camera
+                    Matrix hipCenter = boneTransforms[1];
+                    hipCenter.Translation = Vector3.Zero;
+                    Matrix invPelvis = Matrix.Invert(hipCenter);
+
+                    Matrix combined = (invBindRoot * hipOrientation) * invPelvis;
+
+                    this.ReplaceBoneMatrix(JointType.HipCenter, combined, true, ref boneTransforms);
+                }
+            }
+            else if (bone.EndJoint == JointType.Spine)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+                // The Dude appears to lean back too far compared to a real person, so here we adjust this lean.
+                CorrectBackwardsLean(skeleton, ref tempMat);
+
+                // Also add a small constant adjustment rotation to correct for the hip center to spine bone being at a rear-tilted angle in the Kinect skeleton.
+                // The dude should now look more straight ahead when avateering
+                Matrix adjustment = Matrix.CreateRotationX(MathHelper.ToRadians(20));  // 20 degree rotation around the local Kinect x axis for the spine bone.
+                tempMat *= adjustment;
+
+                // Kinect = +X left, +Y up, +Z forward in body coordinate system
+                // Avatar = +Z left, +X up, +Y forward
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat);    // XYZ
+                Quaternion avatarRotation = new Quaternion(kinectRotation.Y, kinectRotation.Z, kinectRotation.X, kinectRotation.W); // transform from Kinect to avatar coordinate system
+                tempMat = Matrix.CreateFromQuaternion(avatarRotation);
+
+                // Set the corresponding matrix in the avatar using the translation table we specified.
+                // Note for the spine and shoulder center rotations, we could also try to spread the angle
+                // over all the Avatar skeleton spine joints, causing a more curved back, rather than apply
+                // it all to one joint, as we do here.
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.Head)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+                // Add a small adjustment rotation to correct for the avatar skeleton head bones being defined pointing looking slightly down, not vertical.
+                // The dude should now look more straight ahead when avateering
+                Matrix adjustment = Matrix.CreateRotationX(MathHelper.ToRadians(-30));  // -30 degree rotation around the local Kinect x axis for the head bone.
+                tempMat *= adjustment;
+
+                // Kinect = +X left, +Y up, +Z forward in body coordinate system
+                // Avatar = +Z left, +X up, +Y forward
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat);    // XYZ
+                Quaternion avatarRotation = new Quaternion(kinectRotation.Y, kinectRotation.Z, kinectRotation.X, kinectRotation.W); // transform from Kinect to avatar coordinate system
+                tempMat = Matrix.CreateFromQuaternion(avatarRotation);
+
+                // Set the corresponding matrix in the avatar using the translation table we specified
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.ElbowLeft || bone.EndJoint == JointType.WristLeft)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+                if (bone.EndJoint == JointType.ElbowLeft)
+                {
+                    // Add a small adjustment rotation to correct for the avatar skeleton shoulder/upper arm bones.
+                    // The dude should now be able to have arms correctly down at his sides when avateering
+                    Matrix adjustment = Matrix.CreateRotationZ(MathHelper.ToRadians(-15));  // -15 degree rotation around the local Kinect z axis for the upper arm bone.
+                    tempMat *= adjustment;
+                }
+
+                // Kinect = +Y along arm, +X down, -Z backward in body coordinate system
+                // Avatar = +X along arm, -Z down, +Y backwards
+                // Avatar = +X along arm, -Y down, +Z backwards
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat);    // XYZ
+                Quaternion avatarRotation = new Quaternion(kinectRotation.Y, -kinectRotation.Z, -kinectRotation.X, kinectRotation.W); // transform from Kinect to avatar coordinate system
+
+                tempMat = Matrix.CreateFromQuaternion(avatarRotation);
+
+                //Debug according to the keyboard input
+                if (bone.EndJoint == JointType.ElbowLeft && this.isDebug)
+                {
+                    tempMat = Matrix.Identity
+                        * Matrix.CreateRotationX(this.debugRotationVector.X)
+                        * Matrix.CreateRotationY(this.debugRotationVector.Y)
+                        * Matrix.CreateRotationZ(this.debugRotationVector.Z);
+                }
+
+
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.HandLeft)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+                // Add a small adjustment rotation to correct for the avatar skeleton wist/hand bone.
+                // The dude should now have the palm of his hands toward his body when arms are straight down
+                Matrix adjustment = Matrix.CreateRotationY(MathHelper.ToRadians(-90));  // -90 degree rotation around the local Kinect y axis for the wrist-hand bone.
+                tempMat *= adjustment;
+
+                // Kinect = +Y along arm, +X down, +Z forward in body coordinate system
+                // Avatar = +X along arm, +Y down, +Z backwards
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat);    // XYZ
+                Quaternion avatarRotation = new Quaternion(kinectRotation.Y, kinectRotation.X, -kinectRotation.Z, kinectRotation.W);
+                tempMat = Matrix.CreateFromQuaternion(avatarRotation);
+
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.ElbowRight || bone.EndJoint == JointType.WristRight)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+                if (bone.EndJoint == JointType.ElbowRight)
+                {
+                    // Add a small adjustment rotation to correct for the avatar skeleton shoulder/upper arm bones.
+                    // The dude should now be able to have arms correctly down at his sides when avateering
+                    Matrix adjustment = Matrix.CreateRotationZ(MathHelper.ToRadians(15));  // 15 degree rotation around the local Kinect  z axis for the upper arm bone.
+                    tempMat *= adjustment;
+                }
+
+                // Kinect = +Y along arm, +X up, +Z forward in body coordinate system
+                // Avatar = +X along arm, +Y back, +Z down
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat);    // XYZ
+                Quaternion avatarRotation = new Quaternion(kinectRotation.Y, -kinectRotation.Z, -kinectRotation.X, kinectRotation.W); // transform from Kinect to avatar coordinate system
+                tempMat = Matrix.CreateFromQuaternion(avatarRotation);
+
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.HandRight)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+                // Add a small adjustment rotation to correct for the avatar skeleton wist/hand bone.
+                // The dude should now have the palm of his hands toward his body when arms are straight down
+                Matrix adjustment = Matrix.CreateRotationY(MathHelper.ToRadians(90));  // -90 degree rotation around the local Kinect y axis for the wrist-hand bone.
+                tempMat *= adjustment;
+
+                // Kinect = +Y along arm, +X up, +Z forward in body coordinate system
+                // Avatar = +X along arm, +Y down, +Z forwards
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat);    // XYZ
+                Quaternion avatarRotation = new Quaternion(kinectRotation.Y, -kinectRotation.X, kinectRotation.Z, kinectRotation.W); // transform from Kinect to avatar coordinate system
+                tempMat = Matrix.CreateFromQuaternion(avatarRotation);
+
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.KneeLeft)
+            {
+                // Combine the two joint rotations from the hip and knee
+                Matrix hipLeft = KinectHelper.Matrix4ToXNAMatrix(skeleton.BoneOrientations[JointType.HipLeft].HierarchicalRotation.Matrix);
+                Matrix kneeLeft = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+                Matrix combined = kneeLeft * hipLeft;
+
+                this.SetLegMatrix(bone.EndJoint, combined, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.AnkleLeft || bone.EndJoint == JointType.AnkleRight)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+                this.SetLegMatrix(bone.EndJoint, tempMat, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.KneeRight)
+            {
+                // Combine the two joint rotations from the hip and knee
+                Matrix hipRight = KinectHelper.Matrix4ToXNAMatrix(skeleton.BoneOrientations[JointType.HipRight].HierarchicalRotation.Matrix);
+                Matrix kneeRight = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+                Matrix combined = kneeRight * hipRight;
+
+                this.SetLegMatrix(bone.EndJoint, combined, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.FootLeft || bone.EndJoint == JointType.FootRight)
+            {
+                // Only set this if we actually have a good track on this and the parent
+                if (skeleton.Joints[bone.EndJoint].TrackingState == JointTrackingState.Tracked && skeleton.Joints[skeleton.BoneOrientations[bone.EndJoint].StartJoint].TrackingState == JointTrackingState.Tracked)
+                {
+                    Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+                    // Add a small adjustment rotation to correct for the avatar skeleton foot bones being defined pointing down at 45 degrees, not horizontal
+                    Matrix adjustment = Matrix.CreateRotationX(MathHelper.ToRadians(-45));
+                    tempMat *= adjustment;
+
+                    // Kinect = +Y along foot (fwd), +Z up, +X right in body coordinate system
+                    // Avatar = +X along foot (fwd), +Y up, +Z right
+                    Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat); // XYZ
+                    Quaternion avatarRotation = new Quaternion(kinectRotation.Y, kinectRotation.Z, kinectRotation.X, kinectRotation.W); // transform from Kinect to avatar coordinate system
+                    tempMat = Matrix.CreateFromQuaternion(avatarRotation);
+
+                    this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+                }
+            }
+        }
+
+        private void SetJointTransformationByPeople(BoneOrientation bone, Skeleton skeleton, Matrix bindRoot, ref Matrix[] boneTransforms)
+        {
+            // Always look at the skeleton root
+            if (bone.StartJoint == JointType.HipCenter && bone.EndJoint == JointType.HipCenter)
+            {
+
+                // Unless in seated mode, the hip center is special - it is the root of the NuiSkeleton and describes the skeleton orientation in the world
+                // (camera) coordinate system. All other bones/joint orientations in the hierarchy have hip center as one of their parents.
+                // However, if in seated mode, the shoulder center then holds the skeleton orientation in the world (camera) coordinate system.
+                bindRoot.Translation = Vector3.Zero;
+                Matrix invBindRoot = Matrix.Invert(bindRoot);
+
+                Matrix hipOrientation = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+                Vector3 hipRotation = RotationHelper.GetInstance().MatrixToEulerAngleVector3(hipOrientation);
+                //DebugText += String.Format("hipCenter:(x={0},y={1},z={2})\n", hipRotation.X, hipRotation.Y, hipRotation.Z);
+                // ensure pure rotation, as we set world translation from the Kinect camera below
+
+                int hipCenterIndex = 0;
+                //this.nuiJointToAvatarBoneIndex.TryGetValue(JointType.HipCenter, out hipCenterIndex);
+                Matrix hipCenter = boneTransforms[hipCenterIndex];
+
+                hipCenter.Translation = Vector3.Zero;
+                Matrix invPelvis = Matrix.Invert(hipCenter);
+
+
+                Matrix combined = (invBindRoot * hipOrientation) * invPelvis;
+
+                this.ReplaceBoneMatrix(JointType.HipCenter, combined, true, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.ShoulderCenter)
+            {
+                // This contains an absolute rotation if we are in seated mode, or the hip center is not tracked, as the HipCenter will be identity
+                if (this.Chooser.SeatedMode || (this.Chooser.SeatedMode == false && skeleton.Joints[JointType.HipCenter].TrackingState == JointTrackingState.NotTracked))
+                {
+                    bindRoot.Translation = Vector3.Zero;
+                    Matrix invBindRoot = Matrix.Invert(bindRoot);
+
+                    Matrix hipOrientation = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+                    // ensure pure rotation, as we set world translation from the Kinect camera
+                    Matrix hipCenter = boneTransforms[0];
+                    hipCenter.Translation = Vector3.Zero;
+                    Matrix invPelvis = Matrix.Invert(hipCenter);
+
+                    Matrix combined = (invBindRoot * hipOrientation) * invPelvis;
+
+                    this.ReplaceBoneMatrix(JointType.HipCenter, combined, true, ref boneTransforms);
+                }
+            }
+            else if (bone.EndJoint == JointType.Spine)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+                // The Dude appears to lean back too far compared to a real person, so here we adjust this lean.
+                CorrectBackwardsLean(skeleton, ref tempMat);
+
+                Vector3 rotationVector = RotationHelper.GetInstance().MatrixToEulerAngleVector3(tempMat);
+                // Kinect = +X left, +Y up, +Z forward in body coordinate system
+                // Avatar = +Z left, +X up, +Y forward
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat);    // XYZ
+                Quaternion avatarRotation = new Quaternion(kinectRotation.X, kinectRotation.Y, kinectRotation.Z, kinectRotation.W); // transform from Kinect to avatar coordinate system
+                tempMat = Matrix.CreateFromQuaternion(avatarRotation);
+
+                // Set the corresponding matrix in the avatar using the translation table we specified.
+                // Note for the spine and shoulder center rotations, we could also try to spread the angle
+                // over all the Avatar skeleton spine joints, causing a more curved back, rather than apply
+                // it all to one joint, as we do here.
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.Head)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+                // Kinect = +X left, +Y up, +Z forward in body coordinate system
+                // Avatar = +Z left, +X up, +Y forward
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat);    // XYZ
+                Quaternion avatarRotation = new Quaternion(kinectRotation.X, -kinectRotation.Y, kinectRotation.Z, kinectRotation.W); // transform from Kinect to avatar coordinate system
+                tempMat = Matrix.CreateFromQuaternion(avatarRotation);
+
+                // Set the corresponding matrix in the avatar using the translation table we specified
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+            }
+            // Mirror View for the People Model's Left Arm, the real people's Right Arm
+            else if (bone.EndJoint == JointType.ElbowLeft || bone.EndJoint == JointType.WristLeft)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+
+                // The Dude appears to lean back too far compared to a real person, so here we adjust this lean.
+                CorrectBackwardsLean(skeleton, ref tempMat);
+
+                Vector3 rotationVector = RotationHelper.GetInstance().MatrixToEulerAngleVector3(tempMat);
+                //DebugText += String.Format("Joint{0}:(x={1},y={2},z={3})\n", bone.EndJoint, rotationVector.X, rotationVector.Y, rotationVector.Z);
+                // Kinect = +Y along arm, +X down, -Z backward in body coordinate system
+                // Avatar = +X along arm, -Z down, +Y backwards
+                // People = +X along arm, -Y down, +Z backwards
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat);    // XYZ
+
+                Quaternion avatarRotation = new Quaternion(kinectRotation.Y, -kinectRotation.X, kinectRotation.Z, kinectRotation.W); // transform from Kinect to avatar coordinate system
+
+                tempMat = Matrix.CreateFromQuaternion(avatarRotation);
+                //if (bone.EndJoint == JointType.ElbowLeft)
+                //{
+                //    tempMat =tempMat*
+                //        Matrix.CreateRotationX(0.2f) *
+                //        Matrix.CreateRotationY(-0.2f) *
+                //        Matrix.CreateRotationZ(-0.7f);
+                //}
+                //Debug according to the keyboard input
+                if (bone.EndJoint == JointType.ElbowLeft && this.isDebug)
+                {
+                    tempMat = tempMat
+                        * Matrix.CreateRotationX(this.debugRotationVector.X)
+                        * Matrix.CreateRotationY(this.debugRotationVector.Y)
+                        * Matrix.CreateRotationZ(this.debugRotationVector.Z);
+                }
+                // Set the corresponding matrix in the avatar using the translation table we specified.
+                // Note for the spine and shoulder center rotations, we could also try to spread the angle
+                // over all the Avatar skeleton spine joints, causing a more curved back, rather than apply
+                // it all to one joint, as we do here.
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.HandLeft)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+
+                // Kinect = +Y along arm, +X down, +Z forward in body coordinate system
+                // Avatar = +X along arm, +Y down, +Z backwards
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat);    // XYZ
+                Quaternion avatarRotation = new Quaternion(-kinectRotation.Y, kinectRotation.Z, kinectRotation.X, kinectRotation.W);
+                tempMat = Matrix.CreateFromQuaternion(avatarRotation);
+
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.ElbowRight || bone.EndJoint == JointType.WristRight)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+                // The Dude appears to lean back too far compared to a real person, so here we adjust this lean.
+                CorrectBackwardsLean(skeleton, ref tempMat);
+                // Kinect = +X left, +Y up, +Z forward in body coordinate system
+                // Avatar = +Z left, +X up, +Y forward
+                // People = +X left, +Y up, +z forward
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat);    // XYZ
+                Quaternion avatarRotation = new Quaternion(-kinectRotation.Y, kinectRotation.X, kinectRotation.Z, kinectRotation.W); // transform from Kinect to avatar coordinate system
+                tempMat = Matrix.CreateFromQuaternion(avatarRotation);
+
+                // Set the corresponding matrix in the avatar using the translation table we specified.
+                // Note for the spine and shoulder center rotations, we could also try to spread the angle
+                // over all the Avatar skeleton spine joints, causing a more curved back, rather than apply
+                // it all to one joint, as we do here.
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.KneeLeft)
+            {
+                // Combine the two joint rotations from the hip and knee
+                Matrix hipLeft = KinectHelper.Matrix4ToXNAMatrix(skeleton.BoneOrientations[JointType.HipLeft].HierarchicalRotation.Matrix);
+                Vector3 rotationVector = RotationHelper.GetInstance().MatrixToEulerAngleVector3(hipLeft);
+                Matrix kneeLeft = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+                Matrix legRotation = kneeLeft * hipLeft * Matrix.CreateRotationZ(rotationVector.Z);
+
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(legRotation);  // XYZ
+                Quaternion avatarRotation = new Quaternion(-kinectRotation.X, kinectRotation.Y, kinectRotation.Z, kinectRotation.W); // transform from Kinect to avatar coordinate system
+                rotationVector = RotationHelper.GetInstance().QuaternionToEulerAngleVector3(kinectRotation);
+                legRotation = Matrix.CreateFromQuaternion(avatarRotation);
+
+                this.ReplaceBoneMatrix(bone.EndJoint, legRotation, false, ref boneTransforms);
+
+            }
+            else if (bone.EndJoint == JointType.AnkleLeft || bone.EndJoint == JointType.AnkleRight)
+            {
+                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+                Matrix legRotation = tempMat;
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(legRotation);  // XYZ
+                Quaternion avatarRotation = new Quaternion(-kinectRotation.X, kinectRotation.Y, kinectRotation.Z, kinectRotation.W); // transform from Kinect to avatar coordinate system
+                Vector3 rotationVector = RotationHelper.GetInstance().QuaternionToEulerAngleVector3(kinectRotation);
+                legRotation = Matrix.CreateFromQuaternion(avatarRotation);
+
+                this.ReplaceBoneMatrix(bone.EndJoint, legRotation, false, ref boneTransforms);
+
+            }
+            else if (bone.EndJoint == JointType.KneeRight)
+            {
+                // Combine the two joint rotations from the hip and knee
+                Matrix hipRight = KinectHelper.Matrix4ToXNAMatrix(skeleton.BoneOrientations[JointType.HipRight].HierarchicalRotation.Matrix);
+                Matrix kneeRight = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+                Vector3 rotationVector = RotationHelper.GetInstance().MatrixToEulerAngleVector3(hipRight);
+                Matrix legRotation = kneeRight * hipRight * Matrix.CreateRotationZ(rotationVector.Z);
+
+                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(legRotation);  // XYZ
+                Quaternion avatarRotation = new Quaternion(-kinectRotation.X, kinectRotation.Y, kinectRotation.Z, kinectRotation.W); // transform from Kinect to avatar coordinate system
+                rotationVector = RotationHelper.GetInstance().QuaternionToEulerAngleVector3(kinectRotation);
+                legRotation = Matrix.CreateFromQuaternion(avatarRotation);
+
+                this.ReplaceBoneMatrix(bone.EndJoint, legRotation, false, ref boneTransforms);
+            }
+            else if (bone.EndJoint == JointType.FootLeft || bone.EndJoint == JointType.FootRight)
+            {
+                // Only set this if we actually have a good track on this and the parent
+                if (skeleton.Joints[bone.EndJoint].TrackingState == JointTrackingState.Tracked && skeleton.Joints[skeleton.BoneOrientations[bone.EndJoint].StartJoint].TrackingState == JointTrackingState.Tracked)
+                {
+                    Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
+
+                    // Kinect = +Y along foot (fwd), +Z up, +X right in body coordinate system
+                    // Avatar = +X along foot (fwd), +Y up, +Z right
+                    Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat); // XYZ
+                    Quaternion avatarRotation = new Quaternion(kinectRotation.Y, kinectRotation.Z, kinectRotation.X, kinectRotation.W); // transform from Kinect to avatar coordinate system
+                    tempMat = Matrix.CreateFromQuaternion(avatarRotation);
+
+                    this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+                }
+            }
+
+        }
 
         /// <summary>
         /// 3D avatar models typically have varying bone structures and joint orientations, depending on how they are built.
@@ -908,7 +1382,13 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     continue;
                 }
 
-                this.SetJointTransformation(bone, skeleton, bindRoot, ref boneTransforms);
+                if (this.ModelType == 0)
+                    this.SetJointTransformationByPeople(bone, skeleton, bindRoot, ref boneTransforms);
+                else if (this.ModelType == 1)
+                    this.SetJointTransformationByCloth(bone, skeleton, bindRoot, ref boneTransforms);
+                else if (this.ModelType == 2)
+                    this.SetJointTransformationByDube(bone, skeleton, bindRoot, ref boneTransforms);
+
             }
 
             // If seated mode is on, sit the avatar down
@@ -1188,7 +1668,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             Matrix worldTransform = this.GetModelWorldTranslation(skeleton.Joints, this.Chooser.NearMode);
 
             // set root translation
-            boneTransforms[0].Translation = worldTransform.Translation;
+            //boneTransforms[0].Translation = worldTransform.Translation;
+            boneTransforms[0].Translation = new Vector3(0,0,0);
         }
 
         /// <summary>
@@ -1233,41 +1714,52 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             {
                 this.nuiJointToAvatarBoneIndex = new Dictionary<JointType, int>();
             }
-            this.nuiJointToAvatarBoneIndex.Add(JointType.HipCenter, 1);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.Spine, 4);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.ShoulderCenter, 5);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.Head, 7);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.ElbowLeft, 9);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.WristLeft, 10);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.HandLeft, 11);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.ElbowRight, 13);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.WristRight, 14);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.HandRight, 15);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.KneeLeft, 16);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.AnkleLeft, 17);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.FootLeft, 18);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.KneeRight, 20);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.AnkleRight, 21);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.FootRight, 22);
-            /*
+
+            if (this.ModelType == 0)
+            {
+                this.nuiJointToAvatarBoneIndex.Add(JointType.HipCenter, 1);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.Spine, 4);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.ShoulderCenter, 5);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.Head, 7);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.ElbowLeft, 9);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.WristLeft, 10);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.HandLeft, 11);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.ElbowRight, 13);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.WristRight, 14);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.HandRight, 15);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.KneeLeft, 16);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.AnkleLeft, 17);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.FootLeft, 18);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.KneeRight, 20);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.AnkleRight, 21);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.FootRight, 22);
+            }
+            else if (this.ModelType == 1)
+            {
+                this.nuiJointToAvatarBoneIndex.Add(JointType.ElbowLeft, 8);
+            }
+            else if (this.ModelType == 2)
+            {
+                this.nuiJointToAvatarBoneIndex.Add(JointType.HipCenter, 1);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.Spine, 4);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.ShoulderCenter, 6);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.Head, 7);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.ElbowLeft, 13);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.WristLeft, 14);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.HandLeft, 15);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.ElbowRight, 32);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.WristRight, 33);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.HandRight, 34);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.KneeLeft, 50);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.AnkleLeft, 51);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.FootLeft, 52);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.KneeRight, 54);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.AnkleRight, 55);
+                this.nuiJointToAvatarBoneIndex.Add(JointType.FootRight, 56);
+
+            }
             // Note: the actual hip center joint in the Avatar mesh has a root node (index 0) as well, which we ignore here for rotation.
-            this.nuiJointToAvatarBoneIndex.Add(JointType.HipCenter, 1);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.Spine, 4);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.ShoulderCenter, 6);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.Head, 7);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.ElbowLeft, 13);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.WristLeft, 14);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.HandLeft, 15);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.ElbowRight, 32);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.WristRight, 33);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.HandRight, 34);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.KneeLeft, 50);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.AnkleLeft, 51);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.FootLeft, 52);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.KneeRight, 54);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.AnkleRight, 55);
-            this.nuiJointToAvatarBoneIndex.Add(JointType.FootRight, 56);
-             * */
+
         }
 
 
@@ -1386,13 +1878,24 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         protected override void LoadContent()
         {
 
-            // Load the model.
-            Model avatar = this.Game.Content.Load<Model>("yifu_bone");
 
-            if (null == avatar)
+            // Load the model.
+            this.ModelType = 0;
+            Model avatar = null;
+            if (this.ModelType == 0)
             {
-                throw new InvalidOperationException("Cannot load 3D avatar model");
+                avatar = this.Game.Content.Load<Model>("people01");
             }
+            else if (this.ModelType == 1)
+            {
+                avatar = this.Game.Content.Load<Model>("people04");
+            }
+            else if (this.ModelType == 2)
+            {
+                avatar = this.Game.Content.Load<Model>("dude");
+            }
+            // Load the model.
+             
 
             // Add the model to the avatar animator
             this.Avatar = avatar;

@@ -261,7 +261,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.Components.Add(this.worldAxes);
 
             // Create the avatar animator
-            this.animator = new AvatarAnimator(this, this.RetargetMatrixHierarchyToAvatarMesh);
+            this.animator = new AvatarAnimator(this);
             this.Components.Add(this.animator);
 
             // Create the bag animator
