@@ -45,6 +45,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
         private XnaBasics xnaGame;
 
+        public Object3D ObjectRender { get; set; }
+
         public SimpleGUI(XnaBasics game)
             : base(game)
         {
@@ -155,7 +157,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                             current_button_rect,
                             new Rectangle(ButtonsLeft[j].Bound.X, ButtonsLeft[j].tex.Height * (ButtonsLeft[j].Bound.Height - partial_height) / ButtonsLeft[j].Bound.Height, ButtonsLeft[j].tex.Width, ButtonsLeft[j].tex.Height * partial_height / ButtonsLeft[j].Bound.Height),
                             Color.White * 1f);
-                    this.xnaGame.ChangeClothTex(ButtonsLeft[j].tex);
+                    this.ObjectRender.TargetTexture = ButtonsLeft[j].tex;
                 }
                 else
                 {
@@ -183,7 +185,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                             current_button_rect,
                             new Rectangle(ButtonsLeft[j].Bound.X, ButtonsLeft[j].Bound.Y, ButtonsLeft[j].tex.Width, ButtonsLeft[j].tex.Height * current_height / ButtonsLeft[j].Bound.Height),
                             Color.White * 1f);
-                        this.xnaGame.ChangeClothTex(ButtonsLeft[j].tex);
+                        this.ObjectRender.TargetTexture = ButtonsLeft[j].tex;
                     }
                     else
                         this.SharedSpriteBatch.Draw(
@@ -231,7 +233,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                             current_button_rect,
                             new Rectangle(ButtonsRight[j].Bound.X, ButtonsRight[j].tex.Height * (ButtonsRight[j].Bound.Height - partial_height) / ButtonsRight[j].Bound.Height, ButtonsRight[j].tex.Width, ButtonsRight[j].tex.Height * partial_height / ButtonsRight[j].Bound.Height),
                             Color.White * 1f);
-                    this.xnaGame.ChangeClothTex(ButtonsRight[j].tex);
+                    this.ObjectRender.TargetTexture = ButtonsRight[j].tex;
+
                 }
                 else
                 {
@@ -259,7 +262,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                             current_button_rect,
                             new Rectangle(ButtonsRight[j].Bound.X, ButtonsRight[j].Bound.Y, ButtonsRight[j].tex.Width, ButtonsRight[j].tex.Height * current_height / ButtonsRight[j].Bound.Height),
                             Color.White * 1f);
-                        this.xnaGame.ChangeClothTex(ButtonsRight[j].tex);
+                        this.ObjectRender.TargetTexture = ButtonsRight[j].tex;
+
                     }
                     else
                         this.SharedSpriteBatch.Draw(

@@ -77,8 +77,29 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// Render the Bag In the Color map
         /// </summary>
         private BagRender bagRender;
+        public BagRender BagModelRender
+        {
+            get
+            {
+                return bagRender;
+            }
+        }
         private BodyRender bodyRender;
+        public BodyRender BodyModelRender
+        {
+            get
+            {
+                return bodyRender;
+            }
+        }
         private LegRender legRender;
+        public LegRender LegModelRender
+        {
+            get
+            {
+                return legRender;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the ColorStreamRenderer class.
@@ -222,6 +243,11 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         protected override void LoadContent()
         {
+            Model3DAvata = Game.Content.Load<Model>("bag");
+            BodyModel = Game.Content.Load<Model>("yifu");
+            LegModel = Game.Content.Load<Model>("kuzi");
+
+
             base.LoadContent();
 
             // This effect is necessary to remap the BGRX byte data we get
