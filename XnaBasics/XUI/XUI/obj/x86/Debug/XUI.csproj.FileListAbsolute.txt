@@ -1,6 +1,0 @@
-D:\workspace\XUI v0.2\XUI\XUI\bin\x86\Debug\XUI.dll
-D:\workspace\XUI v0.2\XUI\XUI\bin\x86\Debug\XUI.pdb
-D:\workspace\XUI v0.2\XUI\XUI\obj\x86\Debug\ResolveAssemblyReference.cache
-D:\workspace\XUI v0.2\XUI\XUI\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
-D:\workspace\XUI v0.2\XUI\XUI\obj\x86\Debug\XUI.dll
-D:\workspace\XUI v0.2\XUI\XUI\obj\x86\Debug\XUI.pdb
