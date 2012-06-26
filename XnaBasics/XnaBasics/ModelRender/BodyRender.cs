@@ -130,7 +130,33 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // Now draw the bag at the left hand joint
             if (trackedSkeleton.Joints[JointType.ShoulderCenter].TrackingState == JointTrackingState.Tracked)
             {
-                base.Draw(gameTime);
+
+                // Render the 3D model skinned mesh with Skinned Effect.
+                Matrix world = this.CreateWorldMatrix(trackedSkeleton),
+                    view = this.CreateViewMatrix(trackedSkeleton),
+                    projection = this.CreateProjectionMatrix(trackedSkeleton);
+                if (this.Model3DAvatar != null)
+                {
+                    foreach (ModelMesh mesh in this.Model3DAvatar.Meshes)
+                    {
+
+                        foreach (SkinnedEffect effect in mesh.Effects)
+                        {
+                            //effect.SetBoneTransforms(this.skinTransforms);
+                            if (TargetTexture != null && effect.Texture != TargetTexture)
+                                effect.Texture = TargetTexture;
+                            effect.World = world;
+                            effect.View = view;
+                            effect.Projection = projection;
+                            effect.EnableDefaultLighting();
+
+                            effect.SpecularColor = new Vector3(0.25f);
+                            effect.SpecularPower = 16;
+                        }
+
+                        mesh.Draw();
+                    }
+                }
             }
             
             skeletonDrawn = true;

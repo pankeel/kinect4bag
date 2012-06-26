@@ -4,6 +4,16 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+
+// E_Layer
+public enum E_Layer
+{
+    UI = 0,
+
+    // etc ...
+
+    Count,
+};
 namespace Microsoft.Samples.Kinect.XnaBasics
 {
     using Microsoft.Kinect;
@@ -11,6 +21,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
     using System;
+    using Microsoft.Xna.Framework.GamerServices;
 
     /// <summary>
     /// The main Xna game implementation.
@@ -42,6 +53,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// The graphics device manager provided by Xna.
         /// </summary>
         private readonly GraphicsDeviceManager graphics;
+        private UiLayer						UiLayer;
+        public bool IsRunningSlowly;
 
         /// <summary>
         /// Viewing Camera arc.
@@ -116,11 +129,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         private bool colorHasFocus = true;
 
         /// <summary>
-        /// This tracks the previous keyboard state.
-        /// </summary>
-        private KeyboardState previousKeyboard;
-
-        /// <summary>
         /// This tracks the current transition time.
         /// 0                   = Color Stream Full Focus
         /// TransitionDuration  = Depth Stream Full Focus
@@ -183,8 +191,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             this.Components.Add(this.chooser);
 
-            this.previousKeyboard = Keyboard.GetState();
-
             LeftHand = new Vector2();
             RightHand = new Vector2();
         }
@@ -198,7 +204,12 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.Services.AddService(typeof(SpriteBatch), this.spriteBatch);
 
             this.font = Content.Load<SpriteFont>("Segoe16");
+
+            UiLayer.Startup(Content);
+
             base.LoadContent();
+
+            
 
             this.ui.ObjectRender = this.colorStream.BodyModelRender;
         }
@@ -220,6 +231,21 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.ui.DrawOrder = 1000;
             Components.Add(this.ui);
 
+            // Add XUI Component
+            _G.Game = this;
+
+            // add core components
+            Components.Add(new GamerServicesComponent(this));
+
+            // add layers
+            UiLayer = new UiLayer();
+            _G.UI = UiLayer;
+
+            // add other components
+            _G.GameInput = new GameInput((int)E_GameButton.Count, (int)E_GameAxis.Count);
+            GameControls.Setup(); // initialise mappings
+
+
             base.Initialize();
         }
 
@@ -230,14 +256,16 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <param name="gameTime">The elapsed game time.</param>
         protected override void Update(GameTime gameTime)
         {
-            // If the spacebar has been pressed, toggle the focus
-            KeyboardState newState = Keyboard.GetState();
-            if (this.previousKeyboard.IsKeyUp(Keys.Space) && newState.IsKeyDown(Keys.Space))
-            {
-                this.colorHasFocus = !this.colorHasFocus;
-            }
+#if !RELEASE
+            Input input = _G.GameInput.GetInput(0);
 
-            this.previousKeyboard = newState;
+            if (input.ButtonJustPressed((int)E_UiButton.Quit))
+                this.Exit();
+            if (input.ButtonJustPressed((int)E_UiButton.Space))
+                this.colorHasFocus = !this.colorHasFocus;
+
+#endif
+
 
             // Animate the transition value
             if (this.colorHasFocus)
@@ -281,6 +309,16 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 new Vector2(this.viewPortRectangle.Width, this.viewPortRectangle.Height),
                 (float)(this.transition / TransitionDuration));
 
+
+            // update ui
+            float frameTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            UiLayer.Update(frameTime);
+
+            IsRunningSlowly = gameTime.IsRunningSlowly;
+
+            // update input
+            _G.GameInput.Update(frameTime);
+
             base.Update(gameTime);
         }
 
@@ -307,6 +345,13 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 this.colorStream.DrawOrder = 2;
                 this.depthStream.DrawOrder = 1;
             }
+
+            float frameTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // TODO - other stuff here ...
+
+            // render ui
+            UiLayer.Render(frameTime);
 
         }
 

@@ -616,7 +616,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 this.lastNuiTime = currentNuiTime;
             }
 
-            this.HandleInput();
+            //this.HandleInput();
 
             base.Update(gameTime);
         }
@@ -874,54 +874,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             }
         }
 
-        /// <summary>
-        /// Set the bone transform in the avatar mesh.
-        /// </summary>
-        /// <param name="bone">Nui Joint/bone orientation</param>
-        /// <param name="skeleton">The Kinect skeleton.</param>
-        /// <param name="bindRoot">The bind root matrix of the avatar mesh.</param>
-        /// <param name="boneTransforms">The avatar mesh rotation matrices.</param>
-        private void SetJointTransformationByCloth(BoneOrientation bone, Skeleton skeleton, Matrix bindRoot, ref Matrix[] boneTransforms)
-        {
-            if (bone.EndJoint == JointType.ElbowLeft)
-            {
-                Matrix tempMat = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
-
-
-                // The Dude appears to lean back too far compared to a real person, so here we adjust this lean.
-                //CorrectBackwardsLean(skeleton, ref tempMat);
-
-                Vector3 rotationVector = RotationHelper.GetInstance().MatrixToEulerAngleVector3(tempMat);
-                //DebugText += String.Format("Joint{0}:(x={1},y={2},z={3})\n", bone.EndJoint, rotationVector.X, rotationVector.Y, rotationVector.Z);
-
-                // Kinect = +Y along arm, +X down, +Z forward in body coordinate system
-                // Avatar = +X along arm, +Y down, +Z backwards
-                Quaternion kinectRotation = KinectHelper.DecomposeMatRot(tempMat);    // XYZ
-                Quaternion avatarRotation = new Quaternion(kinectRotation.Y, -kinectRotation.Z, -kinectRotation.X, kinectRotation.W); // transform from Kinect to avatar coordinate system
-
-                DebugText += String.Format("JointOrientation{0}:({1},{2},{3})\n", bone.EndJoint, rotationVector.X, rotationVector.Y, rotationVector.Z);
-                this.DebugText += String.Format("Debug Vector=({0},{1},{2})\n",
-                    this.debugRotationVector.X,
-                    this.debugRotationVector.Y,
-                    this.debugRotationVector.Z
-                    );
-                //Debug according to the keyboard input
-                if (bone.EndJoint == JointType.ElbowLeft && this.isDebug)
-                {
-                    tempMat = tempMat
-                        * Matrix.CreateRotationX(this.debugRotationVector.Z)
-                        * Matrix.CreateRotationY(this.debugRotationVector.X)
-                        * Matrix.CreateRotationZ(this.debugRotationVector.Y);
-                }
-
-                // Set the corresponding matrix in the avatar using the translation table we specified.
-                // Note for the spine and shoulder center rotations, we could also try to spread the angle
-                // over all the Avatar skeleton spine joints, causing a more curved back, rather than apply
-                // it all to one joint, as we do here.
-                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
-            }
-        }
-
         private void SetJointTransformationByDube(BoneOrientation bone, Skeleton skeleton, Matrix bindRoot, ref Matrix[] boneTransforms)
         {
             // Always look at the skeleton root
@@ -1164,7 +1116,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
                 Matrix combined = (invBindRoot * hipOrientation) * invPelvis;
 
-                this.ReplaceBoneMatrix(JointType.HipCenter, combined, true, ref boneTransforms);
+                //this.ReplaceBoneMatrix(JointType.HipCenter, combined, true, ref boneTransforms);
             }
             else if (bone.EndJoint == JointType.ShoulderCenter)
             {
@@ -1204,7 +1156,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 // Note for the spine and shoulder center rotations, we could also try to spread the angle
                 // over all the Avatar skeleton spine joints, causing a more curved back, rather than apply
                 // it all to one joint, as we do here.
-                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+                //this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
             }
             else if (bone.EndJoint == JointType.Head)
             {
@@ -1216,7 +1168,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 tempMat = Matrix.CreateFromQuaternion(avatarRotation);
 
                 // Set the corresponding matrix in the avatar using the translation table we specified
-                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+                //this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
             }
             // Mirror View for the People Model's Left Arm, the real people's Right Arm
             else if (bone.EndJoint == JointType.ElbowLeft || bone.EndJoint == JointType.WristLeft)
@@ -1382,10 +1334,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     continue;
                 }
 
-                if (this.ModelType == 0)
+                if (this.ModelType == 0 || this.ModelType == 1)
                     this.SetJointTransformationByPeople(bone, skeleton, bindRoot, ref boneTransforms);
-                else if (this.ModelType == 1)
-                    this.SetJointTransformationByCloth(bone, skeleton, bindRoot, ref boneTransforms);
                 else if (this.ModelType == 2)
                     this.SetJointTransformationByDube(bone, skeleton, bindRoot, ref boneTransforms);
 
@@ -1668,8 +1618,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             Matrix worldTransform = this.GetModelWorldTranslation(skeleton.Joints, this.Chooser.NearMode);
 
             // set root translation
-            //boneTransforms[0].Translation = worldTransform.Translation;
-            boneTransforms[0].Translation = new Vector3(0,0,0);
+            boneTransforms[0].Translation = worldTransform.Translation;
+            //boneTransforms[0].Translation = new Vector3(0,0,0);
         }
 
         /// <summary>
@@ -1715,7 +1665,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 this.nuiJointToAvatarBoneIndex = new Dictionary<JointType, int>();
             }
 
-            if (this.ModelType == 0)
+            if (this.ModelType == 0 || this.ModelType == 1)
             {
                 this.nuiJointToAvatarBoneIndex.Add(JointType.HipCenter, 1);
                 this.nuiJointToAvatarBoneIndex.Add(JointType.Spine, 4);
@@ -1734,10 +1684,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 this.nuiJointToAvatarBoneIndex.Add(JointType.AnkleRight, 21);
                 this.nuiJointToAvatarBoneIndex.Add(JointType.FootRight, 22);
             }
-            else if (this.ModelType == 1)
-            {
-                this.nuiJointToAvatarBoneIndex.Add(JointType.ElbowLeft, 8);
-            }
+
             else if (this.ModelType == 2)
             {
                 this.nuiJointToAvatarBoneIndex.Add(JointType.HipCenter, 1);
@@ -1880,7 +1827,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
 
             // Load the model.
-            this.ModelType = 0;
+            this.ModelType = 1;
             Model avatar = null;
             if (this.ModelType == 0)
             {
@@ -1888,7 +1835,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             }
             else if (this.ModelType == 1)
             {
-                avatar = this.Game.Content.Load<Model>("people04");
+                avatar = this.Game.Content.Load<Model>("yifu_bone2");
             }
             else if (this.ModelType == 2)
             {

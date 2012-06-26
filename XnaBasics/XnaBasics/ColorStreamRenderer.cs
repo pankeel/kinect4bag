@@ -244,7 +244,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         protected override void LoadContent()
         {
             Model3DAvata = Game.Content.Load<Model>("bag");
-            BodyModel = Game.Content.Load<Model>("yifu");
+            BodyModel = Game.Content.Load<Model>("yifu_bone");
             LegModel = Game.Content.Load<Model>("kuzi");
 
 
