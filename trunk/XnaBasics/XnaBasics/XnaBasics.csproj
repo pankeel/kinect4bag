@@ -14,7 +14,7 @@
     </TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
-    <XnaProfile>Reach</XnaProfile>
+    <XnaProfile>HiDef</XnaProfile>
     <XnaCrossPlatformGroupID>4b54117c-0f8d-4dc8-9383-8e22e392476e</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
     <ApplicationIcon>Game.ico</ApplicationIcon>
@@ -126,6 +126,17 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GUI\GameControls.cs" />
+    <Compile Include="GUI\Globals.cs" />
+    <Compile Include="GUI\Layer.cs" />
+    <Compile Include="GUI\Screens\Background.cs" />
+    <Compile Include="GUI\Screens\LevelSelect.cs" />
+    <Compile Include="GUI\Screens\Loading.cs" />
+    <Compile Include="GUI\Screens\MainMenu.cs" />
+    <Compile Include="GUI\Screens\Options.cs" />
+    <Compile Include="GUI\Screens\Popup.cs" />
+    <Compile Include="GUI\Screens\Start.cs" />
+    <Compile Include="GUI\Widgets\FPS.cs" />
     <Compile Include="ModelRender\AvatarAnimator.cs" />
     <Compile Include="AvateeringXNA.cs" />
     <Compile Include="CoordinateCross.cs" />
@@ -219,6 +230,15 @@
     <ProjectReference Include="..\SkinnedModel\SkinnedModelWindows.csproj">
       <Project>{0D41E29B-829F-4255-BCA5-64DC2677DA6D}</Project>
       <Name>SkinnedModelWindows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XUI\XUIContent\XUIContent.contentproj">
+      <Project>{D78EAE4D-281B-4EBA-91A2-37B0C2D34967}</Project>
+      <Name>XUIContent %28Content%29</Name>
+      <XnaReferenceType>Content</XnaReferenceType>
+    </ProjectReference>
+    <ProjectReference Include="..\XUI\XUI\XUI.csproj">
+      <Project>{2F953A14-0E2F-4670-8D82-866020E8DE7B}</Project>
+      <Name>XUI</Name>
     </ProjectReference>
     <ProjectReference Include="Content\XnaBasicsContent.contentproj">
       <Project>{EDD1E44F-7A6A-4EEF-81BA-C2AE70414025}</Project>
