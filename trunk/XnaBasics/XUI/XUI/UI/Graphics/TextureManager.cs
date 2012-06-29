@@ -142,7 +142,7 @@ public class TextureManager
                         RenderTargetUsage.PreserveContents);
         // Set the backbuffer and clear
         graphics.SetRenderTarget(backBuffer);
-        graphics.Clear(ClearOptions.Target, Color.Yellow, 1.0f, 0);
+        graphics.Clear(ClearOptions.Target, Color.AliceBlue, 1.0f, 0);
 
         // Draw Somethine
         graphics.DepthStencilState = DepthStencilState.Default;

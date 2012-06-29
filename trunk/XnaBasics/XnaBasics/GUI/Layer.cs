@@ -36,11 +36,14 @@ public class UiLayer : Layer
 		int bundleIndex = _UI.Texture.CreateBundle();
 
 		_UI.Texture.Add( bundleIndex, "Textures\\UI_Box", "box" );
-        for(int i=0; i<4; i++)
-            _UI.Texture.Add(bundleIndex, "Textures\\tex"+i, "tex"+i );
+        for (int i = 0; i < 4; i++)
+        {
+            _UI.Texture.AddDynamic(bundleIndex, "bag", "Textures\\tex" + i, "BagButtonTex" + i);
+            _UI.Texture.AddDynamic(bundleIndex, "yifu", "Textures\\tex" + i, "ClothButtonTex"+i);
+        }
 
         //Add Dynamic Texture for Bag Model
-        _UI.Texture.AddDynamic(bundleIndex, "yifu", "Textures\\tex1", "BagDisplayUnit");
+        //_UI.Texture.AddDynamic(bundleIndex, "yifu", "Textures\\tex0", "BagDisplayUnit");
 		// load fonts
 		_UI.Font.Add( "Fonts\\", "SegoeUI" );
 
@@ -65,7 +68,7 @@ public class UiLayer : Layer
 
 		// add initial screens
 		//_UI.Screen.AddScreen( new UI.Screen_Background() );
-		//_UI.Screen.AddScreen( new UI.Screen_Start() );
+		//_UI.Screen.AddScreen( new UI.Screen_LevelSelect() );
         _UI.Screen.AddScreen(new UI.SideBar(XnaGame));
 	}
 

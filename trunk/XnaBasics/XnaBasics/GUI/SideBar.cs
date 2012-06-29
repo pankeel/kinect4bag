@@ -20,40 +20,6 @@ namespace UI
         {
             this.XnaGame = game;
 
-            WidgetGraphic black = new WidgetGraphic();
-            black.Size = new Vector3(_UI.SX, _UI.SY, 0.0f);
-            black.AddTexture("null", 0.0f, 0.0f, 1.0f, 1.0f);
-            black.ColorBase = Color.Black;
-            Add(black);
-
-            Timeline blackT = new Timeline("start", true, 0.0f, 0.25f, E_TimerType.Stop, E_RestType.Start);
-            blackT.AddEffect(new TimelineEffect_Alpha(0.0f, -1.0f, E_LerpType.Linear));
-            black.AddTimeline(blackT);
-
-            Random r = new Random();
-
-            WidgetGraphic background0 = new WidgetGraphic();
-            background0.RenderPass = 2;
-            background0.Position = new Vector3(_UI.SXM, _UI.SYM, 0.0f);
-            background0.Size = new Vector3(_UI.SX, _UI.SY, 0.0f);
-            background0.Align = E_Align.MiddleCentre;
-            background0.ColorBase = Color.Yellow;
-            background0.Intensity = 0.25f;
-            background0.Alpha = 1.0f;
-            background0.AddTexture("null", 0.0f, 0.0f, 1.0f, 1.0f);
-            background0.RenderState.Effect = (int)E_Effect.GrayScale;
-            //Add(background0);
-
-            Timeline back0T = new Timeline("selected", false, 0.0f, 0.25f, E_TimerType.Stop, E_RestType.Start);
-            back0T.AddEffect(new TimelineEffect_Alpha(0.0f, 1.0f, E_LerpType.Linear));
-            background0.AddTimeline(back0T);
-
-            WidgetGraphic background1 = (WidgetGraphic)background0.Copy();
-            //Add(background1);
-
-            Backgrounds[0] = background0;
-            Backgrounds[1] = background1;
-
             RightBar = new WidgetMenuScroll(E_MenuType.Vertical);
             RightBar.RenderPass = 1;
             RightBar.Speed = 5.0f;
@@ -75,7 +41,6 @@ namespace UI
                 node.Alpha = 0.5f;
                 node.Parent(RightBar);
                 Add(node);
-
                 Timeline nodeT = new Timeline("selected", false, 0.0f, 0.25f, E_TimerType.Stop, E_RestType.Start);
                 nodeT.AddEffect(new TimelineEffect_Alpha(0.0f, 0.5f, E_LerpType.Linear));
                 node.AddTimeline(nodeT);
@@ -84,23 +49,29 @@ namespace UI
 
                 WidgetGraphic back = new WidgetGraphic();
                 back.RenderPass = 1;
-                back.Size = new Vector3(node.Size.X + 1.0f, node.Size.Y + 1.0f, 0.0f);
-                back.Align = E_Align.MiddleLeft;
-                //back.AddTexture("tex"+i, 0.0f, 0.0f, 1.0f, 1.0f);
-                back.AddTexture("BagDisplayUnit", 0.0f, 0.0f, 1.0f, 1.0f);
-
+                back.Size = new Vector3(node.Size.X, node.Size.Y, 0.0f);
+                back.Align = E_Align.MiddleCentre;
+                back.AddTexture("null", 0.0f, 0.0f, 1.0f, 1.0f);
                 back.Parent(node);
-                back.ParentAttach = E_Align.MiddleCentre;
-                back.ColorBase = Color.AntiqueWhite;
+                back.ParentAttach = E_Align.MiddleRight;
+                back.ColorBase = Color.Yellow;
                 back.Intensity = 0.5f;
                 back.Alpha = 0.0f;
                 Add(back);
-
                 Timeline backT = new Timeline("selected", false, 0.0f, 0.5f, E_TimerType.Bounce, E_RestType.Start);
-                backT.AddEffect(new TimelineEffect_Alpha(0.5f, 0.8f, E_LerpType.SmoothStep));
+                backT.AddEffect(new TimelineEffect_Alpha(0.2f, 0.9f, E_LerpType.SmoothStep));
                 back.AddTimeline(backT);
 
-
+                WidgetGraphic graphic = new WidgetGraphic();
+                graphic.RenderPass = 1;
+                graphic.Layer = 2;
+                graphic.Size = new Vector3(node.Size.X - 1.0f, node.Size.Y - 1.0f, 0.0f);
+                graphic.Align = E_Align.MiddleCentre;
+                graphic.AddTexture("ClothButtonTex"+i, 0.0f, 0.0f, 1.0f, 1.0f);
+                graphic.Parent(node);
+                graphic.ParentAttach = E_Align.MiddleRight;
+                graphic.ColorBase = Color.White;
+                Add(graphic);
 
 
                 WidgetMenuNode node2 = new WidgetMenuNode(i);
@@ -110,7 +81,6 @@ namespace UI
                 node2.Alpha = 0.5f;
                 node2.Parent(LeftBar);
                 Add(node2);
-
                 Timeline nodeT2 = new Timeline("selected", false, 0.0f, 0.25f, E_TimerType.Stop, E_RestType.Start);
                 nodeT2.AddEffect(new TimelineEffect_Alpha(0.0f, 0.5f, E_LerpType.Linear));
                 node2.AddTimeline(nodeT2);
@@ -119,24 +89,33 @@ namespace UI
 
                 WidgetGraphic back2 = new WidgetGraphic();
                 back2.RenderPass = 1;
-                back2.Size = new Vector3(node2.Size.X + 1.0f, node2.Size.Y + 1.0f, 0.0f);
-                back2.Align = E_Align.MiddleRight;
-                back2.AddTexture("uvs", 0.0f, 0.0f, 1.0f, 1.0f);
+                back2.Size = new Vector3(node2.Size.X, node2.Size.Y, 0.0f);
+                back2.Align = E_Align.MiddleCentre;
+                back2.AddTexture("null", 0.0f, 0.0f, 1.0f, 1.0f);
                 back2.Parent(node2);
-                back2.ParentAttach = E_Align.MiddleCentre;
-                back2.ColorBase = Color.Red;
+                back2.ParentAttach = E_Align.MiddleLeft;
+                back2.ColorBase = Color.Tomato;
                 back2.Intensity = 0.5f;
                 back2.Alpha = 0.0f;
                 Add(back2);
-
                 Timeline backT2 = new Timeline("selected", false, 0.0f, 0.5f, E_TimerType.Bounce, E_RestType.Start);
-                backT2.AddEffect(new TimelineEffect_Alpha(0.5f, 0.8f, E_LerpType.SmoothStep));
+                backT2.AddEffect(new TimelineEffect_Alpha(0.2f, 0.9f, E_LerpType.SmoothStep));
                 back2.AddTimeline(backT2);
+
+                WidgetGraphic graphic2 = new WidgetGraphic();
+                graphic2.RenderPass = 1;
+                graphic2.Layer = 2;
+                graphic2.Size = new Vector3(node.Size.X - 1.0f, node.Size.Y - 1.0f, 0.0f);
+                graphic2.Align = E_Align.MiddleCentre;
+                graphic2.AddTexture("BagButtonTex" + i, 0.0f, 0.0f, 1.0f, 1.0f);
+                graphic2.Parent(node2);
+                graphic2.ParentAttach = E_Align.MiddleLeft;
+                graphic2.ColorBase = Color.White;
+                Add(graphic2);
             }
 
             CurrentSelectionRight = -1;
             CurrentSelectionLeft = -1;
-            CurrentBackground = -1;
         }
 
         // OnInit
@@ -159,32 +138,11 @@ namespace UI
             {
                 CurrentSelectionRight = menuSelected;
                 if (this.XnaGame != null) ;
-                    
-                UpdateBackground();
             }
             menuSelected = LeftBar.GetByValue();
             if (menuSelected != CurrentSelectionLeft)
             {
                 CurrentSelectionLeft = menuSelected;
-                UpdateBackground();
-            }
-        }
-
-        // UpdateBackground
-        private void UpdateBackground()
-        {
-            if (CurrentBackground == -1)
-            {
-                CurrentBackground = 0;
-                Backgrounds[CurrentBackground].ChangeTexture(0, TextureNames[0], 0.0f, 0.0f, 1.0f, 1.0f);
-                Backgrounds[CurrentBackground].Selected(true, false, true);
-            }
-            else
-            {
-                Backgrounds[CurrentBackground].Selected(false, false, true);
-                CurrentBackground = (CurrentBackground + 1) % 2;
-                Backgrounds[CurrentBackground].ChangeTexture(0, TextureNames[0], 0.0f, 0.0f, 1.0f, 1.0f);
-                Backgrounds[CurrentBackground].Selected(true, false, true);
             }
         }
 
@@ -212,9 +170,6 @@ namespace UI
 
         //
         private static string[] TextureNames = { "null", "null", "null", "null" };
-
-        private WidgetGraphic[] Backgrounds = new WidgetGraphic[2];
-        private int CurrentBackground;
 
         private WidgetMenuScroll RightBar;
         private WidgetMenuScroll LeftBar;
