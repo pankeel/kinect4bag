@@ -22,6 +22,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
     using Microsoft.Xna.Framework.Input;
     using System;
     using Microsoft.Xna.Framework.GamerServices;
+    using JiggleGame.PhysicObjects;
+    using JigLibX.Physics;
 
     /// <summary>
     /// The main Xna game implementation.
@@ -141,6 +143,22 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         private SpriteFont font;
 
         /// <summary>
+        /// Ragdoll Model Loading Object
+        /// </summary>
+        private Model BoxModel;
+        private Model SphereModel;
+        private Model CapsuleModel;
+        private PhysicsSystem physicSystem;
+
+        public JiggleGame.Camera GameCamera
+        {
+            get
+            {
+                return camera;
+            }
+        }
+        private JiggleGame.Camera camera;
+        /// <summary>
         /// Initializes a new instance of the XnaBasics class.
         /// </summary>
         public XnaBasics()
@@ -164,6 +182,10 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.viewPortRectangle = new Rectangle(0, 0, Width, Height);
             this.graphics.IsFullScreen = false;
             this.IsMouseVisible = false;
+
+            physicSystem = new PhysicsSystem();
+            camera = new JiggleGame.Camera(this);
+
 
             Content.RootDirectory = "Content";
 
@@ -193,6 +215,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             LeftHand = new Vector2();
             RightHand = new Vector2();
+            
         }
 
         /// <summary>
@@ -207,6 +230,13 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             UiLayer.Startup(Content);
 
+            BoxModel = Content.Load<Model>("box");
+            SphereModel = Content.Load<Model>("sphere");
+            CapsuleModel = Content.Load<Model>("capsule");
+
+            camera.Position = Vector3.Down * 12 + Vector3.Backward * 30.0f;
+            UpdateViewingCamera();
+
             base.LoadContent();
 
             
@@ -218,8 +248,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// Initializes class and components
         /// </summary>
         protected override void Initialize()
-        {
-            //this.Components.Add(this.depthStream);
+        {           
             this.Components.Add(this.colorStream);
 
 
@@ -227,9 +256,11 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.animator = new AvatarAnimator(this);
             this.Components.Add(this.animator);
 
+            
+
             this.ui = new SimpleGUI(this);
             this.ui.DrawOrder = 1000;
-            Components.Add(this.ui);
+            //Components.Add(this.ui);
 
             // Add XUI Component
             _G.Game = this;
@@ -247,7 +278,23 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
 
             base.Initialize();
+
+            this.Components.Add(camera);
+
         }
+
+        private void CreateScene9()
+        {
+            RagdollObject rgd;
+
+            
+
+            rgd = new RagdollObject(this, CapsuleModel, SphereModel, BoxModel, RagdollObject.RagdollType.Complex, 1.0f);
+            rgd.Position = new Vector3(1 * 2, -14, 10 + 1 * 2);
+            rgd.PutToSleep();
+
+        }
+
 
         /// <summary>
         /// This method updates the game state. Including monitoring
@@ -263,7 +310,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 this.Exit();
             if (input.ButtonJustPressed((int)E_UiButton.Space))
                 this.colorHasFocus = !this.colorHasFocus;
-
+            //if (input.ButtonJustPressed((int)E_UiButton.D9))
+            //    CreateScene9();
 #endif
 
 
@@ -351,7 +399,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // TODO - other stuff here ...
 
             // render ui
-            UiLayer.Render(frameTime);
+            //UiLayer.Render(frameTime);
 
         }
 

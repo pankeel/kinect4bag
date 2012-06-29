@@ -158,6 +158,7 @@
     <Compile Include="ModelRender\Object3D.cs" />
     <Compile Include="ModelRender\BagRender.cs" />
     <Compile Include="ColorStreamRenderer.cs" />
+    <Compile Include="ModelRender\SkinnedObject3D.cs" />
     <Compile Include="ModelRender\TrousersRender.cs" />
     <Compile Include="ModelRender\SkeletonStreamRenderer.cs" />
     <Compile Include="DepthStreamRenderer.cs" />
@@ -188,6 +189,23 @@
     <Compile Include="ModelViewer\ViewModeLabel.cs" />
     <Compile Include="ModelViewer\WorldAxes.cs" />
     <Compile Include="Object2D.cs" />
+    <Compile Include="PhysxObjects\BowlingPin.cs" />
+    <Compile Include="PhysxObjects\BoxObject.cs" />
+    <Compile Include="PhysxObjects\Camera.cs" />
+    <Compile Include="PhysxObjects\CapsuleObject.cs" />
+    <Compile Include="PhysxObjects\CarObject.cs" />
+    <Compile Include="PhysxObjects\CylinderObject.cs" />
+    <Compile Include="PhysxObjects\DebugDrawer.cs" />
+    <Compile Include="PhysxObjects\FrameRateCounter.cs" />
+    <Compile Include="PhysxObjects\HeightMapInfo.cs" />
+    <Compile Include="PhysxObjects\HeightmapObject.cs" />
+    <Compile Include="PhysxObjects\JiggleGame.cs" />
+    <Compile Include="PhysxObjects\PhysicObject.cs" />
+    <Compile Include="PhysxObjects\PlaneObject.cs" />
+    <Compile Include="PhysxObjects\RagdollObject.cs" />
+    <Compile Include="PhysxObjects\SphereObject.cs" />
+    <Compile Include="PhysxObjects\TestObject.cs" />
+    <Compile Include="PhysxObjects\TriangleMeshObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GUI\SimpleButton.cs" />
@@ -227,6 +245,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\JigLibX\JigLibX.csproj">
+      <Project>{8A7CEF45-3501-491D-AEDA-0164060F5348}</Project>
+      <Name>JigLibX</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SkinnedModelPipeline\SkinnedModelPipeline.csproj">
       <Project>{4636C7E1-B845-4B83-B96D-64A11B8A4515}</Project>
       <Name>SkinnedModelPipeline</Name>
@@ -243,6 +265,11 @@
     <ProjectReference Include="Content\XnaBasicsContent.contentproj">
       <Project>{EDD1E44F-7A6A-4EEF-81BA-C2AE70414025}</Project>
       <Name>XnaBasicsContent %28Content%29</Name>
+      <XnaReferenceType>Content</XnaReferenceType>
+    </ProjectReference>
+    <ProjectReference Include="JigLibGameContent\JigLibGameContent.contentproj">
+      <Project>{56EE122E-686C-413E-80F5-CBD20386ECD7}</Project>
+      <Name>JigLibGameContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
   </ItemGroup>

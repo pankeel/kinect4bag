@@ -24,6 +24,7 @@ namespace Microsoft.Samples.Kinect.Avateering
             //app.Run();
             //using (XnaBasics.AvateeringXNA game = new XnaBasics.AvateeringXNA())
             using (XnaBasics.XnaBasics game = new XnaBasics.XnaBasics())
+            //using (JiggleGame.JiggleGame game = new JiggleGame.JiggleGame())
             {
                 game.Run();
             }

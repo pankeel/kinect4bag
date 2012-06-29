@@ -148,10 +148,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             }
         }
 
-        protected virtual void UpdateShowPosition()
-        {
-
-        }
         /// <summary>
         /// This method retrieves a new skeleton frame if necessary.
         /// </summary>
