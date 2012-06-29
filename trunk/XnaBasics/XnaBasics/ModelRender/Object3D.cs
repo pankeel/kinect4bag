@@ -27,10 +27,17 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             set;
         }
 
+        private Texture2D _TargetTexture;
         public Texture2D TargetTexture
         {
-            get;
-            set;
+            get
+            {
+                return _TargetTexture;
+            }
+            set
+            {
+                _TargetTexture = value;
+            }
         }
 
         protected DateTime lastChangeTicks;
@@ -117,6 +124,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             return Matrix.Identity;
         }
 
+        private static int testFlag = 0;
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
@@ -133,7 +141,16 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     {
                         //effect.SetBoneTransforms(this.skinTransforms);
                         if (TargetTexture != null && effect.Texture != TargetTexture)
+                        {
                             effect.Texture = TargetTexture;
+                            //if (testFlag %2 == 0)
+                            //    effect.Texture = this.Game.Content.Load<Texture2D>("Textures\\tex0");
+                            //else
+                            //    effect.Texture = this.Game.Content.Load<Texture2D>("Textures\\tex1");
+                            
+                            //TargetTexture = effect.Texture;
+                            testFlag++;
+                        }
                         effect.World = world;
                         effect.View = view;
                         effect.Projection = projection;

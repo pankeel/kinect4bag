@@ -242,6 +242,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             
 
             this.ui.ObjectRender = this.colorStream.BodyModelRender;
+
+            UiLayer.SideBars.ObjectRender = this.colorStream.BodyModelRender;
         }
 
         /// <summary>

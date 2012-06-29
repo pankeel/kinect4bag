@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Samples.Kinect.XnaBasics;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Samples.Kinect.XnaBasics.GUI;
 
 namespace UI
 {
@@ -15,11 +17,9 @@ namespace UI
     public class SideBar : Screen
     {
         // Screen_LevelSelect
-        public SideBar(XnaBasics game)
+        public SideBar()
             : base("SideBar")
         {
-            this.XnaGame = game;
-
             RightBar = new WidgetMenuScroll(E_MenuType.Vertical);
             RightBar.RenderPass = 1;
             RightBar.Speed = 5.0f;
@@ -31,6 +31,8 @@ namespace UI
             LeftBar.Speed = 5.0f;
             LeftBar.Padding = 2.0f;
             Add(LeftBar);
+
+            _DictNodeToTextureIndex = new Dictionary<int,int>();
 
             for (int i = 0; i < 4; ++i)
             {
@@ -68,12 +70,16 @@ namespace UI
                 graphic.Size = new Vector3(node.Size.X - 1.0f, node.Size.Y - 1.0f, 0.0f);
                 graphic.Align = E_Align.MiddleCentre;
                 graphic.AddTexture("ClothButtonTex"+i, 0.0f, 0.0f, 1.0f, 1.0f);
+                graphic.Name = "ClothButtonTex" + i;
                 graphic.Parent(node);
                 graphic.ParentAttach = E_Align.MiddleRight;
                 graphic.ColorBase = Color.White;
+                
                 Add(graphic);
 
-
+                _DictNodeToTextureIndex.Add( i,_UI.Texture.Get("ClothTexture" + i) );
+                
+                
                 WidgetMenuNode node2 = new WidgetMenuNode(i);
                 node2.RenderPass = 1;
                 node2.Size = new Vector3(20.0f, 20.0f * (9.0f / 16.0f), 0.0f);
@@ -137,7 +143,12 @@ namespace UI
             if (menuSelected != CurrentSelectionRight)
             {
                 CurrentSelectionRight = menuSelected;
-                if (this.XnaGame != null) ;
+                int texIndex = 0;
+                _DictNodeToTextureIndex.TryGetValue(CurrentSelectionRight, out texIndex);
+                ObjectRender.TargetTexture = _UI.Texture.Get(texIndex);
+                //int slot = _UI.Texture.Get("ClothButtonTex" + CurrentSelectionRight);
+                //ObjectRender.TargetTexture = _UI.Texture.Get(slot);
+                    
             }
             menuSelected = LeftBar.GetByValue();
             if (menuSelected != CurrentSelectionLeft)
@@ -177,7 +188,14 @@ namespace UI
 
         private WidgetMenuNode[] RightNodes = new WidgetMenuNode[4];
         private WidgetMenuNode[] LeftNodes = new WidgetMenuNode[4];
-        private XnaBasics XnaGame;
+
+        public Object3D ObjectRender
+        {
+            get;
+            set;
+        }
+
+        Dictionary<int, int> _DictNodeToTextureIndex;
     };
 
 }; // namespace UI

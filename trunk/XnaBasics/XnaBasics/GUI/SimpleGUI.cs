@@ -43,14 +43,13 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         public const int MOUSE_ON_RIGHT_NEUTRAL = 5;
         public const int MOUSE_ON_RIGHT_BOTTOM = 6;
 
-        private XnaBasics xnaGame;
 
         public Object3D ObjectRender { get; set; }
 
-        public SimpleGUI(XnaBasics game)
+        public SimpleGUI(Game game)
             : base(game)
         {
-            this.xnaGame = game;
+        
         }
 
         public override void Initialize()

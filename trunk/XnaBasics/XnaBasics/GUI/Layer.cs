@@ -40,6 +40,7 @@ public class UiLayer : Layer
         {
             _UI.Texture.AddDynamic(bundleIndex, "bag", "Textures\\tex" + i, "BagButtonTex" + i);
             _UI.Texture.AddDynamic(bundleIndex, "yifu", "Textures\\tex" + i, "ClothButtonTex"+i);
+            _UI.Texture.Add(bundleIndex,"Textures\\tex"+i,"ClothTexture"+i);
         }
 
         //Add Dynamic Texture for Bag Model
@@ -69,7 +70,7 @@ public class UiLayer : Layer
 		// add initial screens
 		//_UI.Screen.AddScreen( new UI.Screen_Background() );
 		//_UI.Screen.AddScreen( new UI.Screen_LevelSelect() );
-        this.SideBars = new UI.SideBar(XnaGame);
+        this.SideBars = new UI.SideBar();
         _UI.Screen.AddScreen(SideBars);
 	}
 
