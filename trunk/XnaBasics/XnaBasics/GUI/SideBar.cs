@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Samples.Kinect.XnaBasics;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Samples.Kinect.XnaBasics.GUI;
 
 namespace UI
 {
