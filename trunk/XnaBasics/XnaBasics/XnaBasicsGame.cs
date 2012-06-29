@@ -92,7 +92,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <summary>
         /// This manages the rendering of the color stream.
         /// </summary>
-        private readonly ColorStreamRenderer colorStream;
+        public readonly ColorStreamRenderer colorStream;
 
         /// <summary>
         /// This manages the rendering of the depth stream.
@@ -269,7 +269,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             Components.Add(new GamerServicesComponent(this));
 
             // add layers
-            UiLayer = new UiLayer();
+            UiLayer = new UiLayer(this);
             _G.UI = UiLayer;
 
             // add other components
@@ -446,5 +446,16 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // This is necessary because we are rendering to back buffer/render targets and we need to preserve the data
             e.GraphicsDeviceInformation.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
         }
+
+        /*
+        public void ChangeClothTex(Texture2D newTex)
+        {
+            this.colorStream.cloth = newTex;
+
+            foreach (ModelMesh mesh in this.bodyModel.Meshes)
+                foreach (BasicEffect effect in mesh.Effects)
+                    effect.Texture = this.colorStream.cloth;
+        }
+         * */
     }
 }

@@ -87,14 +87,14 @@ public abstract class WidgetMenuBase : WidgetBase
 
 		if ( input.ButtonAutoRepeat( (int)E_UiButton.Up, delay, repeat ) )
 		{
-			if ( Type == E_MenuType.Vertical )
-				DecreaseCurrent();
+			if ( Type == E_MenuType.Vertical );
+				//DecreaseCurrent();
 		}
 		else
 		if ( input.ButtonAutoRepeat( (int)E_UiButton.Down, delay, repeat ) )
 		{
-			if ( Type == E_MenuType.Vertical )
-				IncreaseCurrent();
+            if (Type == E_MenuType.Vertical) ;
+				//IncreaseCurrent();
 		}
 		else
 		if ( input.ButtonAutoRepeat( (int)E_UiButton.Left, delay, repeat ) )
@@ -117,7 +117,7 @@ public abstract class WidgetMenuBase : WidgetBase
 	}
 
 	// IncreaseCurrent
-	private void IncreaseCurrent()
+	public void IncreaseCurrent()
 	{
 		int oldNode = CurrentNode++;
 
@@ -134,7 +134,7 @@ public abstract class WidgetMenuBase : WidgetBase
 	}
 
 	// DecreaseCurrent
-	private void DecreaseCurrent()
+	public void DecreaseCurrent()
 	{
 		int oldNode = CurrentNode--;
 
