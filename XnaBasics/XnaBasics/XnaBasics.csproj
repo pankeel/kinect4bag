@@ -136,6 +136,7 @@
     <Compile Include="GUI\Screens\Options.cs" />
     <Compile Include="GUI\Screens\Popup.cs" />
     <Compile Include="GUI\Screens\Start.cs" />
+    <Compile Include="GUI\SideBar.cs" />
     <Compile Include="GUI\Widgets\FPS.cs" />
     <Compile Include="ModelRender\AvatarAnimator.cs" />
     <Compile Include="AvateeringXNA.cs" />

@@ -57,7 +57,7 @@ namespace UI
             Menu.Padding = 10.0f;
             Add(Menu);
 
-            for (int i = 0; i < 1; ++i)
+            for (int i = 0; i < 4; ++i)
             {
                 LevelNodes[i] = new List<WidgetBase>();
 

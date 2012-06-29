@@ -5,6 +5,8 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Samples.Kinect.XnaBasics;
 
 // E_UiMessageType
 public enum E_UiMessageType
@@ -19,10 +21,10 @@ public enum E_UiMessageType
 public class UiLayer : Layer
 {
 	// UiLayer
-	public UiLayer()
+	public UiLayer(XnaBasics game)
 		: base( (int)E_Layer.UI )
 	{
-		//
+        this.XnaGame = game;
 	}
 
 	// Startup
@@ -34,6 +36,8 @@ public class UiLayer : Layer
 		int bundleIndex = _UI.Texture.CreateBundle();
 
 		_UI.Texture.Add( bundleIndex, "Textures\\UI_Box", "box" );
+        for(int i=0; i<4; i++)
+            _UI.Texture.Add(bundleIndex, "Textures\\tex"+i, "tex"+i );
 
 		// load fonts
 		_UI.Font.Add( "Fonts\\", "SegoeUI" );
@@ -58,8 +62,9 @@ public class UiLayer : Layer
 		_UI.Store_FontIcon.Add( "B", new UI.FontIcon( _UI.Texture.Get( "null" ), 0.0f, 0.0f, 1.0f, 1.0f ) );
 
 		// add initial screens
-		_UI.Screen.AddScreen( new UI.Screen_Background() );
-		_UI.Screen.AddScreen( new UI.Screen_Start() );
+		//_UI.Screen.AddScreen( new UI.Screen_Background() );
+		//_UI.Screen.AddScreen( new UI.Screen_Start() );
+        _UI.Screen.AddScreen(new UI.SideBar(XnaGame));
 	}
 
 	// Shutdown
@@ -101,5 +106,6 @@ public class UiLayer : Layer
 	public bool		MM_FromStartScreen;
 	public bool		MM_FromLevelSelect;
 	public bool		SS_FromMainMenu;
+    private XnaBasics XnaGame;
 	//
 };
