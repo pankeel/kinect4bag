@@ -85,7 +85,8 @@ namespace PipelineDebuging
         ///       Example:
         ///               private const string ProjectToDebug = @"C:\XNA Samples\SkinnedModelExtensions\SkinningSample\Content\SkinningSampleContent.contentproj";
         /// </summary>
-        private const string ProjectToDebug = @"D:\googlecodeworkspace\XnaBasics\XnaBasics\Content\XnaBasicsContent.contentproj";
+        //private const string ProjectToDebug = @"D:\googlecodeworkspace\XnaBasics\XnaBasics\Content\XnaBasicsContent.contentproj";
+        private const string ProjectToDebug = @"D:\googlecodeworkspace\XnaBasics\XnaBasics\JigLibGameContent\JigLibGameContent.contentproj";
 
         /// <summary>
         /// TODO: Change this to the content item you want to debug. The content pipeline will only
@@ -94,7 +95,7 @@ namespace PipelineDebuging
         ///       Example:
         ///               private const string SingleItem = @"dude.fbx";
         /// </summary>
-        private const string SingleItem = @"yifu_bone2.fbx";
+        private const string SingleItem = @"terrain.bmp";
 
         /// <summary>
         /// TODO: Set the XnaProfile to HiDef or Reach, depending on your target graphics profile.

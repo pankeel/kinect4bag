@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace UI
 {
@@ -34,6 +35,12 @@ public class TextureBundle
 		Textures.Add( Content.Load< Texture2D >( path ) );
 		TextureNameMap.Add( name, Textures.Count - 1 );
 	}
+
+    public void Add(Texture2D texture, string name)
+    {
+        Textures.Add(texture);
+        TextureNameMap.Add(name, Textures.Count - 1);
+    }
 
 	// Get
 	public int Get( string name )
@@ -114,6 +121,63 @@ public class TextureManager
 	{
 		Bundles[ bundleIndex ].Add( path, name );
 	}
+
+    public void AddDynamic( int bundleIndex, string modelPath, string texturePath, string name )
+    {
+        TextureBundle bundle = Bundles[bundleIndex];
+
+        // Load Device Texture2D
+
+        GraphicsDevice graphics = _UI.Game.GraphicsDevice;
+        SpriteBatch spriteBatch = (SpriteBatch)_UI.Game.Services.GetService(typeof(SpriteBatch));
+
+        
+        RenderTarget2D backBuffer = new RenderTarget2D(graphics,
+                        200,
+                        200,
+                        false,
+                        SurfaceFormat.Color,
+                        DepthFormat.None,
+                        graphics.PresentationParameters.MultiSampleCount,
+                        RenderTargetUsage.PreserveContents);
+        // Set the backbuffer and clear
+        graphics.SetRenderTarget(backBuffer);
+        graphics.Clear(ClearOptions.Target, Color.Yellow, 1.0f, 0);
+
+        // Draw Somethine
+        graphics.DepthStencilState = DepthStencilState.Default;
+        Model model = _UI.Game.Content.Load<Model>(modelPath);
+        Texture2D modelSkin = _UI.Game.Content.Load<Texture2D>(texturePath);
+        foreach (ModelMesh mesh in model.Meshes)
+        {
+            
+            foreach (BasicEffect effect in mesh.Effects)
+            {
+                effect.Texture = modelSkin;
+                effect.World = Matrix.Identity;
+                effect.View = Matrix.CreateLookAt(
+                    new Vector3(0.0f,0.0f,-10f),
+                    new Vector3(0, 0, 0),
+                    Vector3.Up);
+                effect.Projection = Matrix.CreatePerspectiveFieldOfView(
+                    (45.6f * (float)Math.PI / 180.0f),
+                    graphics.Viewport.AspectRatio,
+                    1,
+                    10000);
+                effect.EnableDefaultLighting();
+
+                effect.SpecularColor = new Vector3(0.25f);
+                effect.SpecularPower = 16;
+            }
+
+            mesh.Draw();
+        }
+        // Reset the render target and prepare to draw scaled image
+        graphics.SetRenderTargets(null);
+
+        Bundles[bundleIndex].Add(backBuffer as Texture2D, name);
+
+    }
 
 	// Get
 	public int Get( string name )
