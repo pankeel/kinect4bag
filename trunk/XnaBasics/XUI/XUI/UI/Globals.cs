@@ -40,6 +40,16 @@ public enum E_UiButton
 	MouseRight,
 #endif
     Space,
+    D1,
+    D2,
+    D3,
+    D4,
+    D5,
+    D6,
+    D7,
+    D8,
+    D9,
+    D0,
 	Count,
 };
 
@@ -142,6 +152,25 @@ public static class _UI
 	public static void SetupControls( Input input )
 	{
 	#if WINDOWS
+        input.AddButtonMapping((int)E_UiButton.D1, E_Device.Keyboard, (int)Keys.D1);
+        input.AddButtonMapping((int)E_UiButton.D2, E_Device.Keyboard, (int)Keys.D2);
+        input.AddButtonMapping((int)E_UiButton.D3, E_Device.Keyboard, (int)Keys.D3);
+        input.AddButtonMapping((int)E_UiButton.D4, E_Device.Keyboard, (int)Keys.D4);
+        input.AddButtonMapping((int)E_UiButton.D5, E_Device.Keyboard, (int)Keys.D5);
+        input.AddButtonMapping((int)E_UiButton.D6, E_Device.Keyboard, (int)Keys.D6);
+        input.AddButtonMapping((int)E_UiButton.D7, E_Device.Keyboard, (int)Keys.D7);
+        input.AddButtonMapping((int)E_UiButton.D8, E_Device.Keyboard, (int)Keys.D8);
+        input.AddButtonMapping((int)E_UiButton.D9, E_Device.Keyboard, (int)Keys.D9);
+        input.AddButtonMapping((int)E_UiButton.D0, E_Device.Keyboard, (int)Keys.D0);
+
+
+        input.AddButtonMapping((int)E_UiButton.D1, E_Device.Keyboard, (int)Keys.D1);
+        input.AddButtonMapping((int)E_UiButton.Space, E_Device.Keyboard, (int)Keys.Space);
+        input.AddButtonMapping((int)E_UiButton.Space, E_Device.Keyboard, (int)Keys.Space);
+        input.AddButtonMapping((int)E_UiButton.Space, E_Device.Keyboard, (int)Keys.Space);
+        input.AddButtonMapping((int)E_UiButton.Space, E_Device.Keyboard, (int)Keys.Space);
+        input.AddButtonMapping((int)E_UiButton.Space, E_Device.Keyboard, (int)Keys.Space);
+
         input.AddButtonMapping((int)E_UiButton.Space, E_Device.Keyboard, (int)Keys.Space);
 		input.AddButtonMapping( (int)E_UiButton.Quit, E_Device.Keyboard, (int)Keys.Escape );
 		input.AddButtonMapping( (int)E_UiButton.Up, E_Device.Keyboard, (int)Keys.Up );
