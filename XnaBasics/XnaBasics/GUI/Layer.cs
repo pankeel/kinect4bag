@@ -39,6 +39,8 @@ public class UiLayer : Layer
         for(int i=0; i<4; i++)
             _UI.Texture.Add(bundleIndex, "Textures\\tex"+i, "tex"+i );
 
+        //Add Dynamic Texture for Bag Model
+        _UI.Texture.AddDynamic(bundleIndex, "yifu", "Textures\\tex1", "BagDisplayUnit");
 		// load fonts
 		_UI.Font.Add( "Fonts\\", "SegoeUI" );
 

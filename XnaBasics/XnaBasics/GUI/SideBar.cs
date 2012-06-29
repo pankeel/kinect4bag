@@ -86,7 +86,9 @@ namespace UI
                 back.RenderPass = 1;
                 back.Size = new Vector3(node.Size.X + 1.0f, node.Size.Y + 1.0f, 0.0f);
                 back.Align = E_Align.MiddleLeft;
-                back.AddTexture("tex"+i, 0.0f, 0.0f, 1.0f, 1.0f);
+                //back.AddTexture("tex"+i, 0.0f, 0.0f, 1.0f, 1.0f);
+                back.AddTexture("BagDisplayUnit", 0.0f, 0.0f, 1.0f, 1.0f);
+
                 back.Parent(node);
                 back.ParentAttach = E_Align.MiddleCentre;
                 back.ColorBase = Color.AntiqueWhite;
