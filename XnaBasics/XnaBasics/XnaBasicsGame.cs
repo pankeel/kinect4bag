@@ -399,7 +399,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // TODO - other stuff here ...
 
             // render ui
-            //UiLayer.Render(frameTime);
+            UiLayer.Render(frameTime);
 
         }
 
