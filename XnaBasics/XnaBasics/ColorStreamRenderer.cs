@@ -216,7 +216,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 // Draw the skeleton
                 this.skeletonStream.Draw(gameTime, cloth);
                 // Draw the bag 3d model
-                this.bagRender.Draw(gameTime);
+                //this.bagRender.Draw(gameTime);
                 this.bodyRender.Draw(gameTime);
                 this.legRender.Draw(gameTime);
                 // Reset the render target and prepare to draw scaled image
