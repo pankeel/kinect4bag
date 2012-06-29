@@ -69,7 +69,8 @@ public class UiLayer : Layer
 		// add initial screens
 		//_UI.Screen.AddScreen( new UI.Screen_Background() );
 		//_UI.Screen.AddScreen( new UI.Screen_LevelSelect() );
-        _UI.Screen.AddScreen(new UI.SideBar(XnaGame));
+        this.SideBars = new UI.SideBar(XnaGame);
+        _UI.Screen.AddScreen(SideBars);
 	}
 
 	// Shutdown
@@ -111,6 +112,7 @@ public class UiLayer : Layer
 	public bool		MM_FromStartScreen;
 	public bool		MM_FromLevelSelect;
 	public bool		SS_FromMainMenu;
+    public UI.SideBar SideBars;
     private XnaBasics XnaGame;
 	//
 };
