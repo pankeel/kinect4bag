@@ -126,7 +126,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GUI\Dictionary.cs" />
     <Compile Include="GUI\GameControls.cs" />
     <Compile Include="GUI\Globals.cs" />
     <Compile Include="GUI\Layer.cs" />
