@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="example">
+</Property><Property Name="解决方案文件" Value="D:\workspace\swigwin-2.0.7\Examples\csharp\class3\example.sln">
+</Property><Property Name="用户选项文件" Value="D:\workspace\swigwin-2.0.7\Examples\csharp\class3\example.suo">
+</Property><Property Name="Date" Value="2012年6月29日">
+</Property><Property Name="Time" Value="17:32">
+</Property><Property Name="日志号" Value="2">
+</Property></Properties><Event ErrorLevel="2" Project="" Source="example.sln" Description="创建备份文件 D:\workspace\swigwin-2.0.7\Examples\csharp\class3\example.sln.old 时出错">
+</Event><Event ErrorLevel="0" Project="" Source="example.suo" Description="文件已成功备份为 D:\workspace\swigwin-2.0.7\Examples\csharp\class3\example.suo.old">
+</Event><Event ErrorLevel="0" Project="example-cs" Source="example-cs.csproj" Description="项目文件已成功备份为 D:\workspace\swigwin-2.0.7\Examples\csharp\class3\example-cs.csproj(2).old">
+</Event><Event ErrorLevel="0" Project="example-cs" Source="example-cs.csproj.user" Description="项目用户文件成功备份为 D:\workspace\swigwin-2.0.7\Examples\csharp\class3\example-cs.csproj.user.old">
+</Event><Event ErrorLevel="1" Project="example-cs" Source="example-cs.csproj" Description="您的项目以 .NET Framework 2.0 或 3.0 为目标。如果您的项目使用的程序集需要更新的 .NET Framework，则项目生成将失败。通过单击项目菜单上的“属性”，然后在“.NET Framework”下拉框中选择一个新版本，可以更改 .NET Framework 的版本。(在 Visual Basic 中，可在单击“高级编辑器选项...”按钮时显示的“编译”选项卡上找到此下拉框。)">
+</Event><Event ErrorLevel="0" Project="example-cs" Source="example-cs.csproj" Description="项目已成功转换">
+</Event><Event ErrorLevel="3" Project="example-cs" Source="example-cs.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="example-vc" Source="example-vc.vcproj" Description="Converting project file 'D:\workspace\swigwin-2.0.7\Examples\csharp\class3\example-vc.vcproj'.">
+</Event><Event ErrorLevel="1" Project="example-vc" Source="example-vc.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="1" Project="example-vc" Source="example-vc.vcproj" Description="VCWebServiceProxyGeneratorTool is no longer supported. The tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="example-vc" Source="example-vc.vcproj" Description="Attribute 'Detect64BitPortabilityProblems' of 'VCCLCompilerTool' is not supported in this version and has been removed during conversion.">
+</Event><Event ErrorLevel="0" Project="example-vc" Source="example-vc.vcproj" Description="Web deployment to the local IIS server is no longer supported. The Web Deployment build tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="example-vc" Source="example-vc.vcproj" Description="Attribute 'Detect64BitPortabilityProblems' of 'VCCLCompilerTool' is not supported in this version and has been removed during conversion.">
+</Event><Event ErrorLevel="1" Project="example-vc" Source="example-vc.vcproj" Description="MSB8012: $(TargetPath) ('D:\workspace\swigwin-2.0.7\Examples\csharp\class3\Debug\example.dll') does not match the Linker's OutputFile property value 'example.dll' ('D:\workspace\swigwin-2.0.7\Examples\csharp\class3\example.dll') in project configuration 'Debug|Win32'. This may cause your project to build incorrectly. To correct this, please make sure that $(TargetPath) property value matches the value specified in %(Link.OutputFile).">
+</Event><Event ErrorLevel="1" Project="example-vc" Source="example-vc.vcproj" Description="MSB8012: $(TargetPath) ('D:\workspace\swigwin-2.0.7\Examples\csharp\class3\Release\example.dll') does not match the Linker's OutputFile property value 'example.dll' ('D:\workspace\swigwin-2.0.7\Examples\csharp\class3\example.dll') in project configuration 'Release|Win32'. This may cause your project to build incorrectly. To correct this, please make sure that $(TargetPath) property value matches the value specified in %(Link.OutputFile).">
+</Event><Event ErrorLevel="0" Project="example-vc" Source="example-vc.vcproj" Description="Done converting to new project file 'D:\workspace\swigwin-2.0.7\Examples\csharp\class3\example-vc.vcxproj'.">
+</Event><Event ErrorLevel="3" Project="example-vc" Source="example-vc.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="example.sln" Description="成功转换解决方案">
+</Event><Event ErrorLevel="3" Project="" Source="example.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="example-cs" Source="example-cs.csproj" Description="扫描完成: 项目文件不需要升级。">
+</Event></UpgradeLog>
