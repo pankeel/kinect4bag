@@ -137,11 +137,18 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     projection = this.CreateProjectionMatrix(trackedSkeleton);
                 if (this.Model3DAvatar != null)
                 {
+                    bool isSkinnedEffect = true;
                     foreach (ModelMesh mesh in this.Model3DAvatar.Meshes)
                     {
+                        if (mesh.Effects.Count > 0 && mesh.Effects[0].GetType()!=typeof(SkinnedEffect))
+                        {
+                            isSkinnedEffect = false;
 
+                            break;
+                        }
                         foreach (SkinnedEffect effect in mesh.Effects)
                         {
+                            
                             //effect.SetBoneTransforms(this.skinTransforms);
                             if (TargetTexture != null && effect.Texture != TargetTexture)
                                 effect.Texture = TargetTexture;
@@ -156,6 +163,9 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
                         mesh.Draw();
                     }
+
+                    if (!isSkinnedEffect)
+                        base.Draw(gameTime);
                 }
             }
             

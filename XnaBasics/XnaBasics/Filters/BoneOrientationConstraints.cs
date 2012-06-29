@@ -281,7 +281,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     (this.lineIndices.Count / 2));
             }
 
-            if (null != localJointCoordinateSystemCrosses)
+            if (null != localJointCoordinateSystemCrosses && false)
             {
                 Array jointTypeValues = Enum.GetValues(typeof(JointType));
 

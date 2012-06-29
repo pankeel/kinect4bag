@@ -616,7 +616,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 this.lastNuiTime = currentNuiTime;
             }
 
-            //this.HandleInput();
+            this.HandleInput();
 
             base.Update(gameTime);
         }
