@@ -211,6 +211,14 @@ void CGePhysX::createCloth( const char* clothName, PxReal clothScale,
     createMeshFromObj(clothName, clothScale, &clothRotate, &clothOffset, 
         mClothVertices, mClothIndices, &uvs, meshDesc);
 
+	ClothVerticesWrapper.clear();
+	for (int i=0;i<mClothVertices.size();i++)
+	{
+		PxVec3Wrapper pxVec(mClothVertices[i].x,mClothVertices[i].y,mClothVertices[i].z);
+		ClothVerticesWrapper.push_back(
+			pxVec
+		);
+	}
     if (!meshDesc.isValid()) 
 		fatalError("Could not load cloth obj\n");
     // create the cloth
