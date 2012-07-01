@@ -103,19 +103,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bitmap.cpp" />
+    <ClCompile Include="CGePhysics_wrap.cxx" />
     <ClCompile Include="CGePhysX.cpp" />
-    <ClCompile Include="example.cxx" />
-    <ClCompile Include="example_wrap.cxx" />
     <ClCompile Include="model_obj.cpp" />
     <ClCompile Include="PxTkStream.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bitmap.h" />
     <ClInclude Include="CGePhysX.h" />
-    <ClInclude Include="example.h" />
     <ClInclude Include="model_obj.h" />
     <ClInclude Include="PxTkNamespaceMangle.h" />
     <ClInclude Include="PxTkStream.h" />
+    <ClInclude Include="PxVec3Wrapper.h" />
     <ClInclude Include="vector3.h" />
   </ItemGroup>
   <ItemGroup>

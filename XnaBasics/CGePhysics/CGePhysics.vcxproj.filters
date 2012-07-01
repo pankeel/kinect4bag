@@ -17,16 +17,13 @@
     <ClCompile Include="CGePhysX.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="example.cxx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="example_wrap.cxx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="model_obj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PxTkStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CGePhysics_wrap.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,9 +32,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CGePhysX.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="example.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="model_obj.h">
@@ -50,6 +44,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vector3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PxVec3Wrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

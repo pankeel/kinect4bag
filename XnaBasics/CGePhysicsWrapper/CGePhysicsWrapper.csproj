@@ -46,29 +46,75 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CGePhysics.cs" />
-    <Compile Include="CGePhysicsPINVOKE.cs" />
-    <Compile Include="CGePhysX.cs" />
-    <Compile Include="Circle.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="CGePhysics.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CGePhysicsPINVOKE.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CGePhysX.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Int_Vector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Program.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Shape.cs" />
-    <Compile Include="Square.cs" />
-    <Compile Include="SWIGTYPE_p_physx__PxCloth.cs" />
-    <Compile Include="SWIGTYPE_p_physx__PxClothCollisionData.cs" />
-    <Compile Include="SWIGTYPE_p_physx__PxCooking.cs" />
-    <Compile Include="SWIGTYPE_p_physx__PxPhysics.cs" />
-    <Compile Include="SWIGTYPE_p_physx__PxQuat.cs" />
-    <Compile Include="SWIGTYPE_p_physx__PxReal.cs" />
-    <Compile Include="SWIGTYPE_p_physx__PxScene.cs" />
-    <Compile Include="SWIGTYPE_p_physx__PxU32.cs" />
-    <Compile Include="SWIGTYPE_p_physx__PxVec3.cs" />
-    <Compile Include="SWIGTYPE_p_p_physx__PxU32.cs" />
-    <Compile Include="SWIGTYPE_p_vectorT_physx__PxClothCollisionSphere_t.cs" />
-    <Compile Include="SWIGTYPE_p_vectorT_physx__PxReal_t.cs" />
-    <Compile Include="SWIGTYPE_p_vectorT_physx__PxU32_t.cs" />
-    <Compile Include="SWIGTYPE_p_vectorT_physx__PxVec3_t.cs" />
+    <Compile Include="PxVec3Wrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PxVec3_Vector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_physx__PxCloth.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_physx__PxClothCollisionData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_physx__PxCooking.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_physx__PxPhysics.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_physx__PxQuat.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_physx__PxReal.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_physx__PxScene.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_physx__PxU32.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_physx__PxVec3.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_PxVec3Wrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_p_physx__PxU32.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_std__vectorT_physx__PxClothCollisionSphere_t.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_std__vectorT_physx__PxReal_t.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_std__vectorT_physx__PxU32_t.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SWIGTYPE_p_std__vectorT_physx__PxVec3_t.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

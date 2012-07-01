@@ -140,7 +140,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     foreach (BasicEffect effect in mesh.Effects)
                     {
                         //effect.SetBoneTransforms(this.skinTransforms);
-                        if (TargetTexture != null && effect.Texture != TargetTexture)
+                      if (TargetTexture != null && effect.Texture != TargetTexture)
                         {
                             effect.Texture = TargetTexture;
                             //if (testFlag %2 == 0)

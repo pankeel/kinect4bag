@@ -148,7 +148,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                         }
                         foreach (SkinnedEffect effect in mesh.Effects)
                         {
-                            
+                            //CopyVertexBuffer(mesh.MeshPart[0].VertexBuffer);
                             //effect.SetBoneTransforms(this.skinTransforms);
                             if (TargetTexture != null && effect.Texture != TargetTexture)
                                 effect.Texture = TargetTexture;

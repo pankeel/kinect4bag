@@ -532,7 +532,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// This method retrieves a new skeleton frame if necessary.
         /// </summary>
         /// <param name="gameTime">The elapsed game time.</param>
-        public override void Update(GameTime gameTime)
+        public  override void Update(GameTime gameTime)
         {
             
             if (!this.bSupress)
@@ -618,6 +618,28 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             this.HandleInput();
 
+            //Update Vertex Buffer By Physics
+            unsafe
+            {
+                foreach (ModelMesh mesh in this.currentModel.Meshes)
+                {
+                    ModelMeshPart mmp = mesh.MeshParts[0];                    
+                    byte[] buf = new byte[mmp.NumVertices];
+
+                    mmp.VertexBuffer.GetData<byte>(buf);
+
+                    for (int i = 0; i < mmp.NumVertices; i++)
+                    {
+                        fixed (byte* bytePtr = &buf[i])
+                        {
+                            Vector3* pPos = (Vector3*)bytePtr;
+                            float a = pPos->X;
+                        }
+                    }
+
+                }
+            }
+
             base.Update(gameTime);
         }
 
@@ -649,8 +671,11 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             if (this.currentModel == null)
                 return;
             // Render the 3D model skinned mesh with Skinned Effect.
+            // Mesh Draw Method
             foreach (ModelMesh mesh in this.currentModel.Meshes)
             {
+                double[] mmp = new double[mesh.MeshParts[0].VertexBuffer.VertexCount];
+                mesh.MeshParts[0].VertexBuffer.GetData<double>(mmp);
                 foreach (SkinnedEffect effect in mesh.Effects)
                 {
                     effect.SetBoneTransforms(this.skinTransforms);
@@ -667,7 +692,27 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
                 mesh.Draw();
             }
+            /*GraphicsDevice device = this.Game.GraphicsDevice;
+            foreach (ModelMesh mesh in this.currentModel.Meshes)
+            {
+                double[] mmp = new double[mesh.MeshParts[0].VertexBuffer.VertexCount];
+                mesh.MeshParts[0].VertexBuffer.GetData<double>(mmp);
 
+                foreach (ModelMeshPart part in mesh.MeshParts)
+                {
+                    //这里也有个顺序问题，一定要根据每一个ModelMeshPart的每一个EffectPass这样画  
+                    foreach (EffectPass pass in mesh.Effects[0].CurrentTechnique.Passes)
+                    {
+                        pass.Apply();
+                        
+                        device.VertexDeclaration = part.VertexDeclaration;//顶点声明  
+                        device.Indices = mesh.IndexBuffer;//索引缓存  
+                        device.Vertices[0].SetSource(mesh.VertexBuffer, part.StreamOffset, part.VertexStride);//设置顶点  
+                        device.DrawIndexedPrimitives(PrimitiveType.TriangleList, part.BaseVertex,0, part.NumVertices, part.StartIndex, part.PrimitiveCount);
+                        //画顶点，如果要用Shader的话，是不能用mesh.Draw函数来话的，这个函数不支持Shader
+                    }
+                } 
+            }*/
             // Optionally draw local bone transforms with Basic Effect.
             if (this.drawLocalAxes && null != this.localAxes)
             {

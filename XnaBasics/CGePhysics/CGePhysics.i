@@ -3,9 +3,15 @@
 
 %{
 #include "CGePhysX.h"
-#include "example.h"
+
 %}
 
 /* Let's just grab the original header file here */
+%include "std_vector.i"
 %include "CGePhysX.h"
-%include "example.h"
+%include "PxVec3Wrapper.h"
+
+
+
+%template(Int_Vector) std::vector<int>;
+%template(PxVec3_Vector) std::vector<PxVec3Wrapper>;

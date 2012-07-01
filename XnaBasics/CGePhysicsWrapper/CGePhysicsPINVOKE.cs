@@ -245,6 +245,12 @@ class CGePhysicsPINVOKE {
   [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_mClothVertices_get")]
   public static extern IntPtr CGePhysX_mClothVertices_get(HandleRef jarg1);
 
+  [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_ClothVerticesWrapper_set")]
+  public static extern void CGePhysX_ClothVerticesWrapper_set(HandleRef jarg1, HandleRef jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_ClothVerticesWrapper_get")]
+  public static extern IntPtr CGePhysX_ClothVerticesWrapper_get(HandleRef jarg1);
+
   [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_mClothCollisionData_set")]
   public static extern void CGePhysX_mClothCollisionData_set(HandleRef jarg1, HandleRef jarg2);
 
@@ -284,63 +290,174 @@ class CGePhysicsPINVOKE {
   [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_getCooking")]
   public static extern IntPtr CGePhysX_getCooking(HandleRef jarg1);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_delete_Shape")]
-  public static extern void delete_Shape(HandleRef jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3Wrapper_x_set")]
+  public static extern void PxVec3Wrapper_x_set(HandleRef jarg1, double jarg2);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Shape_x_set")]
-  public static extern void Shape_x_set(HandleRef jarg1, double jarg2);
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3Wrapper_x_get")]
+  public static extern double PxVec3Wrapper_x_get(HandleRef jarg1);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Shape_x_get")]
-  public static extern double Shape_x_get(HandleRef jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3Wrapper_y_set")]
+  public static extern void PxVec3Wrapper_y_set(HandleRef jarg1, double jarg2);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Shape_y_set")]
-  public static extern void Shape_y_set(HandleRef jarg1, double jarg2);
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3Wrapper_y_get")]
+  public static extern double PxVec3Wrapper_y_get(HandleRef jarg1);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Shape_y_get")]
-  public static extern double Shape_y_get(HandleRef jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3Wrapper_z_set")]
+  public static extern void PxVec3Wrapper_z_set(HandleRef jarg1, double jarg2);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Shape_move")]
-  public static extern void Shape_move(HandleRef jarg1, double jarg2, double jarg3);
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3Wrapper_z_get")]
+  public static extern double PxVec3Wrapper_z_get(HandleRef jarg1);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Shape_area")]
-  public static extern double Shape_area(HandleRef jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_new_PxVec3Wrapper__SWIG_0")]
+  public static extern IntPtr new_PxVec3Wrapper__SWIG_0();
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Shape_perimeter")]
-  public static extern double Shape_perimeter(HandleRef jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_new_PxVec3Wrapper__SWIG_1")]
+  public static extern IntPtr new_PxVec3Wrapper__SWIG_1(double jarg1, double jarg2, double jarg3);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Shape_nshapes_set")]
-  public static extern void Shape_nshapes_set(int jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_delete_PxVec3Wrapper")]
+  public static extern void delete_PxVec3Wrapper(HandleRef jarg1);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Shape_nshapes_get")]
-  public static extern int Shape_nshapes_get();
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_Clear")]
+  public static extern void Int_Vector_Clear(HandleRef jarg1);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_new_Circle")]
-  public static extern IntPtr new_Circle(double jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_Add")]
+  public static extern void Int_Vector_Add(HandleRef jarg1, int jarg2);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Circle_area")]
-  public static extern double Circle_area(HandleRef jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_size")]
+  public static extern uint Int_Vector_size(HandleRef jarg1);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Circle_perimeter")]
-  public static extern double Circle_perimeter(HandleRef jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_capacity")]
+  public static extern uint Int_Vector_capacity(HandleRef jarg1);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_delete_Circle")]
-  public static extern void delete_Circle(HandleRef jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_reserve")]
+  public static extern void Int_Vector_reserve(HandleRef jarg1, uint jarg2);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_new_Square")]
-  public static extern IntPtr new_Square(double jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_new_Int_Vector__SWIG_0")]
+  public static extern IntPtr new_Int_Vector__SWIG_0();
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Square_area")]
-  public static extern double Square_area(HandleRef jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_new_Int_Vector__SWIG_1")]
+  public static extern IntPtr new_Int_Vector__SWIG_1(HandleRef jarg1);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Square_perimeter")]
-  public static extern double Square_perimeter(HandleRef jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_new_Int_Vector__SWIG_2")]
+  public static extern IntPtr new_Int_Vector__SWIG_2(int jarg1);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_delete_Square")]
-  public static extern void delete_Square(HandleRef jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_getitemcopy")]
+  public static extern int Int_Vector_getitemcopy(HandleRef jarg1, int jarg2);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Circle_SWIGUpcast")]
-  public static extern IntPtr Circle_SWIGUpcast(IntPtr jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_getitem")]
+  public static extern int Int_Vector_getitem(HandleRef jarg1, int jarg2);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_Square_SWIGUpcast")]
-  public static extern IntPtr Square_SWIGUpcast(IntPtr jarg1);
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_setitem")]
+  public static extern void Int_Vector_setitem(HandleRef jarg1, int jarg2, int jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_AddRange")]
+  public static extern void Int_Vector_AddRange(HandleRef jarg1, HandleRef jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_GetRange")]
+  public static extern IntPtr Int_Vector_GetRange(HandleRef jarg1, int jarg2, int jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_Insert")]
+  public static extern void Int_Vector_Insert(HandleRef jarg1, int jarg2, int jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_InsertRange")]
+  public static extern void Int_Vector_InsertRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_RemoveAt")]
+  public static extern void Int_Vector_RemoveAt(HandleRef jarg1, int jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_RemoveRange")]
+  public static extern void Int_Vector_RemoveRange(HandleRef jarg1, int jarg2, int jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_Repeat")]
+  public static extern IntPtr Int_Vector_Repeat(int jarg1, int jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_Reverse__SWIG_0")]
+  public static extern void Int_Vector_Reverse__SWIG_0(HandleRef jarg1);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_Reverse__SWIG_1")]
+  public static extern void Int_Vector_Reverse__SWIG_1(HandleRef jarg1, int jarg2, int jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_SetRange")]
+  public static extern void Int_Vector_SetRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_Contains")]
+  public static extern bool Int_Vector_Contains(HandleRef jarg1, int jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_IndexOf")]
+  public static extern int Int_Vector_IndexOf(HandleRef jarg1, int jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_LastIndexOf")]
+  public static extern int Int_Vector_LastIndexOf(HandleRef jarg1, int jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_Int_Vector_Remove")]
+  public static extern bool Int_Vector_Remove(HandleRef jarg1, int jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_delete_Int_Vector")]
+  public static extern void delete_Int_Vector(HandleRef jarg1);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_Clear")]
+  public static extern void PxVec3_Vector_Clear(HandleRef jarg1);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_Add")]
+  public static extern void PxVec3_Vector_Add(HandleRef jarg1, HandleRef jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_size")]
+  public static extern uint PxVec3_Vector_size(HandleRef jarg1);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_capacity")]
+  public static extern uint PxVec3_Vector_capacity(HandleRef jarg1);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_reserve")]
+  public static extern void PxVec3_Vector_reserve(HandleRef jarg1, uint jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_new_PxVec3_Vector__SWIG_0")]
+  public static extern IntPtr new_PxVec3_Vector__SWIG_0();
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_new_PxVec3_Vector__SWIG_1")]
+  public static extern IntPtr new_PxVec3_Vector__SWIG_1(HandleRef jarg1);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_new_PxVec3_Vector__SWIG_2")]
+  public static extern IntPtr new_PxVec3_Vector__SWIG_2(int jarg1);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_getitemcopy")]
+  public static extern IntPtr PxVec3_Vector_getitemcopy(HandleRef jarg1, int jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_getitem")]
+  public static extern IntPtr PxVec3_Vector_getitem(HandleRef jarg1, int jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_setitem")]
+  public static extern void PxVec3_Vector_setitem(HandleRef jarg1, int jarg2, HandleRef jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_AddRange")]
+  public static extern void PxVec3_Vector_AddRange(HandleRef jarg1, HandleRef jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_GetRange")]
+  public static extern IntPtr PxVec3_Vector_GetRange(HandleRef jarg1, int jarg2, int jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_Insert")]
+  public static extern void PxVec3_Vector_Insert(HandleRef jarg1, int jarg2, HandleRef jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_InsertRange")]
+  public static extern void PxVec3_Vector_InsertRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_RemoveAt")]
+  public static extern void PxVec3_Vector_RemoveAt(HandleRef jarg1, int jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_RemoveRange")]
+  public static extern void PxVec3_Vector_RemoveRange(HandleRef jarg1, int jarg2, int jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_Repeat")]
+  public static extern IntPtr PxVec3_Vector_Repeat(HandleRef jarg1, int jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_Reverse__SWIG_0")]
+  public static extern void PxVec3_Vector_Reverse__SWIG_0(HandleRef jarg1);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_Reverse__SWIG_1")]
+  public static extern void PxVec3_Vector_Reverse__SWIG_1(HandleRef jarg1, int jarg2, int jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_PxVec3_Vector_SetRange")]
+  public static extern void PxVec3_Vector_SetRange(HandleRef jarg1, int jarg2, HandleRef jarg3);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_delete_PxVec3_Vector")]
+  public static extern void delete_PxVec3_Vector(HandleRef jarg1);
 }

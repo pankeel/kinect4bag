@@ -180,7 +180,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.graphics.SynchronizeWithVerticalRetrace = true;
             //this.viewPortRectangle = new Rectangle(10, 80, Width - 20, ((Width - 2) / 4) * 3);
             this.viewPortRectangle = new Rectangle(0, 0, Width, Height);
-            this.graphics.IsFullScreen = false;
+            this.graphics.IsFullScreen = true;
             this.IsMouseVisible = false;
 
             physicSystem = new PhysicsSystem();

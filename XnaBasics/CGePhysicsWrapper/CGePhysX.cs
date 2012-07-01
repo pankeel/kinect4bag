@@ -70,14 +70,14 @@ public class CGePhysX : IDisposable {
     CGePhysicsPINVOKE.CGePhysX_createCloth__SWIG_3(swigCPtr, clothName);
   }
 
-  public bool addCollisionSpheres(SWIGTYPE_p_vectorT_physx__PxVec3_t positions, SWIGTYPE_p_vectorT_physx__PxReal_t radius, SWIGTYPE_p_vectorT_physx__PxU32_t indexPair) {
-    bool ret = CGePhysicsPINVOKE.CGePhysX_addCollisionSpheres(swigCPtr, SWIGTYPE_p_vectorT_physx__PxVec3_t.getCPtr(positions), SWIGTYPE_p_vectorT_physx__PxReal_t.getCPtr(radius), SWIGTYPE_p_vectorT_physx__PxU32_t.getCPtr(indexPair));
+  public bool addCollisionSpheres(SWIGTYPE_p_std__vectorT_physx__PxVec3_t positions, SWIGTYPE_p_std__vectorT_physx__PxReal_t radius, SWIGTYPE_p_std__vectorT_physx__PxU32_t indexPair) {
+    bool ret = CGePhysicsPINVOKE.CGePhysX_addCollisionSpheres(swigCPtr, SWIGTYPE_p_std__vectorT_physx__PxVec3_t.getCPtr(positions), SWIGTYPE_p_std__vectorT_physx__PxReal_t.getCPtr(radius), SWIGTYPE_p_std__vectorT_physx__PxU32_t.getCPtr(indexPair));
     if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
-  public void updateCollisionSpheres(SWIGTYPE_p_vectorT_physx__PxVec3_t positions) {
-    CGePhysicsPINVOKE.CGePhysX_updateCollisionSpheres(swigCPtr, SWIGTYPE_p_vectorT_physx__PxVec3_t.getCPtr(positions));
+  public void updateCollisionSpheres(SWIGTYPE_p_std__vectorT_physx__PxVec3_t positions) {
+    CGePhysicsPINVOKE.CGePhysX_updateCollisionSpheres(swigCPtr, SWIGTYPE_p_std__vectorT_physx__PxVec3_t.getCPtr(positions));
     if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
   }
 
@@ -107,26 +107,35 @@ public class CGePhysX : IDisposable {
     } 
   }
 
-  public SWIGTYPE_p_vectorT_physx__PxU32_t mClothIndices {
+  public SWIGTYPE_p_std__vectorT_physx__PxU32_t mClothIndices {
     set {
-      CGePhysicsPINVOKE.CGePhysX_mClothIndices_set(swigCPtr, SWIGTYPE_p_vectorT_physx__PxU32_t.getCPtr(value));
-      if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
+      CGePhysicsPINVOKE.CGePhysX_mClothIndices_set(swigCPtr, SWIGTYPE_p_std__vectorT_physx__PxU32_t.getCPtr(value));
     } 
     get {
-      SWIGTYPE_p_vectorT_physx__PxU32_t ret = new SWIGTYPE_p_vectorT_physx__PxU32_t(CGePhysicsPINVOKE.CGePhysX_mClothIndices_get(swigCPtr), true);
-      if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
+      IntPtr cPtr = CGePhysicsPINVOKE.CGePhysX_mClothIndices_get(swigCPtr);
+      SWIGTYPE_p_std__vectorT_physx__PxU32_t ret = (cPtr == IntPtr.Zero) ? null : new SWIGTYPE_p_std__vectorT_physx__PxU32_t(cPtr, false);
       return ret;
     } 
   }
 
-  public SWIGTYPE_p_vectorT_physx__PxVec3_t mClothVertices {
+  public SWIGTYPE_p_std__vectorT_physx__PxVec3_t mClothVertices {
     set {
-      CGePhysicsPINVOKE.CGePhysX_mClothVertices_set(swigCPtr, SWIGTYPE_p_vectorT_physx__PxVec3_t.getCPtr(value));
-      if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
+      CGePhysicsPINVOKE.CGePhysX_mClothVertices_set(swigCPtr, SWIGTYPE_p_std__vectorT_physx__PxVec3_t.getCPtr(value));
     } 
     get {
-      SWIGTYPE_p_vectorT_physx__PxVec3_t ret = new SWIGTYPE_p_vectorT_physx__PxVec3_t(CGePhysicsPINVOKE.CGePhysX_mClothVertices_get(swigCPtr), true);
-      if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
+      IntPtr cPtr = CGePhysicsPINVOKE.CGePhysX_mClothVertices_get(swigCPtr);
+      SWIGTYPE_p_std__vectorT_physx__PxVec3_t ret = (cPtr == IntPtr.Zero) ? null : new SWIGTYPE_p_std__vectorT_physx__PxVec3_t(cPtr, false);
+      return ret;
+    } 
+  }
+
+  public PxVec3_Vector ClothVerticesWrapper {
+    set {
+      CGePhysicsPINVOKE.CGePhysX_ClothVerticesWrapper_set(swigCPtr, PxVec3_Vector.getCPtr(value));
+    } 
+    get {
+      IntPtr cPtr = CGePhysicsPINVOKE.CGePhysX_ClothVerticesWrapper_get(swigCPtr);
+      PxVec3_Vector ret = (cPtr == IntPtr.Zero) ? null : new PxVec3_Vector(cPtr, false);
       return ret;
     } 
   }
@@ -143,38 +152,35 @@ public class CGePhysX : IDisposable {
     } 
   }
 
-  public SWIGTYPE_p_vectorT_physx__PxClothCollisionSphere_t mClothCollisionSpheres {
+  public SWIGTYPE_p_std__vectorT_physx__PxClothCollisionSphere_t mClothCollisionSpheres {
     set {
-      CGePhysicsPINVOKE.CGePhysX_mClothCollisionSpheres_set(swigCPtr, SWIGTYPE_p_vectorT_physx__PxClothCollisionSphere_t.getCPtr(value));
-      if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
+      CGePhysicsPINVOKE.CGePhysX_mClothCollisionSpheres_set(swigCPtr, SWIGTYPE_p_std__vectorT_physx__PxClothCollisionSphere_t.getCPtr(value));
     } 
     get {
-      SWIGTYPE_p_vectorT_physx__PxClothCollisionSphere_t ret = new SWIGTYPE_p_vectorT_physx__PxClothCollisionSphere_t(CGePhysicsPINVOKE.CGePhysX_mClothCollisionSpheres_get(swigCPtr), true);
-      if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
+      IntPtr cPtr = CGePhysicsPINVOKE.CGePhysX_mClothCollisionSpheres_get(swigCPtr);
+      SWIGTYPE_p_std__vectorT_physx__PxClothCollisionSphere_t ret = (cPtr == IntPtr.Zero) ? null : new SWIGTYPE_p_std__vectorT_physx__PxClothCollisionSphere_t(cPtr, false);
       return ret;
     } 
   }
 
-  public SWIGTYPE_p_vectorT_physx__PxU32_t mClothCollisionSpheresIndexPair {
+  public SWIGTYPE_p_std__vectorT_physx__PxU32_t mClothCollisionSpheresIndexPair {
     set {
-      CGePhysicsPINVOKE.CGePhysX_mClothCollisionSpheresIndexPair_set(swigCPtr, SWIGTYPE_p_vectorT_physx__PxU32_t.getCPtr(value));
-      if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
+      CGePhysicsPINVOKE.CGePhysX_mClothCollisionSpheresIndexPair_set(swigCPtr, SWIGTYPE_p_std__vectorT_physx__PxU32_t.getCPtr(value));
     } 
     get {
-      SWIGTYPE_p_vectorT_physx__PxU32_t ret = new SWIGTYPE_p_vectorT_physx__PxU32_t(CGePhysicsPINVOKE.CGePhysX_mClothCollisionSpheresIndexPair_get(swigCPtr), true);
-      if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
+      IntPtr cPtr = CGePhysicsPINVOKE.CGePhysX_mClothCollisionSpheresIndexPair_get(swigCPtr);
+      SWIGTYPE_p_std__vectorT_physx__PxU32_t ret = (cPtr == IntPtr.Zero) ? null : new SWIGTYPE_p_std__vectorT_physx__PxU32_t(cPtr, false);
       return ret;
     } 
   }
 
-  public SWIGTYPE_p_vectorT_physx__PxU32_t mClothCollisionIndexPair {
+  public SWIGTYPE_p_std__vectorT_physx__PxU32_t mClothCollisionIndexPair {
     set {
-      CGePhysicsPINVOKE.CGePhysX_mClothCollisionIndexPair_set(swigCPtr, SWIGTYPE_p_vectorT_physx__PxU32_t.getCPtr(value));
-      if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
+      CGePhysicsPINVOKE.CGePhysX_mClothCollisionIndexPair_set(swigCPtr, SWIGTYPE_p_std__vectorT_physx__PxU32_t.getCPtr(value));
     } 
     get {
-      SWIGTYPE_p_vectorT_physx__PxU32_t ret = new SWIGTYPE_p_vectorT_physx__PxU32_t(CGePhysicsPINVOKE.CGePhysX_mClothCollisionIndexPair_get(swigCPtr), true);
-      if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
+      IntPtr cPtr = CGePhysicsPINVOKE.CGePhysX_mClothCollisionIndexPair_get(swigCPtr);
+      SWIGTYPE_p_std__vectorT_physx__PxU32_t ret = (cPtr == IntPtr.Zero) ? null : new SWIGTYPE_p_std__vectorT_physx__PxU32_t(cPtr, false);
       return ret;
     } 
   }
