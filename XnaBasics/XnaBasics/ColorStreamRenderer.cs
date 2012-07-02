@@ -248,11 +248,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         protected override void LoadContent()
         {
-            Model3DAvata = Game.Content.Load<Model>("bag");
-            BodyModel = Game.Content.Load<Model>("yifu");
-            LegModel = Game.Content.Load<Model>("kuzi");
-
-            
             base.LoadContent();
 
             // This effect is necessary to remap the BGRX byte data we get

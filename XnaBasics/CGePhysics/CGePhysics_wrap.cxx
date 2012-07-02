@@ -538,24 +538,18 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_StepPhysX(void * jarg1, float jarg2)
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_createCloth__SWIG_0(void * jarg1, char * jarg2, void * jarg3, void * jarg4, void * jarg5) {
+SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_createCloth__SWIG_0(void * jarg1, char * jarg2, float jarg3, void * jarg4, void * jarg5) {
   CGePhysX *arg1 = (CGePhysX *) 0 ;
   char *arg2 = (char *) 0 ;
-  physx::PxReal arg3 ;
+  float arg3 ;
   physx::PxVec3 arg4 ;
   physx::PxQuat arg5 ;
-  physx::PxReal *argp3 ;
   physx::PxVec3 *argp4 ;
   physx::PxQuat *argp5 ;
   
   arg1 = (CGePhysX *)jarg1; 
   arg2 = (char *)jarg2; 
-  argp3 = (physx::PxReal *)jarg3; 
-  if (!argp3) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null physx::PxReal", 0);
-    return ;
-  }
-  arg3 = *argp3; 
+  arg3 = (float)jarg3; 
   argp4 = (physx::PxVec3 *)jarg4; 
   if (!argp4) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null physx::PxVec3", 0);
@@ -572,22 +566,16 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_createCloth__SWIG_0(void * jarg1, ch
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_createCloth__SWIG_1(void * jarg1, char * jarg2, void * jarg3, void * jarg4) {
+SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_createCloth__SWIG_1(void * jarg1, char * jarg2, float jarg3, void * jarg4) {
   CGePhysX *arg1 = (CGePhysX *) 0 ;
   char *arg2 = (char *) 0 ;
-  physx::PxReal arg3 ;
+  float arg3 ;
   physx::PxVec3 arg4 ;
-  physx::PxReal *argp3 ;
   physx::PxVec3 *argp4 ;
   
   arg1 = (CGePhysX *)jarg1; 
   arg2 = (char *)jarg2; 
-  argp3 = (physx::PxReal *)jarg3; 
-  if (!argp3) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null physx::PxReal", 0);
-    return ;
-  }
-  arg3 = *argp3; 
+  arg3 = (float)jarg3; 
   argp4 = (physx::PxVec3 *)jarg4; 
   if (!argp4) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null physx::PxVec3", 0);
@@ -598,20 +586,14 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_createCloth__SWIG_1(void * jarg1, ch
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_createCloth__SWIG_2(void * jarg1, char * jarg2, void * jarg3) {
+SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_createCloth__SWIG_2(void * jarg1, char * jarg2, float jarg3) {
   CGePhysX *arg1 = (CGePhysX *) 0 ;
   char *arg2 = (char *) 0 ;
-  physx::PxReal arg3 ;
-  physx::PxReal *argp3 ;
+  float arg3 ;
   
   arg1 = (CGePhysX *)jarg1; 
   arg2 = (char *)jarg2; 
-  argp3 = (physx::PxReal *)jarg3; 
-  if (!argp3) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null physx::PxReal", 0);
-    return ;
-  }
-  arg3 = *argp3; 
+  arg3 = (float)jarg3; 
   (arg1)->createCloth((char const *)arg2,arg3);
 }
 

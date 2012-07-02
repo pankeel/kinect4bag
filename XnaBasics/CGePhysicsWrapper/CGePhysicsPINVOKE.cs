@@ -201,13 +201,13 @@ class CGePhysicsPINVOKE {
   public static extern void CGePhysX_StepPhysX(HandleRef jarg1, float jarg2);
 
   [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_createCloth__SWIG_0")]
-  public static extern void CGePhysX_createCloth__SWIG_0(HandleRef jarg1, string jarg2, HandleRef jarg3, HandleRef jarg4, HandleRef jarg5);
+  public static extern void CGePhysX_createCloth__SWIG_0(HandleRef jarg1, string jarg2, float jarg3, HandleRef jarg4, HandleRef jarg5);
 
   [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_createCloth__SWIG_1")]
-  public static extern void CGePhysX_createCloth__SWIG_1(HandleRef jarg1, string jarg2, HandleRef jarg3, HandleRef jarg4);
+  public static extern void CGePhysX_createCloth__SWIG_1(HandleRef jarg1, string jarg2, float jarg3, HandleRef jarg4);
 
   [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_createCloth__SWIG_2")]
-  public static extern void CGePhysX_createCloth__SWIG_2(HandleRef jarg1, string jarg2, HandleRef jarg3);
+  public static extern void CGePhysX_createCloth__SWIG_2(HandleRef jarg1, string jarg2, float jarg3);
 
   [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_createCloth__SWIG_3")]
   public static extern void CGePhysX_createCloth__SWIG_3(HandleRef jarg1, string jarg2);
