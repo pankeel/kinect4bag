@@ -43,6 +43,11 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         private AvatarAnimator animator;
 
+        private ClothRender clothRender;
+        public ClothRender ClothModelRender
+        {
+            get { return clothRender; }
+        }
         SimpleGUI ui;
         public static Vector2 LeftHand, RightHand;
 
@@ -215,7 +220,9 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             LeftHand = new Vector2();
             RightHand = new Vector2();
-            
+
+            this.clothRender = new ClothRender(this);
+            this.Components.Add(this.clothRender);
         }
 
         /// <summary>
