@@ -125,5 +125,18 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         }
 
 
+//<<<<<<< .mine
+//            // Need Debug
+//            int* pIndices;
+//            mCloth.getClothIndices((SWIGTYPE_p_p_physx__PxU32)pIndices, (SWIGTYPE_p_physx__PxU32)nIndices);
+//            // If can't pass raw data, memcpy indexbuffer
+//            int[] indx;
+//            Marshal.Copy((IntPtr)pIndices, 0, indx, nIndices);
+//            indexBuffer = new IndexBuffer(this.GraphicsDevice, typeof(int), nIndices, BufferUsage.WriteOnly);
+//            indexBuffer.SetData(pIndices);
+//        }
+
+//=======
+//>>>>>>> .r75
     }
 }

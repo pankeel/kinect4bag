@@ -31,9 +31,6 @@ using namespace std;
 #endif 
 
 
-
-
-
 //class DllExport CGePhysX
 class CGePhysX
 {
@@ -46,24 +43,34 @@ public:
 
     void StepPhysX(float stepTime);
 
-    void createCloth(const char* clothName, physx::PxReal clothScale = 1.0f, 
+    void createCloth(const char* clothName, physx::PxReal clothScale = 1.0f, \
         physx::PxVec3 clothOffset = physx::PxVec3(0,0,0), physx::PxQuat clothRotate = physx::PxQuat::createIdentity());
-
+    //void createCloth(const char* clothName);
+    
     bool addCollisionSpheres(vector<physx::PxVec3>& positions, vector<physx::PxReal>& radius, vector<physx::PxU32>& indexPair);
 
     void updateCollisionSpheres(vector<physx::PxVec3>& positions);
 
     bool getClothIndices(physx::PxU32*& indices, physx::PxU32& nIndices);
+
 	// Wrapper Function for C#
 	int getClothIndicesCount();
 	bool getClothIndicesContent(int* indices);
 
     bool getClothParticles(physx::PxVec3* particles);
+
 	// Wrapper Function for C#
 	int getClothParticesCount();
 	bool getClothParticlesContent(void* particles);
 
     bool getClothParticles(physx::PxVec3* particles, physx::PxU32& nParticles);
+
+    // simple interface data structure
+    //int getNbParticles();
+
+    //void getParticles(int* particle);
+
+    //int getNbIndices();
 
     void Destroy();
 

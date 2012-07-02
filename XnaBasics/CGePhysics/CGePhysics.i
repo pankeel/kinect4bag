@@ -4,6 +4,7 @@
 %{
 #include "CGePhysX.h"
 %}
+%include "arrays_csharp.i"
 
 /* Let's just grab the original header file here */
 %include "arrays_csharp.i"
@@ -25,6 +26,9 @@
 %include "PxVec3Wrapper.h"
 
 
+
+%apply int INPUT[]  { int* sourceArray }
+%apply int OUTPUT[] { int* particle }
 
 %template(Int_Vector) std::vector<int>;
 %template(PxVec3_Vector) std::vector<PxVec3Wrapper>;
