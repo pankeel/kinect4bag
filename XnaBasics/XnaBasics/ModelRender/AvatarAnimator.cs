@@ -638,6 +638,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     }
 
                 }
+
+
             }
 
             base.Update(gameTime);

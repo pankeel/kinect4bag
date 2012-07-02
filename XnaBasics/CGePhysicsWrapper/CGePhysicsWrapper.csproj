@@ -95,9 +95,6 @@
     <Compile Include="SWIGTYPE_p_physx__PxVec3.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SWIGTYPE_p_PxVec3Wrapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SWIGTYPE_p_p_physx__PxU32.cs">
       <SubType>Code</SubType>
     </Compile>
