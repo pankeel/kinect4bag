@@ -695,7 +695,7 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_getClothIndices(void * jarg1
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_getClothParticles(void * jarg1, void * jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_getClothParticles__SWIG_0(void * jarg1, void * jarg2) {
   unsigned int jresult ;
   CGePhysX *arg1 = (CGePhysX *) 0 ;
   physx::PxVec3 *arg2 = (physx::PxVec3 *) 0 ;
@@ -704,6 +704,26 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_getClothParticles(void * jar
   arg1 = (CGePhysX *)jarg1; 
   arg2 = (physx::PxVec3 *)jarg2; 
   result = (bool)(arg1)->getClothParticles(arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_getClothParticles__SWIG_1(void * jarg1, void * jarg2, void * jarg3) {
+  unsigned int jresult ;
+  CGePhysX *arg1 = (CGePhysX *) 0 ;
+  physx::PxVec3 *arg2 = (physx::PxVec3 *) 0 ;
+  physx::PxU32 *arg3 = 0 ;
+  bool result;
+  
+  arg1 = (CGePhysX *)jarg1; 
+  arg2 = (physx::PxVec3 *)jarg2; 
+  arg3 = (physx::PxU32 *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "physx::PxU32 & type is null", 0);
+    return 0;
+  } 
+  result = (bool)(arg1)->getClothParticles(arg2,*arg3);
   jresult = result; 
   return jresult;
 }

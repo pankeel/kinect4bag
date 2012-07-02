@@ -221,8 +221,11 @@ class CGePhysicsPINVOKE {
   [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_getClothIndices")]
   public static extern bool CGePhysX_getClothIndices(HandleRef jarg1, HandleRef jarg2, HandleRef jarg3);
 
-  [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_getClothParticles")]
-  public static extern bool CGePhysX_getClothParticles(HandleRef jarg1, HandleRef jarg2);
+  [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_getClothParticles__SWIG_0")]
+  public static extern bool CGePhysX_getClothParticles__SWIG_0(HandleRef jarg1, HandleRef jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_getClothParticles__SWIG_1")]
+  public static extern bool CGePhysX_getClothParticles__SWIG_1(HandleRef jarg1, HandleRef jarg2, HandleRef jarg3);
 
   [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_Destroy")]
   public static extern void CGePhysX_Destroy(HandleRef jarg1);

@@ -57,6 +57,8 @@ public:
 
     bool getClothParticles(physx::PxVec3* particles);
 
+    bool getClothParticles(physx::PxVec3* particles, physx::PxU32& nParticles);
+
     void Destroy();
 
 protected:
