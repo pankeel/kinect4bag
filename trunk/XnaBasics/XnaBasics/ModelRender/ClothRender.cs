@@ -6,8 +6,9 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Kinect;
+using System.Runtime.InteropServices;
 
-namespace Microsoft.Samples.Kinect.XnaBasics.ModelRender
+namespace Microsoft.Samples.Kinect.XnaBasics
 {
     public class ClothRender : Object3D
     {
@@ -26,6 +27,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics.ModelRender
         {
             // TODO: Construct any child components here
             this.scaleFactor = 1.0f;
+
         }
     
         /// <summary>
@@ -35,6 +37,24 @@ namespace Microsoft.Samples.Kinect.XnaBasics.ModelRender
         public override void Initialize()
         {
             base.Initialize();
+            mCloth = new CGePhysX();
+            mCloth.OnInit();
+            string filePath = Path.GetFullPath("..\\..\\..\\Media\\yifu.obj");
+            mCloth.createCloth(filePath);
+
+            // Need Debug
+            unsafe
+            {
+                
+                int nIndices = mCloth.getClothIndicesCount();
+                int[] pIndices = new int[nIndices];
+                mCloth.getClothIndicesContent(pIndices);
+                
+                // If can't pass raw data, memcpy indexbuffer
+                indexBuffer = new IndexBuffer(this.GraphicsDevice, typeof(int), nIndices, BufferUsage.WriteOnly);
+                indexBuffer.SetData(pIndices);
+            }
+            
         }
 
         /// <summary>
@@ -67,20 +87,36 @@ namespace Microsoft.Samples.Kinect.XnaBasics.ModelRender
             //skeletonDrawn = true;
 
             // Update
-            mCloth.StepPhysX(gameTime.ElapsedGameTime.Seconds);
-            SWIGTYPE_p_physx__PxVec3 vertices;
-            mCloth.getClothParticles(vertices, nVertices);
-            // memcopy
-            VertexPositionColor[] vertexColor = new VertexPositionColor[nVertices];
-            for (int i = 0; i < nVertices; ++i)
+            unsafe
             {
-                vertexColor[i] = new VertexPositionColor(
-                    Vector3(vertices[i].x, vertices[i].y, vertices[i].z), Color.Gray);
-            }
-            vertexBuffer = new VertexBuffer(this.GraphicsDevice, VertexPositionColor.VertexDeclaration
-                , nVertices, BufferUsage.WriteOnly);
-            vertexBuffer.SetData(vertices);
+                mCloth.StepPhysX(gameTime.ElapsedGameTime.Seconds);
+                
+                nVertices = mCloth.getClothParticesCount();
+                int[] buffer = new int[nVertices];
+                mCloth.getClothParticlesContent(buffer);
+                Vector3[] vertices = new Vector3[nVertices];
+                fixed (int* bytePtr = &buffer[0])
+                {
+                    Vector3 *vec = (Vector3*)bytePtr;
+                    for (int i = 0; i < nVertices; i++, vec++)
+                    {
+                        vertices[i].X = vec->X;
+                        vertices[i].Y = vec->Y;
+                        vertices[i].Z = vec->Z;
+                    }
+                }
 
+                // memcopy
+                VertexPositionColor[] vertexColor = new VertexPositionColor[nVertices];
+                for (int i = 0; i < nVertices; ++i)
+                {
+                    vertexColor[i] = new VertexPositionColor(
+                        new Vector3(vertices[i].X, vertices[i].Y, vertices[i].Z), Color.Gray);
+                }
+                vertexBuffer = new VertexBuffer(this.GraphicsDevice, VertexPositionColor.VertexDeclaration
+                    , nVertices, BufferUsage.WriteOnly);
+                vertexBuffer.SetData<Vector3>(vertices);
+            }
             // bind to graphics pipeline
             this.GraphicsDevice.Indices = indexBuffer;
             this.GraphicsDevice.SetVertexBuffer(vertexBuffer);
@@ -88,23 +124,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics.ModelRender
                 nVertices, 0, nIndices / 3);
         }
 
-        protected override void LoadContent()
-        {
-            base.LoadContent();
-            mCloth = new CGePhysX();
-            mCloth.OnInit();
-            string filePath = Path.GetFullPath("..\\..\\..\\Media\\yifu.obj");
-            mCloth.createCloth(filePath);
-            //SWIGTYPE_p_p_physx__PxU32 pIndices = 0;
-            //SWIGTYPE_p_physx__PxU32 nIndices = 0;
-
-            // Need Debug
-            int* pIndices;
-            mCloth.getClothIndices((SWIGTYPE_p_p_physx__PxU32)pIndices, (SWIGTYPE_p_physx__PxU32)nIndices);
-            // If can't pass raw data, memcpy indexbuffer
-            indexBuffer = new IndexBuffer(this.GraphicsDevice, typeof(int), nIndices, BufferUsage.WriteOnly);
-            indexBuffer.SetData(pIndices);
-        }
 
     }
 }

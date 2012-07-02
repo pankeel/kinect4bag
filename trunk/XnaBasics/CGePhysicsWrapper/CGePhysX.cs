@@ -87,8 +87,28 @@ public class CGePhysX : IDisposable {
     return ret;
   }
 
+  public int getClothIndicesCount() {
+    int ret = CGePhysicsPINVOKE.CGePhysX_getClothIndicesCount(swigCPtr);
+    return ret;
+  }
+
+  public bool getClothIndicesContent(int[] indices) {
+    bool ret = CGePhysicsPINVOKE.CGePhysX_getClothIndicesContent(swigCPtr, indices);
+    return ret;
+  }
+
   public bool getClothParticles(SWIGTYPE_p_physx__PxVec3 particles) {
     bool ret = CGePhysicsPINVOKE.CGePhysX_getClothParticles__SWIG_0(swigCPtr, SWIGTYPE_p_physx__PxVec3.getCPtr(particles));
+    return ret;
+  }
+
+  public int getClothParticesCount() {
+    int ret = CGePhysicsPINVOKE.CGePhysX_getClothParticesCount(swigCPtr);
+    return ret;
+  }
+
+  public bool getClothParticlesContent(int[] particles) {
+    bool ret = CGePhysicsPINVOKE.CGePhysX_getClothParticlesContent(swigCPtr, particles);
     return ret;
   }
 

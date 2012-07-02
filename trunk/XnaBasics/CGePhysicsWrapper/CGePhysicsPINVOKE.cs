@@ -221,8 +221,20 @@ class CGePhysicsPINVOKE {
   [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_getClothIndices")]
   public static extern bool CGePhysX_getClothIndices(HandleRef jarg1, HandleRef jarg2, HandleRef jarg3);
 
+  [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_getClothIndicesCount")]
+  public static extern int CGePhysX_getClothIndicesCount(HandleRef jarg1);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_getClothIndicesContent")]
+  public static extern bool CGePhysX_getClothIndicesContent(HandleRef jarg1, [Out, MarshalAs(UnmanagedType.LPArray)]int[] jarg2);
+
   [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_getClothParticles__SWIG_0")]
   public static extern bool CGePhysX_getClothParticles__SWIG_0(HandleRef jarg1, HandleRef jarg2);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_getClothParticesCount")]
+  public static extern int CGePhysX_getClothParticesCount(HandleRef jarg1);
+
+  [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_getClothParticlesContent")]
+  public static extern bool CGePhysX_getClothParticlesContent(HandleRef jarg1, [Out, MarshalAs(UnmanagedType.LPArray)]int[] jarg2);
 
   [DllImport("CGePhysics", EntryPoint="CSharp_CGePhysX_getClothParticles__SWIG_1")]
   public static extern bool CGePhysX_getClothParticles__SWIG_1(HandleRef jarg1, HandleRef jarg2, HandleRef jarg3);

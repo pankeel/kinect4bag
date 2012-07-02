@@ -54,8 +54,14 @@ public:
     void updateCollisionSpheres(vector<physx::PxVec3>& positions);
 
     bool getClothIndices(physx::PxU32*& indices, physx::PxU32& nIndices);
+	// Wrapper Function for C#
+	int getClothIndicesCount();
+	bool getClothIndicesContent(int* indices);
 
     bool getClothParticles(physx::PxVec3* particles);
+	// Wrapper Function for C#
+	int getClothParticesCount();
+	bool getClothParticlesContent(void* particles);
 
     bool getClothParticles(physx::PxVec3* particles, physx::PxU32& nParticles);
 

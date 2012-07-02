@@ -283,7 +283,6 @@ SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_CGePhysics(SWIG_CSharpStr
 #include "CGePhysX.h"
 
 
-
 #include <stdexcept>
 
 
@@ -695,6 +694,34 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_getClothIndices(void * jarg1
 }
 
 
+SWIGEXPORT int SWIGSTDCALL CSharp_CGePhysX_getClothIndicesCount(void * jarg1) {
+  int jresult ;
+  CGePhysX *arg1 = (CGePhysX *) 0 ;
+  int result;
+  
+  arg1 = (CGePhysX *)jarg1; 
+  result = (int)(arg1)->getClothIndicesCount();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_getClothIndicesContent(void * jarg1, int* jarg2) {
+  unsigned int jresult ;
+  CGePhysX *arg1 = (CGePhysX *) 0 ;
+  int *arg2 = (int *) 0 ;
+  bool result;
+  
+  arg1 = (CGePhysX *)jarg1; 
+  arg2 = jarg2;
+  result = (bool)(arg1)->getClothIndicesContent(arg2);
+  jresult = result; 
+  
+  
+  return jresult;
+}
+
+
 SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_getClothParticles__SWIG_0(void * jarg1, void * jarg2) {
   unsigned int jresult ;
   CGePhysX *arg1 = (CGePhysX *) 0 ;
@@ -705,6 +732,34 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_getClothParticles__SWIG_0(vo
   arg2 = (physx::PxVec3 *)jarg2; 
   result = (bool)(arg1)->getClothParticles(arg2);
   jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CGePhysX_getClothParticesCount(void * jarg1) {
+  int jresult ;
+  CGePhysX *arg1 = (CGePhysX *) 0 ;
+  int result;
+  
+  arg1 = (CGePhysX *)jarg1; 
+  result = (int)(arg1)->getClothParticesCount();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_getClothParticlesContent(void * jarg1, int* jarg2) {
+  unsigned int jresult ;
+  CGePhysX *arg1 = (CGePhysX *) 0 ;
+  void *arg2 = (void *) 0 ;
+  bool result;
+  
+  arg1 = (CGePhysX *)jarg1; 
+  arg2 = jarg2;
+  result = (bool)(arg1)->getClothParticlesContent(arg2);
+  jresult = result; 
+  
+  
   return jresult;
 }
 
