@@ -21,7 +21,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         private int nIndices;
         //public Texture2D shapeTexture;
         CGePhysX mCloth;
-
+        BasicEffect effect;
         public ClothRender(Game game)
             : base(game)
         {
@@ -53,8 +53,28 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 // If can't pass raw data, memcpy indexbuffer
                 indexBuffer = new IndexBuffer(this.GraphicsDevice, typeof(int), nIndices, BufferUsage.WriteOnly);
                 indexBuffer.SetData(pIndices);
+                
             }
-            
+
+
+             this.effect = new BasicEffect(this.GraphicsDevice);
+             this.effect.World = Matrix.Identity;
+             this.effect.View = Matrix.CreateLookAt(
+                 new Vector3(0, 0, -3000000000.0f),
+                 new Vector3(0, 0, 0),
+                 Vector3.Up);
+             this.effect.Projection = Matrix.CreatePerspectiveFieldOfView(
+                 (45.6f * (float)Math.PI / 180.0f),
+                 this.GraphicsDevice.Viewport.AspectRatio,
+                 1.0f,
+                 20000.0f
+             );
+
+             this.effect.AmbientLightColor = new Vector3(0.1f, 0.1f, 0.1f);
+             this.effect.DiffuseColor = new Vector3(1.0f, 1.0f, 1.0f);
+             this.effect.SpecularColor = new Vector3(0.25f, 0.25f, 0.25f);
+             this.effect.SpecularPower = 5.0f;
+             this.effect.Alpha = 1.0f;
         }
 
         /// <summary>
@@ -72,33 +92,20 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Draw(GameTime gameTime)
         {
-            // If the joint texture isn't loaded, load it now
-            
-            //if (this.trackedSkeleton == null)
-            //{
-            //    return;
-            //}
-
-            //// Now draw the bag at the left hand joint
-            //if (trackedSkeleton.Joints[JointType.HandLeft] != null)
-            //{
-            //    base.Draw(gameTime);
-            //}
-            //skeletonDrawn = true;
-
+            GraphicsDevice.Clear(Color.Green);
             // Update
             unsafe
             {
                 //mCloth.StepPhysX(gameTime.ElapsedGameTime.Seconds);
-                mCloth.StepPhysX(1.0f/60.0f);
-                
+                mCloth.StepPhysX(1.0f / 60.0f);
+
                 nVertices = mCloth.getClothParticesCount();
                 int[] buffer = new int[nVertices];
                 mCloth.getClothParticlesContent(buffer);
                 Vector3[] vertices = new Vector3[nVertices];
                 fixed (int* bytePtr = &buffer[0])
                 {
-                    Vector3 *vec = (Vector3*)bytePtr;
+                    Vector3* vec = (Vector3*)bytePtr;
                     for (int i = 0; i < nVertices; i++, vec++)
                     {
                         vertices[i].X = vec->X;
@@ -112,7 +119,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 for (int i = 0; i < nVertices; ++i)
                 {
                     vertexColor[i] = new VertexPositionColor(
-                        new Vector3(vertices[i].X, vertices[i].Y, vertices[i].Z), Color.Gray);
+                        new Vector3(vertices[i].X, vertices[i].Y, vertices[i].Z), Color.Red);
                 }
                 vertexBuffer = new VertexBuffer(this.GraphicsDevice, VertexPositionColor.VertexDeclaration
                     , nVertices, BufferUsage.WriteOnly);
@@ -122,8 +129,12 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 this.GraphicsDevice.Indices = indexBuffer;
                 this.GraphicsDevice.SetVertexBuffer(vertexBuffer);
 
-                this.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0,
-                    nVertices, 0, nIndices / 3);
+                foreach (EffectPass pass in this.effect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    this.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, nVertices, 0, nIndices / 3);
+                }
+                
             }
 
         }

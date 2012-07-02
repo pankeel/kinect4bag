@@ -455,16 +455,5 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // This is necessary because we are rendering to back buffer/render targets and we need to preserve the data
             e.GraphicsDeviceInformation.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
         }
-
-        /*
-        public void ChangeClothTex(Texture2D newTex)
-        {
-            this.colorStream.cloth = newTex;
-
-            foreach (ModelMesh mesh in this.bodyModel.Meshes)
-                foreach (BasicEffect effect in mesh.Effects)
-                    effect.Texture = this.colorStream.cloth;
-        }
-         * */
     }
 }

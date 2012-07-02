@@ -43,56 +43,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 return;
             }
 
-            this.localCubeIndexes = new short[36] 
-            {
-                0,1,2,2,3,0,
-                4,7,6,6,5,4,  
-                8,11,10,10,9,8,
-                12,13,14,14,15,12,
-                16,17,18,18,19,16,
-                20,23,22,22,21,20
-            };
-
-            this.localCubeVertices = new VertexPositionColor[24]
-            {
-                // Create Coordinate axes
-                new VertexPositionColor(new Vector3(-axisHalfLength,-axisHalfLength,axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(-axisHalfLength, -axisHalfLength, -axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(axisHalfLength, -axisHalfLength, -axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(axisHalfLength, -axisHalfLength, axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(-axisHalfLength, axisHalfLength, axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(-axisHalfLength, axisHalfLength, -axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(axisHalfLength, axisHalfLength, -axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(axisHalfLength, axisHalfLength, axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(-axisHalfLength, -axisHalfLength, axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(-axisHalfLength, axisHalfLength, axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(axisHalfLength, axisHalfLength, axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(axisHalfLength, -axisHalfLength, axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(-axisHalfLength, -axisHalfLength, -axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(-axisHalfLength, axisHalfLength, -axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(axisHalfLength, axisHalfLength, -axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(axisHalfLength, -axisHalfLength, -axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(-axisHalfLength, -axisHalfLength, axisHalfLength),Color.Red),
-                new VertexPositionColor( new Vector3(-axisHalfLength, axisHalfLength, axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(-axisHalfLength, axisHalfLength, -axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(-axisHalfLength, -axisHalfLength, -axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(axisHalfLength, -axisHalfLength, axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(axisHalfLength, axisHalfLength, axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(axisHalfLength, axisHalfLength, -axisHalfLength),Color.Red),
-                new VertexPositionColor(new Vector3(axisHalfLength, -axisHalfLength, -axisHalfLength),Color.Red)      
-            };
-
-            //
-            // Draw the cube 3D object
-            //
-            /*foreach (EffectPass pass in this.effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                this.Game
-                    .GraphicsDevice
-                    .DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, this.localCubeVertices, 0, 24, this.localCubeIndexes, 0, 12);
-
-            }*/
         }
 
         public BagRender(Game game)

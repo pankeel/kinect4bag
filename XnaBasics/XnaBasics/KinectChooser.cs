@@ -183,7 +183,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // then we will display the information text
             if (null == this.Sensor || this.LastStatus != KinectStatus.Connected)
             {
-                this.SharedSpriteBatch.Begin();
+                // Delete the Draw Kinect not Connection image
+                /*this.SharedSpriteBatch.Begin();
 
                 // Render the background
                 this.SharedSpriteBatch.Draw(
@@ -211,7 +212,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     txt,
                     new Vector2((Game.GraphicsDevice.Viewport.Width - size.X) / 2, (Game.GraphicsDevice.Viewport.Height / 2) + size.Y),
                     Color.White);
-                this.SharedSpriteBatch.End();
+                this.SharedSpriteBatch.End();*/
             }
 
             base.Draw(gameTime);
