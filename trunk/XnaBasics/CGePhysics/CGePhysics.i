@@ -12,8 +12,8 @@
 
 
 
-%apply int INPUT[]  { void* particles}
-%apply int OUTPUT[]  { void* particles}
+%apply float INPUT[]  { void* particles}
+%apply float OUTPUT[]  { void* particles}
 %apply int INPUT[]  { int* indices}
 %apply int OUTPUT[]  { int* indices}
 

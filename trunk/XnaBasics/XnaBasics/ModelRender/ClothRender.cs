@@ -92,34 +92,46 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Green);
+            //GraphicsDevice.Clear(Color.Green);
+
             // Update
+            mCloth.StepPhysX(1.0f / 60.0f);
+            //mCloth.StepPhysX(gameTime.ElapsedGameTime.Seconds);
+
+            nVertices = mCloth.getClothParticesCount();
+            //double[] buffer = new double[nVertices*3];
+            //mCloth.getClothParticlesContent(buffer);
+            //Vector3[] vertices = new Vector3[nVertices];
+            float[] fVert = new float[nVertices * 3];
             unsafe
             {
-                //mCloth.StepPhysX(gameTime.ElapsedGameTime.Seconds);
-                mCloth.StepPhysX(1.0f / 60.0f);
-
-                nVertices = mCloth.getClothParticesCount();
-                int[] buffer = new int[nVertices];
-                mCloth.getClothParticlesContent(buffer);
-                Vector3[] vertices = new Vector3[nVertices];
-                fixed (int* bytePtr = &buffer[0])
-                {
-                    Vector3* vec = (Vector3*)bytePtr;
-                    for (int i = 0; i < nVertices; i++, vec++)
-                    {
-                        vertices[i].X = vec->X;
-                        vertices[i].Y = vec->Y;
-                        vertices[i].Z = vec->Z;
-                    }
-                }
+                mCloth.getClothParticlesContent(fVert);
+                //fixed (float* bytePtr = &vertices[0].X)
+                //{
+                //    //Vector3* vec = (Vector3*)bytePtr;
+                //    //for (int i = 0; i < nVertices; i++, vec++)
+                //    //{
+                //    //    vertices[i].X = vec->X;
+                //    //    vertices[i].Y = vec->Y;
+                //    //    vertices[i].Z = vec->Z;
+                //    //}
+                //    double* pVec = bytePtr;
+                //    for ( int i = 0; i < nVertices; ++i)
+                //    {
+                //        vertices[i].X = (float)*pVec++;
+                //        vertices[i].Y = (float)*pVec++;
+                //        vertices[i].Z = (float)*pVec++;
+                //    }
+                //}
 
                 // memcopy
                 VertexPositionColor[] vertexColor = new VertexPositionColor[nVertices];
                 for (int i = 0; i < nVertices; ++i)
                 {
-                    vertexColor[i] = new VertexPositionColor(
-                        new Vector3(vertices[i].X, vertices[i].Y, vertices[i].Z), Color.Red);
+                    vertexColor[i] = new VertexPositionColor(new Vector3(fVert[3 * i], 
+                        fVert[3 * i + 1], fVert[3 * i + 2]), Color.Red);
+                    //vertexColor[i] = new VertexPositionColor( 
+                        //new Vector3(vertices[i].X, vertices[i].Y, vertices[i].Z), Color.Red);
                 }
                 vertexBuffer = new VertexBuffer(this.GraphicsDevice, VertexPositionColor.VertexDeclaration
                     , nVertices, BufferUsage.WriteOnly);

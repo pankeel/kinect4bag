@@ -211,14 +211,6 @@ void CGePhysX::createCloth( const char* clothName, PxReal clothScale,
     createMeshFromObj(clothName, clothScale, &clothRotate, &clothOffset, 
         mClothVertices, mClothIndices, &uvs, meshDesc);
 
-	ClothVerticesWrapper.clear();
-	for (int i=0;i<mClothVertices.size();i++)
-	{
-		PxVec3Wrapper pxVec(mClothVertices[i].x,mClothVertices[i].y,mClothVertices[i].z);
-		ClothVerticesWrapper.push_back(
-			pxVec
-		);
-	}
     if (!meshDesc.isValid()) 
 		fatalError("Could not load cloth obj\n");
     // create the cloth
@@ -583,17 +575,14 @@ bool CGePhysX::getClothParticlesContent(void* particles)
 	// copy vertex positions
 	PxU32 partCount = mCloth->getNbParticles();
 	
-	
-	ClothVerticesWrapper.resize(partCount);
+	mClothVertices.resize(partCount);
 	for (PxU32 i = 0; i < partCount; ++i)
 	{
-		ClothVerticesWrapper[i].x = readData->particles[i].pos.x;
-		ClothVerticesWrapper[i].y = readData->particles[i].pos.y;
-		ClothVerticesWrapper[i].z = readData->particles[i].pos.z;
+		mClothVertices[i] = readData->particles[i].pos;
 	}
-	readData->unlock();
+    readData->unlock();
 
-	memcpy(particles,&ClothVerticesWrapper[0],partCount * sizeof(PxU32) );
+	memcpy(particles,&mClothVertices[0],partCount * sizeof(PxVec3) );
 	
 
 	return true;
