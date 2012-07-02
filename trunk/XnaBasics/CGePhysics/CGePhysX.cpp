@@ -570,14 +570,8 @@ bool CGePhysX::getClothParticles( PxVec3* particles )
 }
 
 int CGePhysX::getClothParticesCount()
-{
-	PxClothReadData* readData = mCloth->lockClothReadData();
-	if (!readData)
-		return false;
-
-	// copy vertex positions
-	PxU32 partCount = mCloth->getNbParticles();
-	return (int)partCount; 
+{ 
+	return mCloth->getNbParticles(); 
 }
 
 bool CGePhysX::getClothParticlesContent(void* particles)
@@ -623,6 +617,22 @@ bool CGePhysX::getClothParticles( physx::PxVec3* particles, physx::PxU32& nParti
 
     return true;
 }
+
+//int CGePhysX::getNbParticles()
+//{
+//    return mCloth->getNbParticles();
+//}
+//
+//int CGePhysX::getNbIndices()
+//{
+//    return mClothIndices.size();
+//}
+//
+//void CGePhysX::getParticles( int* particle )
+//{
+//    for (int i = 0; i < mClothIndices.size(); ++i)
+//        particle[i] = mClothIndices[i];
+//}
 
 // ----------
 PxErrorCallback& getPhysxErrorCallback()
