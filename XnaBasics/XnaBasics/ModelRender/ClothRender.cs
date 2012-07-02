@@ -46,7 +46,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             unsafe
             {
                 
-                int nIndices = mCloth.getClothIndicesCount();
+                nIndices = mCloth.getClothIndicesCount();
                 int[] pIndices = new int[nIndices];
                 mCloth.getClothIndicesContent(pIndices);
                 
@@ -89,7 +89,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // Update
             unsafe
             {
-                mCloth.StepPhysX(gameTime.ElapsedGameTime.Seconds);
+                //mCloth.StepPhysX(gameTime.ElapsedGameTime.Seconds);
+                mCloth.StepPhysX(1.0f/60.0f);
                 
                 nVertices = mCloth.getClothParticesCount();
                 int[] buffer = new int[nVertices];
@@ -115,28 +116,17 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 }
                 vertexBuffer = new VertexBuffer(this.GraphicsDevice, VertexPositionColor.VertexDeclaration
                     , nVertices, BufferUsage.WriteOnly);
-                vertexBuffer.SetData<Vector3>(vertices);
+                vertexBuffer.SetData<VertexPositionColor>(vertexColor);
+
+                // bind to graphics pipeline
+                this.GraphicsDevice.Indices = indexBuffer;
+                this.GraphicsDevice.SetVertexBuffer(vertexBuffer);
+
+                this.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0,
+                    nVertices, 0, nIndices / 3);
             }
-            // bind to graphics pipeline
-            this.GraphicsDevice.Indices = indexBuffer;
-            this.GraphicsDevice.SetVertexBuffer(vertexBuffer);
-            this.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 
-                nVertices, 0, nIndices / 3);
+
         }
 
-
-//<<<<<<< .mine
-//            // Need Debug
-//            int* pIndices;
-//            mCloth.getClothIndices((SWIGTYPE_p_p_physx__PxU32)pIndices, (SWIGTYPE_p_physx__PxU32)nIndices);
-//            // If can't pass raw data, memcpy indexbuffer
-//            int[] indx;
-//            Marshal.Copy((IntPtr)pIndices, 0, indx, nIndices);
-//            indexBuffer = new IndexBuffer(this.GraphicsDevice, typeof(int), nIndices, BufferUsage.WriteOnly);
-//            indexBuffer.SetData(pIndices);
-//        }
-
-//=======
-//>>>>>>> .r75
     }
 }
