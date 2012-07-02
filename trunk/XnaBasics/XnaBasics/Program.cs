@@ -22,18 +22,18 @@ namespace Microsoft.Samples.Kinect.Avateering
         public static void Main()
         {
 
-            CGePhysX test = new CGePhysX();
-            test.OnInit();
-            string filePath = Path.GetFullPath("..\\..\\..\\Media\\yifu.obj");
+            //CGePhysX test = new CGePhysX();
+            //test.OnInit();
+            //string filePath = Path.GetFullPath("..\\..\\..\\Media\\skirt2.obj");
 
-            test.createCloth(filePath);
+            //test.createCloth(filePath);
 
-            PxVec3_Vector a = test.ClothVerticesWrapper;
-            foreach (PxVec3Wrapper pv3 in a)
-            {
-                Console.WriteLine(String.Format("(%s,%s,%s)"), pv3.x, pv3.y, pv3.z);
-            }
-            
+            //PxVec3_Vector a = test.ClothVerticesWrapper;
+            //foreach (PxVec3Wrapper pv3 in a)
+            //{
+            //    Console.WriteLine(String.Format("(%s,%s,%s)"), pv3.x, pv3.y, pv3.z);
+            //}
+
             //ModelViewer.App app = new ModelViewer.App();
             //app.Run();
             //using (XnaBasics.AvateeringXNA game = new XnaBasics.AvateeringXNA())

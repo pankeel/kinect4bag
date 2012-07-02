@@ -542,7 +542,7 @@ bool CGePhysX::getVertsFromCloth( PxVec3* verts, const PxCloth& cloth )
     return true;
 }
 
-bool CGePhysX::getClothIndices( PxU32*& indices, PxU32& nIndices )
+bool CGePhysX::getClothIndices( physx::PxU32*& indices, physx::PxU32& nIndices )
 {
     nIndices = mClothIndices.size();
     indices = &mClothIndices[0];
@@ -552,6 +552,25 @@ bool CGePhysX::getClothIndices( PxU32*& indices, PxU32& nIndices )
 bool CGePhysX::getClothParticles( PxVec3* particles )
 {
     return getVertsFromCloth(particles, *mCloth);
+}
+
+bool CGePhysX::getClothParticles( physx::PxVec3* particles, physx::PxU32& nParticles )
+{
+    PxClothReadData* readData = mCloth->lockClothReadData();
+    if (!readData)
+        return false;
+
+    // copy vertex positions
+    nParticles = mCloth->getNbParticles();
+    mClothVertices.resize(nParticles);
+    for (PxU32 i = 0; i < nParticles; ++i)
+        mClothVertices[i] = readData->particles[i].pos;
+
+    readData->unlock();
+
+    particles = &mClothVertices[0];
+
+    return true;
 }
 
 // ----------

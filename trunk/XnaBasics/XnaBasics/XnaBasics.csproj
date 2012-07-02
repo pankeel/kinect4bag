@@ -156,6 +156,7 @@
     <Compile Include="GridXZ.cs" />
     <Compile Include="KinectHelper.cs" />
     <Compile Include="ModelRender\BodyRender.cs" />
+    <Compile Include="ModelRender\ClothRender.cs" />
     <Compile Include="ModelRender\LegRender.cs" />
     <Compile Include="ModelRender\Object3D.cs" />
     <Compile Include="ModelRender\BagRender.cs" />
