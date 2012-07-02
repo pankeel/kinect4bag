@@ -107,7 +107,7 @@ public class CGePhysX : IDisposable {
     return ret;
   }
 
-  public bool getClothParticlesContent(int[] particles) {
+  public bool getClothParticlesContent(float[] particles) {
     bool ret = CGePhysicsPINVOKE.CGePhysX_getClothParticlesContent(swigCPtr, particles);
     return ret;
   }
@@ -151,17 +151,6 @@ public class CGePhysX : IDisposable {
     get {
       IntPtr cPtr = CGePhysicsPINVOKE.CGePhysX_mClothVertices_get(swigCPtr);
       SWIGTYPE_p_std__vectorT_physx__PxVec3_t ret = (cPtr == IntPtr.Zero) ? null : new SWIGTYPE_p_std__vectorT_physx__PxVec3_t(cPtr, false);
-      return ret;
-    } 
-  }
-
-  public PxVec3_Vector ClothVerticesWrapper {
-    set {
-      CGePhysicsPINVOKE.CGePhysX_ClothVerticesWrapper_set(swigCPtr, PxVec3_Vector.getCPtr(value));
-    } 
-    get {
-      IntPtr cPtr = CGePhysicsPINVOKE.CGePhysX_ClothVerticesWrapper_get(swigCPtr);
-      PxVec3_Vector ret = (cPtr == IntPtr.Zero) ? null : new PxVec3_Vector(cPtr, false);
       return ret;
     } 
   }

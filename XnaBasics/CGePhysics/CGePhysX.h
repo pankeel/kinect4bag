@@ -110,7 +110,7 @@ public:
     physx::PxCloth* mCloth; 
     vector<physx::PxU32> mClothIndices;
     vector<physx::PxVec3> mClothVertices;
-	vector<PxVec3Wrapper> ClothVerticesWrapper;
+	//vector<PxVec3Wrapper> ClothVerticesWrapper;
     physx::PxClothCollisionData mClothCollisionData;
     vector<physx::PxClothCollisionSphere> mClothCollisionSpheres;
     vector<physx::PxU32> mClothCollisionSpheresIndexPair;

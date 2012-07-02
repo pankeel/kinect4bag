@@ -676,8 +676,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // Mesh Draw Method
             foreach (ModelMesh mesh in this.currentModel.Meshes)
             {
-                double[] mmp = new double[mesh.MeshParts[0].VertexBuffer.VertexCount];
-                mesh.MeshParts[0].VertexBuffer.GetData<double>(mmp);
+                //double[] mmp = new double[mesh.MeshParts[0].VertexBuffer.VertexCount];
+                //mesh.MeshParts[0].VertexBuffer.GetData<double>(mmp);
                 foreach (SkinnedEffect effect in mesh.Effects)
                 {
                     effect.SetBoneTransforms(this.skinTransforms);

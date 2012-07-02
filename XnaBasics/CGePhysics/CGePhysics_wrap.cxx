@@ -748,7 +748,7 @@ SWIGEXPORT int SWIGSTDCALL CSharp_CGePhysX_getClothParticesCount(void * jarg1) {
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_getClothParticlesContent(void * jarg1, int* jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_getClothParticlesContent(void * jarg1, float* jarg2) {
   unsigned int jresult ;
   CGePhysX *arg1 = (CGePhysX *) 0 ;
   void *arg2 = (void *) 0 ;
@@ -853,28 +853,6 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CGePhysX_mClothVertices_get(void * jarg1) {
   
   arg1 = (CGePhysX *)jarg1; 
   result = (std::vector< physx::PxVec3 > *)& ((arg1)->mClothVertices);
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_ClothVerticesWrapper_set(void * jarg1, void * jarg2) {
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  std::vector< PxVec3Wrapper > *arg2 = (std::vector< PxVec3Wrapper > *) 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  arg2 = (std::vector< PxVec3Wrapper > *)jarg2; 
-  if (arg1) (arg1)->ClothVerticesWrapper = *arg2;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CGePhysX_ClothVerticesWrapper_get(void * jarg1) {
-  void * jresult ;
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  std::vector< PxVec3Wrapper > *result = 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  result = (std::vector< PxVec3Wrapper > *)& ((arg1)->ClothVerticesWrapper);
   jresult = (void *)result; 
   return jresult;
 }
