@@ -101,11 +101,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             }
         }
 
-        private ClothRender clothRender;
-        public ClothRender ClothModelRender
-        {
-            get { return clothRender; }
-        }
+
 
         /// <summary>
         /// Initializes a new instance of the ColorStreamRenderer class.
@@ -118,7 +114,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.bagRender = new BagRender(game);
             this.bodyRender = new BodyRender(game);
             this.legRender = new LegRender(game);
-            this.clothRender = new ClothRender(game);
+            
         }
 
         /// <summary>
@@ -127,7 +123,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         public override void Initialize()
         {
             base.Initialize();
-            clothRender.Initialize();
             this.Size = new Vector2(Game.GraphicsDevice.Viewport.Width, Game.GraphicsDevice.Viewport.Height);
         }
 
@@ -186,7 +181,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.bagRender.Update(gameTime);
             this.bodyRender.Update(gameTime);
             this.legRender.Update(gameTime);
-            this.clothRender.Update(gameTime);
+            
             // Update the skeleton renderer
             this.skeletonStream.Update(gameTime);
         }
@@ -228,7 +223,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 //this.bagRender.Draw(gameTime);
                 this.bodyRender.Draw(gameTime);
                 this.legRender.Draw(gameTime);
-                this.clothRender.Draw(gameTime);
+                
                 // Reset the render target and prepare to draw scaled image
                 this.Game.GraphicsDevice.SetRenderTargets(null);
 
