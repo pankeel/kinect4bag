@@ -179,7 +179,7 @@ void CGePhysX::StepPhysX(float stepTime)
         // do something useful        
     }
 }
-void CGePhysX::createCloth( const char* clothName, PxReal clothScale, 
+void CGePhysX::createCloth( const char* clothName, float clothScale, 
     PxVec3 clothOffset, PxQuat clothRotate)
 {
     // compute root transform and positions of all the bones

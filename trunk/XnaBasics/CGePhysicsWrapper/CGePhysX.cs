@@ -51,19 +51,18 @@ public class CGePhysX : IDisposable {
     CGePhysicsPINVOKE.CGePhysX_StepPhysX(swigCPtr, stepTime);
   }
 
-  public void createCloth(string clothName, SWIGTYPE_p_physx__PxReal clothScale, SWIGTYPE_p_physx__PxVec3 clothOffset, SWIGTYPE_p_physx__PxQuat clothRotate) {
-    CGePhysicsPINVOKE.CGePhysX_createCloth__SWIG_0(swigCPtr, clothName, SWIGTYPE_p_physx__PxReal.getCPtr(clothScale), SWIGTYPE_p_physx__PxVec3.getCPtr(clothOffset), SWIGTYPE_p_physx__PxQuat.getCPtr(clothRotate));
+  public void createCloth(string clothName, float clothScale, SWIGTYPE_p_physx__PxVec3 clothOffset, SWIGTYPE_p_physx__PxQuat clothRotate) {
+    CGePhysicsPINVOKE.CGePhysX_createCloth__SWIG_0(swigCPtr, clothName, clothScale, SWIGTYPE_p_physx__PxVec3.getCPtr(clothOffset), SWIGTYPE_p_physx__PxQuat.getCPtr(clothRotate));
     if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
   }
 
-  public void createCloth(string clothName, SWIGTYPE_p_physx__PxReal clothScale, SWIGTYPE_p_physx__PxVec3 clothOffset) {
-    CGePhysicsPINVOKE.CGePhysX_createCloth__SWIG_1(swigCPtr, clothName, SWIGTYPE_p_physx__PxReal.getCPtr(clothScale), SWIGTYPE_p_physx__PxVec3.getCPtr(clothOffset));
+  public void createCloth(string clothName, float clothScale, SWIGTYPE_p_physx__PxVec3 clothOffset) {
+    CGePhysicsPINVOKE.CGePhysX_createCloth__SWIG_1(swigCPtr, clothName, clothScale, SWIGTYPE_p_physx__PxVec3.getCPtr(clothOffset));
     if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
   }
 
-  public void createCloth(string clothName, SWIGTYPE_p_physx__PxReal clothScale) {
-    CGePhysicsPINVOKE.CGePhysX_createCloth__SWIG_2(swigCPtr, clothName, SWIGTYPE_p_physx__PxReal.getCPtr(clothScale));
-    if (CGePhysicsPINVOKE.SWIGPendingException.Pending) throw CGePhysicsPINVOKE.SWIGPendingException.Retrieve();
+  public void createCloth(string clothName, float clothScale) {
+    CGePhysicsPINVOKE.CGePhysX_createCloth__SWIG_2(swigCPtr, clothName, clothScale);
   }
 
   public void createCloth(string clothName) {

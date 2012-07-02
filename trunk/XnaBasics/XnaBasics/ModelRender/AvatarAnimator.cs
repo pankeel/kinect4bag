@@ -54,7 +54,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// Viewing Camera distance from origin.
         /// The "Dude" model is defined in centimeters, hence all the units we use here are cm.
         /// </summary>
-        private float cameraDistance = 90.0f;
+        private float cameraDistance = 190.0f;
 
         /// <summary>
         /// This is used to adjust the window size. The height is set automatically from the width using a 4:3 ratio.
@@ -676,8 +676,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // Mesh Draw Method
             foreach (ModelMesh mesh in this.currentModel.Meshes)
             {
-                //double[] mmp = new double[mesh.MeshParts[0].VertexBuffer.VertexCount];
-                //mesh.MeshParts[0].VertexBuffer.GetData<double>(mmp);
+                //VertexPositionNormalTexture[] mmp = new VertexPositionNormalTexture[mesh.MeshParts[0].VertexBuffer.VertexCount];
+                //mesh.MeshParts[0].VertexBuffer.GetData<VertexPositionNormalTexture>(mmp);
                 foreach (SkinnedEffect effect in mesh.Effects)
                 {
                     effect.SetBoneTransforms(this.skinTransforms);

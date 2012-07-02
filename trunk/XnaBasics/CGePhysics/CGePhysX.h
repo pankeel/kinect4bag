@@ -43,7 +43,7 @@ public:
 
     void StepPhysX(float stepTime);
 
-    void createCloth(const char* clothName, physx::PxReal clothScale = 1.0f, \
+    void createCloth(const char* clothName, float clothScale = 1.0f, \
         physx::PxVec3 clothOffset = physx::PxVec3(0,0,0), physx::PxQuat clothRotate = physx::PxQuat::createIdentity());
     //void createCloth(const char* clothName);
     
