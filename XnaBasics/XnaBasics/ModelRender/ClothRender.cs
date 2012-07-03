@@ -40,7 +40,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// Viewing Camera distance from origin.
         /// The "Dude" model is defined in centimeters, hence all the units we use here are cm.
         /// </summary>
-        private float cameraDistance = 190.0f;
+        private float cameraDistance = 40.0f;
 
         /// <summary>
         /// Viewing Camera projection matrix.
@@ -55,7 +55,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <summary>
         /// Camera starting Distance value.
         /// </summary>
-        private const float CameraHeight = 40.0f;
+        private const float CameraHeight = 10.0f;
         
         public ClothRender(Game game)
             : base(game)
@@ -95,23 +95,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
 
              this.effect = new BasicEffect(this.GraphicsDevice);
-             this.effect.World = Matrix.Identity;
-             this.effect.View = Matrix.CreateLookAt(
-                 new Vector3(0, 0, -3000000000.0f),
-                 new Vector3(0, 0, 0),
-                 Vector3.Up);
-             this.effect.Projection = Matrix.CreatePerspectiveFieldOfView(
-                 (45.6f * (float)Math.PI / 180.0f),
-                 this.GraphicsDevice.Viewport.AspectRatio,
-                 1.0f,
-                 20000.0f
-             );
 
-             this.effect.AmbientLightColor = new Vector3(0.1f, 0.1f, 0.1f);
-             this.effect.DiffuseColor = new Vector3(1.0f, 1.0f, 1.0f);
-             this.effect.SpecularColor = new Vector3(0.25f, 0.25f, 0.25f);
-             this.effect.SpecularPower = 5.0f;
-             this.effect.Alpha = 1.0f;
         }
 
         /// <summary>
@@ -140,12 +124,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                                                 Vector3.Up);
 
             // Kinect vertical FOV in degrees
-            float nominalVerticalFieldOfView = 45.6f;
+            float nominalVerticalFieldOfView = 91.2f;
 
-            if (null != this.Chooser && null != this.Chooser.Sensor && this.Chooser.Sensor.IsRunning && KinectStatus.Connected == this.Chooser.Sensor.Status)
-            {
-                nominalVerticalFieldOfView = this.Chooser.Sensor.DepthStream.NominalVerticalFieldOfView;
-            }
 
             this.projection = Matrix.CreatePerspectiveFieldOfView(
                                                                 (nominalVerticalFieldOfView * (float)Math.PI / 180.0f),
@@ -195,13 +175,11 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             effect.View = view;
             effect.Projection = projection;
             effect.TextureEnabled = false;
-            effect.DiffuseColor = Color.White.ToVector3();
+            effect.DiffuseColor = Color.Green.ToVector3();
             foreach (EffectPass pass in this.effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
                 this.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, nVertices, 0, nIndices / 3);
-                //this.GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(
-                //    PrimitiveType.TriangleList, vertexData, 0, nVertices, indexData, 0, nIndices / 3);
             }
 
         }
