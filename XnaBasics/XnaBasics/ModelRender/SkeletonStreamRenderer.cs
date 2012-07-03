@@ -36,11 +36,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
 
         public static Tuple<float, float, float, float> FloorClipPlane;
-        /// <summary>
-        /// This flag ensures only request a frame once per update call
-        /// across the entire application.
-        /// </summary>
-        private static bool skeletonDrawn = true;
 
         /// <summary>
         /// The origin (center) location of the joint texture.
@@ -103,28 +98,23 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             {
                 return;
             }
-
-            // If we have already drawn this skeleton, then we should retrieve a new frame
-            // This prevents us from calling the next frame more than once per update
-            if (skeletonDrawn)
+            // Update Skeleton Frame 
+            using (var skeletonFrame = this.Chooser.Sensor.SkeletonStream.OpenNextFrame(0))
             {
-                using (var skeletonFrame = this.Chooser.Sensor.SkeletonStream.OpenNextFrame(0))
+                // Sometimes we get a null frame back if no data is ready
+                if (null == skeletonFrame)
                 {
-                    // Sometimes we get a null frame back if no data is ready
-                    if (null == skeletonFrame)
-                    {
-                        return;
-                    }
-
-                    // Reallocate if necessary
-                    if (null == skeletonData || skeletonData.Length != skeletonFrame.SkeletonArrayLength)
-                    {
-                        skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
-                    }
-
-                    skeletonFrame.CopySkeletonDataTo(skeletonData);
-                    skeletonDrawn = false;
+                    return;
                 }
+
+                // Reallocate if necessary
+                if (null == skeletonData || skeletonData.Length != skeletonFrame.SkeletonArrayLength)
+                {
+                    skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+                }
+
+                skeletonFrame.CopySkeletonDataTo(skeletonData);
+
             }
         }
 
@@ -209,7 +199,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             }
 
             this.SharedSpriteBatch.End();
-            skeletonDrawn = true;
 
             base.Draw(gameTime);
         }
@@ -309,7 +298,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             }
 
             this.SharedSpriteBatch.End();
-            skeletonDrawn = true;
+
 
             base.Draw(gameTime);
         }
