@@ -687,6 +687,15 @@ public class WidgetBase
 	public    E_Align					ParentAttach;
 
 	protected List< WidgetBase >		Children;
+    // Only Used For Query, not delete
+    public List<WidgetBase> ChildrenWidget
+    {
+        get 
+        {
+            return Children;
+        }
+        
+    }
 	
 	public float						Alpha;
 	public float						Intensity;

@@ -154,7 +154,7 @@ public class TextureManager
             foreach (BasicEffect effect in mesh.Effects)
             {
                 effect.Texture = modelSkin;
-                effect.World = Matrix.Identity;
+                effect.World = Matrix.CreateTranslation(new Vector3(0.0f,2.0f,10.0f) );
                 effect.View = Matrix.CreateLookAt(
                     new Vector3(0.0f,0.0f,-10f),
                     new Vector3(0, 0, 0),
