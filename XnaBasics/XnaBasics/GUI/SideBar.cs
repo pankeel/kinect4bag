@@ -76,7 +76,9 @@ namespace UI
             : base("SideBar")
         {
             RightBar = CreateSideBar();
+            RightBar.Position = new Vector3(21f, 0f, 0f);
             LeftBar = CreateSideBar();
+            LeftBar.Position = new Vector3(-36f, 0f, 0f);
             
  
             _DictNodeToTextureIndex = new Dictionary<int,int>();
@@ -84,11 +86,11 @@ namespace UI
             {
                 "ClothButtonTex0","ClothButtonTex1","ClothButtonTex2","ClothButtonTex3"
             };
-            Vector3 size = new Vector3(5.0f,5.0f,0);
+            Vector3 size = new Vector3(15.0f, 15.0f, 0f);
             FillSideBar(RightBar, texNameArray, size);
             for (int i = 0; i < texNameArray.Length;i++ )
                 _DictNodeToTextureIndex.Add(i, _UI.Texture.Get(texNameArray[i]));
-            //FillSideBar(LeftBar, texNameArray, size);
+            FillSideBar(LeftBar, texNameArray, size);
 
             CurrentSelectionRight = -1;
             CurrentSelectionLeft = -1;
@@ -147,7 +149,7 @@ namespace UI
 
             }
 
-            else if (input.ButtonJustPressed((int)E_UiButton.B))
+            if (input.ButtonJustPressed((int)E_UiButton.B))
             {
                 RightBar.DecreaseCurrent();
             }
