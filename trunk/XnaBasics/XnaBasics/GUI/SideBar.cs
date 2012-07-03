@@ -22,6 +22,7 @@ namespace UI
             sideBar.Speed = 5.0f;
             sideBar.Padding = 2.0f;
             Add(sideBar);
+            //sideBar.ParentAttach = E_Align.MiddleLeft;
             return sideBar;
         }
 
@@ -33,7 +34,7 @@ namespace UI
                 WidgetMenuNode node = new WidgetMenuNode(i);
                 node.RenderPass = 1;
                 node.Size = size;
-                node.Align = E_Align.TopLeft;
+                node.Align = E_Align.MiddleCentre;
                 node.Alpha = 0.5f;
                 node.Parent(sideBar);
                 Add(node);
