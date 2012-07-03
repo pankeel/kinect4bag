@@ -25,31 +25,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         private byte[] colorData;
 
-        public Model Model3DAvata
-        {
-            set
-            {
-                bagRender.Model3DAvatar = value;
-            }
-        }
-
-        public Model BodyModel
-        {
-            set
-            {
-                bodyRender.Model3DAvatar = value;
-            }
-        }
-
-        public Model LegModel
-        {
-            set
-            {
-                legRender.Model3DAvatar = value;
-            }
-        }
-
-
         public Texture2D cloth;
   
 
@@ -218,7 +193,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 this.SharedSpriteBatch.End();
 
                 // Draw the skeleton
-                //this.skeletonStream.Draw(gameTime, cloth);
+                this.skeletonStream.Draw(gameTime, cloth);
                 // Draw the bag 3d model
                 this.bagRender.Draw(gameTime);
                 this.bodyRender.Draw(gameTime);
@@ -248,9 +223,10 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         protected override void LoadContent()
         {
-            Model3DAvata = Game.Content.Load<Model>("bag");
-            BodyModel = Game.Content.Load<Model>("yifu");
-            LegModel = Game.Content.Load<Model>("kuzi");
+            bagRender.Model3DAvatar = Game.Content.Load<Model>("bag");
+            bodyRender.Model3DAvatar = Game.Content.Load<Model>("yifu");
+            legRender.Model3DAvatar = Game.Content.Load<Model>("kuzi");
+
 
             base.LoadContent();
 
