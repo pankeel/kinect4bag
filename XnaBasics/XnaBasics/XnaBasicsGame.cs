@@ -220,9 +220,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             LeftHand = new Vector2();
             RightHand = new Vector2();
-
-            this.clothRender = new ClothRender(this);
-            this.Components.Add(this.clothRender);
         }
 
         /// <summary>
@@ -260,11 +257,13 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         {           
             this.Components.Add(this.colorStream);
 
-
             // Create the avatar animator
             this.animator = new AvatarAnimator(this);
             this.Components.Add(this.animator);
 
+
+            this.clothRender = new ClothRender(this);
+            this.Components.Add(this.clothRender);
             
 
             this.ui = new SimpleGUI(this);

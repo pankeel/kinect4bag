@@ -344,7 +344,8 @@ PxCloth* CGePhysX::createClothFromMeshDesc( PxClothMeshDesc &meshDesc, const PxT
 
     // damp global particle velocity to 90% every 0.1 seconds
     //cloth->setDampingCoefficient(0.1f); // damp local particle velocity
-    cloth->setDampingCoefficient(1.f); // damp local particle velocity
+    //cloth->setDampingCoefficient(1.f); // damp local particle velocity
+    cloth->setDampingCoefficient(0.6f); // damp local particle velocity
     cloth->setDragCoefficient(0.1f); // transfer frame velocity
 
     // reduce effect of local frame acceleration

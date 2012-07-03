@@ -91,8 +91,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 nVertices = mCloth.getClothParticesCount();
                 vertexBuffer = new VertexBuffer(this.GraphicsDevice, VertexPositionColor.VertexDeclaration
                     , nVertices, BufferUsage.WriteOnly);
+                vertexData = new VertexPositionColor[nVertices];
             }
-
 
              this.effect = new BasicEffect(this.GraphicsDevice);
 
@@ -150,7 +150,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             //mCloth.getClothParticlesContent(buffer);
             //Vector3[] vertices = new Vector3[nVertices];
             float[] fVert = new float[nVertices * 3];
-            vertexData = new VertexPositionColor[nVertices];
             unsafe
             {
                 mCloth.getClothParticlesContent(fVert);
@@ -163,8 +162,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     //new Vector3(vertices[i].X, vertices[i].Y, vertices[i].Z), Color.Red);
                 }
             }
-
             vertexBuffer.SetData<VertexPositionColor>(vertexData);
+
             this.UpdateViewingCamera();
 
             // bind to graphics pipeline
