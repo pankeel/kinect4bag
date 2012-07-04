@@ -161,6 +161,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             if (tracked_skel != null)
             {
+                //GestureTracker.Update(tracked_skel);
+
                 Vector2 hand_r_v = mapMethod(tracked_skel.Joints[JointType.HandRight].Position);
                 Vector2 hand_l_v = mapMethod(tracked_skel.Joints[JointType.HandLeft].Position);
                 int actual_width = this.Game.GraphicsDevice.DisplayMode.Width;
