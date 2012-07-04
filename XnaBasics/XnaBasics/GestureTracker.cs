@@ -15,8 +15,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         public static SkeletonPoint last_hand_r;
 
         public static void Reset() {
-            counter = 0;
-            trend = Trend.Neutral;
+            GestureTracker.counter = 0;
+            GestureTracker.trend = Trend.Neutral;
         }
 
         public static void Update(Skeleton skel)
@@ -32,28 +32,28 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             SkeletonPoint elbow_r = skel.Joints[JointType.ElbowRight].Position;
 
             //right hand above hip and moving upward
-            if (hand_r.Y < elbow_r.Y && hand_r.Y < last_hand_r.Y)
+            if (hand_r.Y > elbow_r.Y && hand_r.Y > last_hand_r.Y)
             {
-                if (trend == Trend.Up)
+                if (GestureTracker.trend == Trend.Up)
                 {
-                    counter++;
+                    GestureTracker.counter++;
                 }
                 else
                 {
                     Reset();
-                    trend = Trend.Up;
+                    GestureTracker.trend = Trend.Up;
                 }
             }
-            else if (hand_r.Y > elbow_r.Y && hand_r.Y > last_hand_r.Y) //right hand below hip and moving downward
+            else if (hand_r.Y < elbow_r.Y && hand_r.Y < last_hand_r.Y) //right hand below hip and moving downward
             {
-                if (trend == Trend.Down)
+                if (GestureTracker.trend == Trend.Down)
                 {
-                    counter++;
+                    GestureTracker.counter++;
                 }
                 else
                 {
                     Reset();
-                    trend = Trend.Down;
+                    GestureTracker.trend = Trend.Down;
                 }
             }
             else
