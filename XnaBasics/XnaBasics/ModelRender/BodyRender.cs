@@ -131,6 +131,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             if (trackedSkeleton.Joints[JointType.ShoulderCenter].TrackingState == JointTrackingState.Tracked)
             {
 
+                GestureTracker.Update(trackedSkeleton);
                 // Render the 3D model skinned mesh with Skinned Effect.
                 Matrix world = this.CreateWorldMatrix(trackedSkeleton),
                     view = this.CreateViewMatrix(trackedSkeleton),
