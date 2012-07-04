@@ -28,7 +28,6 @@ namespace UI
 
         private void FillSideBar(WidgetMenuScroll sideBar, string[] texNameArray, Vector3 size)
         {
-            
             for (int i = 0; i < texNameArray.Length; ++i)
             {
                 WidgetMenuNode node = new WidgetMenuNode(i);
@@ -118,8 +117,6 @@ namespace UI
                 int texIndex = 0;
                 _DictNodeToTextureIndex.TryGetValue(CurrentSelectionRight, out texIndex);
                 ObjectRender.TargetTexture = _UI.Texture.Get(texIndex);
-                //int slot = _UI.Texture.Get("ClothButtonTex" + CurrentSelectionRight);
-                //ObjectRender.TargetTexture = _UI.Texture.Get(slot);
                     
             }
             if (LeftBar.ChildrenWidget.Count > 0)
@@ -128,6 +125,23 @@ namespace UI
                 if (menuSelected != CurrentSelectionLeft)
                 {
                     CurrentSelectionLeft = menuSelected;
+                }
+            }
+
+            if (GestureTracker.trend == Trend.Up)
+            {
+                if (GestureTracker.counter >= 3)
+                {
+                    RightBar.IncreaseCurrent();
+                    GestureTracker.Reset();
+                }
+            }
+            else if (GestureTracker.trend == Trend.Down)
+            {
+                if (GestureTracker.counter >= 2)
+                {
+                    RightBar.DecreaseCurrent();
+                    GestureTracker.Reset();
                 }
             }
 
@@ -148,16 +162,17 @@ namespace UI
                 }
 
             }
-
-            if (input.ButtonJustPressed((int)E_UiButton.B))
+            if (RightBar.ChildrenWidget.Count > 0)
             {
-                RightBar.DecreaseCurrent();
+                if (input.ButtonJustPressed((int)E_UiButton.B))
+                {
+                    RightBar.DecreaseCurrent();
+                }
+                else if (input.ButtonJustPressed((int)E_UiButton.A))
+                {
+                    RightBar.IncreaseCurrent();
+                }
             }
-            else if (input.ButtonJustPressed((int)E_UiButton.A))
-            {
-                RightBar.IncreaseCurrent();
-            }
-
         }
 
         private WidgetMenuScroll RightBar;
