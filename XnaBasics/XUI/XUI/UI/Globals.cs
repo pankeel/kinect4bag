@@ -19,12 +19,9 @@ public enum E_UiButton
 	Down,
 	Left,
 	Right,
-	A,
-	B,
-	X,
-	Y,
 	Start,
 	Back,
+    Enter,
 	LeftTrigger,
 	RightTrigger,
 	LeftShoulder,
@@ -50,6 +47,7 @@ public enum E_UiButton
     D8,
     D9,
     D0,
+    A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,
 	Count,
 };
 
@@ -166,19 +164,18 @@ public static class _UI
 
         input.AddButtonMapping((int)E_UiButton.D1, E_Device.Keyboard, (int)Keys.D1);
         input.AddButtonMapping((int)E_UiButton.Space, E_Device.Keyboard, (int)Keys.Space);
-        input.AddButtonMapping((int)E_UiButton.Space, E_Device.Keyboard, (int)Keys.Space);
-        input.AddButtonMapping((int)E_UiButton.Space, E_Device.Keyboard, (int)Keys.Space);
-        input.AddButtonMapping((int)E_UiButton.Space, E_Device.Keyboard, (int)Keys.Space);
-        input.AddButtonMapping((int)E_UiButton.Space, E_Device.Keyboard, (int)Keys.Space);
+        for (int i = (int)E_UiButton.A; i <= (int)E_UiButton.Z;i++ )
+        {
+            input.AddButtonMapping(i, E_Device.Keyboard, (int)Keys.A + (i - (int)E_UiButton.A));
+        }
 
-        input.AddButtonMapping((int)E_UiButton.Space, E_Device.Keyboard, (int)Keys.Space);
 		input.AddButtonMapping( (int)E_UiButton.Quit, E_Device.Keyboard, (int)Keys.Escape );
 		input.AddButtonMapping( (int)E_UiButton.Up, E_Device.Keyboard, (int)Keys.Up );
 		input.AddButtonMapping( (int)E_UiButton.Down, E_Device.Keyboard, (int)Keys.Down );
 		input.AddButtonMapping( (int)E_UiButton.Left, E_Device.Keyboard, (int)Keys.Left );
 		input.AddButtonMapping( (int)E_UiButton.Right, E_Device.Keyboard, (int)Keys.Right );
-		input.AddButtonMapping( (int)E_UiButton.A, E_Device.Keyboard, (int)Keys.Enter );
-		input.AddButtonMapping( (int)E_UiButton.B, E_Device.Keyboard, (int)Keys.Back );
+		input.AddButtonMapping( (int)E_UiButton.Enter, E_Device.Keyboard, (int)Keys.Enter );
+		input.AddButtonMapping( (int)E_UiButton.Back, E_Device.Keyboard, (int)Keys.Back );
 
 		input.AddButtonMapping( (int)E_UiButton.MouseLeft, E_Device.Mouse, (int)E_MouseButton.Left );
 		input.AddButtonMapping( (int)E_UiButton.MouseRight, E_Device.Mouse, (int)E_MouseButton.Right );

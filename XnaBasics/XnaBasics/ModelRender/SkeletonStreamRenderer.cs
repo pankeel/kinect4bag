@@ -1,4 +1,5 @@
-﻿//------------------------------------------------------------------------------
+﻿using System.Text;
+//------------------------------------------------------------------------------
 // <copyright file="SkeletonStreamRenderer.cs" company="Microsoft">
 //     Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
@@ -10,6 +11,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
     using Microsoft.Kinect;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
+    using System.IO;
 
     /// <summary>
     /// A delegate method explaining how to map a SkeletonPoint from one space to another.
@@ -260,10 +262,24 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                         this.DrawBone(skeleton.Joints, JointType.AnkleRight, JointType.FootRight);
                         */
                         // Now draw the joints
+                        FileStream fs = new FileStream("Skeleton.txt", FileMode.Append, FileAccess.Write, FileShare.None);
+                        StreamWriter mStreamWriter = new StreamWriter(fs);
+                        String content = "";
+                        Joint leftShoulder = skeleton.Joints[JointType.ShoulderLeft],
+                            rightShoulder = skeleton.Joints[JointType.ShoulderRight];
+                        content += String.Format("{0} {1} {2} {3} {4} {5}",
+                            leftShoulder.Position.X,
+                            leftShoulder.Position.Y,
+                            leftShoulder.Position.Z,
+                            rightShoulder.Position.X,
+                            rightShoulder.Position.Y,
+                            rightShoulder.Position.Z);
                         foreach (Joint j in skeleton.Joints)
                         {
+
                             if (j.JointType != JointType.HandLeft)
                                 continue;
+
                             Color jointColor = Color.LightYellow;
                             if (j.TrackingState != JointTrackingState.Tracked)
                             {
@@ -281,7 +297,12 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                                 SpriteEffects.None,
                                 0.0f);
                         }
-
+                        
+                        mStreamWriter.WriteLine(content);
+                        mStreamWriter.Flush();
+                        mStreamWriter.Close();
+                        fs.Close();
+                        fs.Dispose();
                         break;
                     case SkeletonTrackingState.PositionOnly:
                         // If we are only tracking position, draw a blue dot

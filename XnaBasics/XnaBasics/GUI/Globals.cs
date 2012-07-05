@@ -7,7 +7,7 @@
 // class _G
 public static class _G
 {
-    public static XnaBasics Game;
+    public static VirtualTryonGame      Game;
 	public static GameInput				GameInput;
 	public static UiLayer				UI;
 };

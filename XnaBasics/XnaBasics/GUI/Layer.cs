@@ -21,10 +21,10 @@ public enum E_UiMessageType
 public class UiLayer : Layer
 {
 	// UiLayer
-	public UiLayer(XnaBasics game)
+	public UiLayer(VirtualTryonGame game)
 		: base( (int)E_Layer.UI )
 	{
-        this.XnaGame = game;
+        this.tryonGame = game;
 	}
 
 	// Startup
@@ -114,6 +114,6 @@ public class UiLayer : Layer
 	public bool		MM_FromLevelSelect;
 	public bool		SS_FromMainMenu;
     public UI.SideBar SideBars;
-    private XnaBasics XnaGame;
+    private VirtualTryonGame tryonGame;
 	//
 };
