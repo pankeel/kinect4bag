@@ -44,10 +44,13 @@ public:
     void StepPhysX(float stepTime);
 
     void createCloth(const char* clothName, float clothScale = 1.0f, \
-        physx::PxVec3 clothOffset = physx::PxVec3(0,0,0), physx::PxQuat clothRotate = physx::PxQuat::createIdentity());
+        float* clothOffset = NULL, float* clothRotate = NULL);
     //void createCloth(const char* clothName);
     
     bool addCollisionSpheres(vector<physx::PxVec3>& positions, vector<physx::PxReal>& radius, vector<physx::PxU32>& indexPair);
+
+    bool addCollisionSpheres(int nSpheres, float* pSpherePos, float* pSphereRadius, 
+        int nIndexPair, int* pIndexPair);
 
     void updateCollisionSpheres(vector<physx::PxVec3>& positions);
 
@@ -65,12 +68,9 @@ public:
 
     bool getClothParticles(physx::PxVec3* particles, physx::PxU32& nParticles);
 
-    // simple interface data structure
-    //int getNbParticles();
+    void getClothNormalStream(float* normals);
 
-    //void getParticles(int* particle);
-
-    //int getNbIndices();
+    void getClothTextureStream(float* textures);
 
     void Destroy();
 
@@ -106,10 +106,12 @@ protected:
     PVD::PvdConnection*                     mPvdConnection;
     bool                                    mUseFullPvdConnection;
 
-public:
+private:
     physx::PxCloth* mCloth; 
     vector<physx::PxU32> mClothIndices;
     vector<physx::PxVec3> mClothVertices;
+    vector<physx::PxVec3> mClothNormals;
+    vector<physx::PxReal> mClothTextures;
 	//vector<PxVec3Wrapper> ClothVerticesWrapper;
     physx::PxClothCollisionData mClothCollisionData;
     vector<physx::PxClothCollisionSphere> mClothCollisionSpheres;

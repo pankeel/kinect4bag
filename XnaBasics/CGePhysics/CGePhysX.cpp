@@ -93,27 +93,10 @@ void CGePhysX::OnInit()
     if(!PxInitExtensions(*mPhysics))
         cerr<< "PxInitExtensions failed!" <<endl;
     PxVisualDebuggerExt::createConnection(mPhysics->getPvdConnectionManager(), "127.0.0.1", 5425, 100);
-    
-    // check if PvdConnection manager is available on this platform
-    //if(mPhysics->getPvdConnectionManager() != NULL)
-    //{
-    //    // setup connection parameters
-    //    const char*     pvd_host_ip = "127.0.0.1";  // IP of the PC which is running PVD
-    //    int             port        = 5425;         // TCP port to connect to, where PVD is listening
-    //    unsigned int    timeout     = 100;          // timeout in milliseconds to wait for PVD to respond,
-    //    // consoles and remote PCs need a higher timeout.
-    //    PxVisualDebuggerConnectionFlags connectionFlags = PxVisualDebuggerExt::getAllConnectionFlags();
-
-    //    // and now try to connect
-    //    mPvdConnection = PxVisualDebuggerExt::createConnection(mPhysics->getPvdConnectionManager(),
-    //        pvd_host_ip, port, timeout, connectionFlags);
-
-    //}
-
 
     //Create the scene
     PxSceneDesc sceneDesc(mPhysics->getTolerancesScale());
-    sceneDesc.gravity=PxVec3(0.0f, -9.8f, 0.0f);
+    sceneDesc.gravity = PxVec3(0.0f, -9.8f, 0.0f);
     //sceneDesc.gravity=PxVec3(0.0f, 0.f, 0.0f);
 
     if(!sceneDesc.cpuDispatcher) {
@@ -152,21 +135,6 @@ void CGePhysX::OnInit()
     //if (!shape)
     //    cerr<<"create shape failed!"<<endl;
     //mScene->addActor(*plane);
-
-
-    ////2) Create cube	 
-    //PxReal density = 1.0f;
-    //PxTransform transform(PxVec3(0.0f, 5.0, 0.0f), PxQuat::createIdentity());
-    //PxVec3 dimensions(0.5,0.5,0.5);
-    //PxBoxGeometry geometry(dimensions);    
-
-    //PxRigidDynamic *actor = PxCreateDynamic(*mPhysics, transform, geometry, *mMaterial, density);
-    //if (!actor)
-    //    cerr<<"create actor failed!"<<endl;
-    //actor->setAngularDamping(0.75);
-    //actor->setLinearVelocity(PxVec3(0,0,0)); 
-    //mScene->addActor(*actor);
-    //boxes.push_back(actor);
 }
 
 void CGePhysX::StepPhysX(float stepTime)
@@ -180,36 +148,22 @@ void CGePhysX::StepPhysX(float stepTime)
     }
 }
 void CGePhysX::createCloth( const char* clothName, float clothScale, 
-    PxVec3 clothOffset, PxQuat clothRotate)
+    float* clothOffset, float* clothRotate)
 {
     // compute root transform and positions of all the bones
     PxTransform rootPose(PxVec3(0,0,0), PxQuat::createIdentity());
-    //vector<PxVec3> positions;	
-    //vector<PxU32> indexPairs;
-    ////mCharacter.getFramePose(rootPose, positions, indexPairs);
-
-    //// convert bones to collision capsules
-    //vector<PxClothCollisionSphere> spheres;	
-    //spheres.resize(positions.size());
-    //for (PxU32 i = 0; i < positions.size(); i++)
-    //{
-    //    spheres[i].pos = positions[i];
-    //    //spheres[i].radius = gCharacterScale * gSphereRadius[i];
-    //}
-
-    //PxClothCollisionData collisionData;
-    //collisionData.numSpheres = static_cast<PxU32>(positions.size());
-    //collisionData.spheres = &spheres[0];
-    //collisionData.numPairs = static_cast<PxU32>(indexPairs.size()) / 2; // number of capsules
-    //collisionData.pairIndexBuffer = &indexPairs[0];
 
     PxClothMeshDesc meshDesc;
     meshDesc.setToDefault();
-    vector<PxReal> uvs;
-
-    //PxReal clothScale = gCharacterScale * 0.3f;
-    createMeshFromObj(clothName, clothScale, &clothRotate, &clothOffset, 
-        mClothVertices, mClothIndices, &uvs, meshDesc);
+    
+    PxVec3 offset(0.0f);
+    if (clothOffset)
+        offset = PxVec3(clothOffset[0], clothOffset[1], clothOffset[2]);
+    PxQuat rotation= PxQuat::createIdentity();
+    if (clothRotate)
+        rotation = PxQuat(clothRotate[0], clothRotate[1], clothRotate[2], clothRotate[3]);
+    createMeshFromObj(clothName, clothScale, &rotation, &offset, 
+        mClothVertices, mClothIndices, &mClothTextures, meshDesc);
 
     if (!meshDesc.isValid()) 
 		fatalError("Could not load cloth obj\n");
@@ -218,16 +172,16 @@ void CGePhysX::createCloth( const char* clothName, float clothScale,
         meshDesc, rootPose, &collisionData, PxVec3(0,-1,0),\
         &uvs[0], "dummy_cape_d.bmp", PxVec3(0.5f, 0.5f, 0.5f));
     mCloth = createClothFromMeshDesc( \
-        meshDesc, rootPose, PxVec3(0,-1,0),\
-        &uvs[0], "dummy_cape_d.bmp", PxVec3(0.5f, 0.5f, 0.5f));
+        meshDesc, rootPose, mScene->getGravity().getNormalized(),\
+        &mClothTextures[0], "dummy_cape_d.bmp", PxVec3(0.5f, 0.5f, 0.5f));
+
+    mClothNormals.resize(mClothVertices.size());
 }
 
 bool CGePhysX::createMeshFromObj( const char* path, PxReal scale, const PxQuat* rot, 
     const PxVec3* offset, vector<PxVec3>& vertexBuffer, vector<PxU32>& primitiveBuffer, 
     vector<PxReal>* textureBuffer, PxClothMeshDesc &meshDesc )
 {
-    bool textured = (textureBuffer != 0);
-
     ModelOBJ obj;
     obj.import(path, false);
     if (obj.getNumberOfVertices() <= 0)
@@ -272,10 +226,9 @@ bool CGePhysX::createMeshFromObj( const char* path, PxReal scale, const PxQuat* 
     physx::shdfnd::fastMemcpy((PxU32*)&primitiveBuffer[0], 
         (PxU32*)obj.getIndexBuffer(), sizeof(PxU32)*numPrimitives*3);
 
-    if (textured)
+    if (textureBuffer)
     {
-        int numTexCoords = numVertices * 2;
-        textureBuffer->resize(numTexCoords);
+        textureBuffer->resize(numVertices * 2);
         const ModelOBJ::Vertex* pVert = obj.getVertexBuffer();
         for (int i = 0; i < numVertices; i++, pVert++) 
         {
@@ -503,6 +456,27 @@ bool CGePhysX::addCollisionSpheres( vector<PxVec3>& positions,
     return true;
 }
 
+bool CGePhysX::addCollisionSpheres( int nSpheres, float* pSpherePos, 
+    float* pSphereRadius, int nIndexPair, int* pIndexPair )
+{
+    mClothCollisionSpheres.resize(nSpheres);
+    for (int i = 0;i < nSpheres; ++i)
+    {
+        mClothCollisionSpheres[i].pos = PxVec3(pSpherePos[i*3], pSpherePos[i*3+1], pSpherePos[i*3+2]);
+        mClothCollisionSpheres[i].radius = mCharacterScale * pSphereRadius[i];
+    }
+    mClothCollisionData.numSpheres = static_cast<PxU32>(nSpheres);
+    if (mClothCollisionData.numSpheres)
+        mClothCollisionData.spheres = &mClothCollisionSpheres[0];
+    mClothCollisionSpheresIndexPair.resize(nIndexPair);
+    for (int i = 0; i < nIndexPair; ++i)
+        mClothCollisionSpheresIndexPair[i] = pIndexPair[i];
+    mClothCollisionData.numPairs = static_cast<PxU32>(nIndexPair) / 2; // number of capsules
+    if(mClothCollisionData.numPairs)
+        mClothCollisionData.pairIndexBuffer = &mClothCollisionSpheresIndexPair[0];
+    return true;
+}
+
 void CGePhysX::updateCollisionSpheres( vector<PxVec3>& positions )
 {
     // set collision sphere positions
@@ -584,7 +558,6 @@ bool CGePhysX::getClothParticlesContent(void* particles)
     readData->unlock();
 
 	memcpy(particles,&mClothVertices[0],partCount * sizeof(PxVec3) );
-	
 
 	return true;
 }
@@ -606,6 +579,31 @@ bool CGePhysX::getClothParticles( physx::PxVec3* particles, physx::PxU32& nParti
     particles = &mClothVertices[0];
 
     return true;
+}
+
+void CGePhysX::getClothNormalStream( float* normals )
+{
+    //update normals
+    for(size_t i=0;i<mClothIndices.size();i+=3) {
+        PxVec3 p1 = mClothVertices[mClothIndices[i]];
+        PxVec3 p2 = mClothVertices[mClothIndices[i+1]];
+        PxVec3 p3 = mClothVertices[mClothIndices[i+2]];
+        PxVec3 n  = (p2-p1).cross(p3-p1);
+
+        mClothNormals[mClothIndices[i]]    += n/3.0f ; 
+        mClothNormals[mClothIndices[i+1]]  += n/3.0f ; 
+        mClothNormals[mClothIndices[i+2]]  += n/3.0f ; 			
+    }
+
+    for(size_t i=0;i<mClothNormals.size();i++)
+        mClothNormals[i].normalize();
+
+    memcpy(normals, &mClothNormals[0], mClothNormals.size() * sizeof(PxVec3) );
+}
+
+void CGePhysX::getClothTextureStream( float* textures )
+{
+    memcpy(textures, &mClothTextures[0], mClothTextures.size() * sizeof(PxReal) );
 }
 
 //int CGePhysX::getNbParticles()

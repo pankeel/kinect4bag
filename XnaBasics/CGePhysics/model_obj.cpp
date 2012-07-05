@@ -498,7 +498,8 @@ int ModelOBJ::addVertex(int hash, const Vertex *pVertex)
             index = *i;
             pCachedVertex = &m_vertexBuffer[index];
 
-            if (memcmp(pCachedVertex, pVertex, sizeof(Vertex)) == 0)
+            //if (memcmp(pCachedVertex, pVertex, sizeof(Vertex)) == 0)
+            if (memcmp(pCachedVertex->position, pVertex->position, sizeof(float)*3) == 0)
             {
                 found = true;
                 break;

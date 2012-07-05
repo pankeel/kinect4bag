@@ -16,6 +16,15 @@
 %apply float OUTPUT[]  { void* particles}
 %apply int INPUT[]  { int* indices}
 %apply int OUTPUT[]  { int* indices}
+%apply float INPUT[]  { float* pSpherePos}
+%apply float INPUT[]  { float* pSphereRadius}
+%apply int INPUT[]  { int* pIndexPair}
+%apply float INPUT[]  { float* normals}
+%apply float OUTPUT[]  { float* normals}
+%apply float INPUT[]  { float* textures}
+%apply float OUTPUT[]  { float* textures}
+%apply float INPUT[]  { float* clothOffset}
+%apply float INPUT[]  { float* clothRotate}
 
 %include "CGePhysX.h"
 
