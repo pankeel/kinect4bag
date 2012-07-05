@@ -130,7 +130,7 @@ namespace UI
 
             if (GestureTracker.trend == Trend.Up)
             {
-                if (GestureTracker.counter >= 3)
+                if (GestureTracker.counter >= 2)
                 {
                     RightBar.IncreaseCurrent();
                     GestureTracker.Reset();
