@@ -538,51 +538,39 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_StepPhysX(void * jarg1, float jarg2)
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_createCloth__SWIG_0(void * jarg1, char * jarg2, float jarg3, void * jarg4, void * jarg5) {
+SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_createCloth__SWIG_0(void * jarg1, char * jarg2, float jarg3, float* jarg4, float* jarg5) {
   CGePhysX *arg1 = (CGePhysX *) 0 ;
   char *arg2 = (char *) 0 ;
   float arg3 ;
-  physx::PxVec3 arg4 ;
-  physx::PxQuat arg5 ;
-  physx::PxVec3 *argp4 ;
-  physx::PxQuat *argp5 ;
+  float *arg4 = (float *) 0 ;
+  float *arg5 = (float *) 0 ;
   
   arg1 = (CGePhysX *)jarg1; 
   arg2 = (char *)jarg2; 
   arg3 = (float)jarg3; 
-  argp4 = (physx::PxVec3 *)jarg4; 
-  if (!argp4) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null physx::PxVec3", 0);
-    return ;
-  }
-  arg4 = *argp4; 
-  argp5 = (physx::PxQuat *)jarg5; 
-  if (!argp5) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null physx::PxQuat", 0);
-    return ;
-  }
-  arg5 = *argp5; 
+  arg4 = jarg4;
+  arg5 = jarg5;
   (arg1)->createCloth((char const *)arg2,arg3,arg4,arg5);
+  
+  
+  
+  
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_createCloth__SWIG_1(void * jarg1, char * jarg2, float jarg3, void * jarg4) {
+SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_createCloth__SWIG_1(void * jarg1, char * jarg2, float jarg3, float* jarg4) {
   CGePhysX *arg1 = (CGePhysX *) 0 ;
   char *arg2 = (char *) 0 ;
   float arg3 ;
-  physx::PxVec3 arg4 ;
-  physx::PxVec3 *argp4 ;
+  float *arg4 = (float *) 0 ;
   
   arg1 = (CGePhysX *)jarg1; 
   arg2 = (char *)jarg2; 
   arg3 = (float)jarg3; 
-  argp4 = (physx::PxVec3 *)jarg4; 
-  if (!argp4) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null physx::PxVec3", 0);
-    return ;
-  }
-  arg4 = *argp4; 
+  arg4 = jarg4;
   (arg1)->createCloth((char const *)arg2,arg3,arg4);
+  
+  
 }
 
 
@@ -608,7 +596,7 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_createCloth__SWIG_3(void * jarg1, ch
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_addCollisionSpheres(void * jarg1, void * jarg2, void * jarg3, void * jarg4) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_addCollisionSpheres__SWIG_0(void * jarg1, void * jarg2, void * jarg3, void * jarg4) {
   unsigned int jresult ;
   CGePhysX *arg1 = (CGePhysX *) 0 ;
   std::vector< physx::PxVec3 > *arg2 = 0 ;
@@ -634,6 +622,34 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_addCollisionSpheres(void * j
   } 
   result = (bool)(arg1)->addCollisionSpheres(*arg2,*arg3,*arg4);
   jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_addCollisionSpheres__SWIG_1(void * jarg1, int jarg2, float* jarg3, float* jarg4, int jarg5, int* jarg6) {
+  unsigned int jresult ;
+  CGePhysX *arg1 = (CGePhysX *) 0 ;
+  int arg2 ;
+  float *arg3 = (float *) 0 ;
+  float *arg4 = (float *) 0 ;
+  int arg5 ;
+  int *arg6 = (int *) 0 ;
+  bool result;
+  
+  arg1 = (CGePhysX *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = jarg3;
+  arg4 = jarg4;
+  arg5 = (int)jarg5; 
+  arg6 = jarg6;
+  result = (bool)(arg1)->addCollisionSpheres(arg2,arg3,arg4,arg5,arg6);
+  jresult = result; 
+  
+  
+  
+  
+  
+  
   return jresult;
 }
 
@@ -766,199 +782,35 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CGePhysX_getClothParticles__SWIG_1(vo
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_getClothNormalStream(void * jarg1, float* jarg2) {
+  CGePhysX *arg1 = (CGePhysX *) 0 ;
+  float *arg2 = (float *) 0 ;
+  
+  arg1 = (CGePhysX *)jarg1; 
+  arg2 = jarg2;
+  (arg1)->getClothNormalStream(arg2);
+  
+  
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_getClothTextureStream(void * jarg1, float* jarg2) {
+  CGePhysX *arg1 = (CGePhysX *) 0 ;
+  float *arg2 = (float *) 0 ;
+  
+  arg1 = (CGePhysX *)jarg1; 
+  arg2 = jarg2;
+  (arg1)->getClothTextureStream(arg2);
+  
+  
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_Destroy(void * jarg1) {
   CGePhysX *arg1 = (CGePhysX *) 0 ;
   
   arg1 = (CGePhysX *)jarg1; 
   (arg1)->Destroy();
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_mCloth_set(void * jarg1, void * jarg2) {
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  physx::PxCloth *arg2 = (physx::PxCloth *) 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  arg2 = (physx::PxCloth *)jarg2; 
-  if (arg1) (arg1)->mCloth = arg2;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CGePhysX_mCloth_get(void * jarg1) {
-  void * jresult ;
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  physx::PxCloth *result = 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  result = (physx::PxCloth *) ((arg1)->mCloth);
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_mClothIndices_set(void * jarg1, void * jarg2) {
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  std::vector< physx::PxU32 > *arg2 = (std::vector< physx::PxU32 > *) 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  arg2 = (std::vector< physx::PxU32 > *)jarg2; 
-  if (arg1) (arg1)->mClothIndices = *arg2;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CGePhysX_mClothIndices_get(void * jarg1) {
-  void * jresult ;
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  std::vector< physx::PxU32 > *result = 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  result = (std::vector< physx::PxU32 > *)& ((arg1)->mClothIndices);
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_mClothVertices_set(void * jarg1, void * jarg2) {
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  std::vector< physx::PxVec3 > *arg2 = (std::vector< physx::PxVec3 > *) 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  arg2 = (std::vector< physx::PxVec3 > *)jarg2; 
-  if (arg1) (arg1)->mClothVertices = *arg2;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CGePhysX_mClothVertices_get(void * jarg1) {
-  void * jresult ;
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  std::vector< physx::PxVec3 > *result = 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  result = (std::vector< physx::PxVec3 > *)& ((arg1)->mClothVertices);
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_mClothCollisionData_set(void * jarg1, void * jarg2) {
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  physx::PxClothCollisionData arg2 ;
-  physx::PxClothCollisionData *argp2 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  argp2 = (physx::PxClothCollisionData *)jarg2; 
-  if (!argp2) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null physx::PxClothCollisionData", 0);
-    return ;
-  }
-  arg2 = *argp2; 
-  if (arg1) (arg1)->mClothCollisionData = arg2;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CGePhysX_mClothCollisionData_get(void * jarg1) {
-  void * jresult ;
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  physx::PxClothCollisionData result;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  result =  ((arg1)->mClothCollisionData);
-  jresult = new physx::PxClothCollisionData((const physx::PxClothCollisionData &)result); 
-  return jresult;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_mClothCollisionSpheres_set(void * jarg1, void * jarg2) {
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  std::vector< physx::PxClothCollisionSphere > *arg2 = (std::vector< physx::PxClothCollisionSphere > *) 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  arg2 = (std::vector< physx::PxClothCollisionSphere > *)jarg2; 
-  if (arg1) (arg1)->mClothCollisionSpheres = *arg2;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CGePhysX_mClothCollisionSpheres_get(void * jarg1) {
-  void * jresult ;
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  std::vector< physx::PxClothCollisionSphere > *result = 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  result = (std::vector< physx::PxClothCollisionSphere > *)& ((arg1)->mClothCollisionSpheres);
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_mClothCollisionSpheresIndexPair_set(void * jarg1, void * jarg2) {
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  std::vector< physx::PxU32 > *arg2 = (std::vector< physx::PxU32 > *) 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  arg2 = (std::vector< physx::PxU32 > *)jarg2; 
-  if (arg1) (arg1)->mClothCollisionSpheresIndexPair = *arg2;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CGePhysX_mClothCollisionSpheresIndexPair_get(void * jarg1) {
-  void * jresult ;
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  std::vector< physx::PxU32 > *result = 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  result = (std::vector< physx::PxU32 > *)& ((arg1)->mClothCollisionSpheresIndexPair);
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_mClothCollisionIndexPair_set(void * jarg1, void * jarg2) {
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  std::vector< physx::PxU32 > *arg2 = (std::vector< physx::PxU32 > *) 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  arg2 = (std::vector< physx::PxU32 > *)jarg2; 
-  if (arg1) (arg1)->mClothCollisionIndexPair = *arg2;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CGePhysX_mClothCollisionIndexPair_get(void * jarg1) {
-  void * jresult ;
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  std::vector< physx::PxU32 > *result = 0 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  result = (std::vector< physx::PxU32 > *)& ((arg1)->mClothCollisionIndexPair);
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CGePhysX_mCharacterScale_set(void * jarg1, void * jarg2) {
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  physx::PxReal arg2 ;
-  physx::PxReal *argp2 ;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  argp2 = (physx::PxReal *)jarg2; 
-  if (!argp2) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null physx::PxReal", 0);
-    return ;
-  }
-  arg2 = *argp2; 
-  if (arg1) (arg1)->mCharacterScale = arg2;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CGePhysX_mCharacterScale_get(void * jarg1) {
-  void * jresult ;
-  CGePhysX *arg1 = (CGePhysX *) 0 ;
-  physx::PxReal result;
-  
-  arg1 = (CGePhysX *)jarg1; 
-  result =  ((arg1)->mCharacterScale);
-  jresult = new physx::PxReal((const physx::PxReal &)result); 
-  return jresult;
 }
 
 
