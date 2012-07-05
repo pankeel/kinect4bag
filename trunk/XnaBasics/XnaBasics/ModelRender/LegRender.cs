@@ -85,35 +85,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             return world;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="skeleton"></param>
-        /// <returns></returns>
-        protected override Matrix CreateViewMatrix(Skeleton skeleton)
-        {
-            return Matrix.CreateLookAt(
-                   new Vector3(0.0f, 0.0f, 0.0f),
-                   new Vector3(0.0f, 0.0f, 1.0f),
-                   Vector3.Down);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="skeleton"></param>
-        /// <returns></returns>
-        protected override Matrix CreateProjectionMatrix(Skeleton skeleton)
-        {
-            float nominalVerticalFieldOfView = 45.6f;
 
-            Matrix projection = Matrix.CreatePerspectiveFieldOfView(
-                (nominalVerticalFieldOfView * (float)Math.PI / 180.0f),
-                this.Game.GraphicsDevice.Viewport.AspectRatio,
-                1.0f,
-                20000.0f
-            );
-            return projection;
-        }
         /// <summary>
         /// This method draws the skeleton frame data.
         /// </summary>
@@ -122,13 +94,13 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         {
             // If the joint texture isn't loaded, load it now
             
-            if (this.trackedSkeleton == null)
+            if (this.TrackedSkeleton == null)
             {
                 return;
             }
 
             // Now draw the bag at the left hand joint
-            if (trackedSkeleton.Joints[JointType.HandLeft] != null)
+            if (TrackedSkeleton.Joints[JointType.HandLeft] != null)
             {
                 base.Draw(gameTime);
             }

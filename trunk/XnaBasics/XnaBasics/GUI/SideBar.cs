@@ -164,11 +164,11 @@ namespace UI
             }
             if (RightBar.ChildrenWidget.Count > 0)
             {
-                if (input.ButtonJustPressed((int)E_UiButton.B))
+                if (input.ButtonJustPressed((int)E_UiButton.Back))
                 {
                     RightBar.DecreaseCurrent();
                 }
-                else if (input.ButtonJustPressed((int)E_UiButton.A))
+                else if (input.ButtonJustPressed((int)E_UiButton.Enter))
                 {
                     RightBar.IncreaseCurrent();
                 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using JiggleGame;
 
 namespace Microsoft.Samples.Kinect.XnaBasics
 {
@@ -17,7 +18,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <summary>
         /// The Skeleton tracked From the Kinect 
         /// </summary>
-        protected Skeleton trackedSkeleton = null;
+        protected Skeleton TrackedSkeleton = null;
         /// <summary>
         /// The 3D Object mesh Model
         /// </summary>
@@ -54,11 +55,13 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         }
 
 
-        private Matrix worldMatrix;
-
-        private Matrix viewMatrix;
-
-        private Matrix projectionMatrix;
+        public Camera GameCamera
+        {
+            get
+            {
+                return (Camera)Game.Services.GetService(typeof(Camera));
+            }
+        }
 
         /// <summary>
         /// The back buffer where the depth frame is scaled as requested by the Size.
@@ -73,6 +76,9 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// The last frames skeleton data.
         /// </summary>
         protected static Skeleton[] skeletonData;
+
+
+
 
         /// <summary>
         /// This flag ensures only request a frame once per update call
@@ -114,24 +120,15 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             return Matrix.Identity;
         }
 
-        protected virtual Matrix CreateViewMatrix(Skeleton skeleton)
-        {
-            return Matrix.Identity;
-        }
-
-        protected virtual Matrix CreateProjectionMatrix(Skeleton skeleton)
-        {
-            return Matrix.Identity;
-        }
 
         private static int testFlag = 0;
         public override void Draw(GameTime gameTime)
-        {
+        { 
             base.Draw(gameTime);
             // Render the 3D model skinned mesh with Skinned Effect.
-            Matrix world = this.CreateWorldMatrix(trackedSkeleton),
-                view = this.CreateViewMatrix(trackedSkeleton),
-                projection = this.CreateProjectionMatrix(trackedSkeleton);
+            Matrix world = this.CreateWorldMatrix(TrackedSkeleton),
+                view = GameCamera.View,
+                projection = GameCamera.Projection;
             if (this.Model3DAvatar != null)
             {
                 foreach (ModelMesh mesh in this.Model3DAvatar.Meshes)
@@ -177,14 +174,14 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // This prevents us from calling the next frame more than once per update
             skeletonData = SkeletonStreamRenderer.skeletonData;
 
-            this.trackedSkeleton = null;
+            this.TrackedSkeleton = null;
             if (skeletonData != null)
             {
                 foreach (var skeleton in skeletonData)
                 {
                     if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
                     {
-                        this.trackedSkeleton = skeleton;
+                        this.TrackedSkeleton = skeleton;
                     }
                 }
 

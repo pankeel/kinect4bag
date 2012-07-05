@@ -193,7 +193,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 this.SharedSpriteBatch.End();
 
                 // Draw the skeleton
-                this.skeletonStream.Draw(gameTime, cloth);
+                //this.skeletonStream.Draw(gameTime, cloth);
+                this.skeletonStream.Draw(gameTime);
                 // Draw the bag 3d model
                 this.bagRender.Draw(gameTime);
                 this.bodyRender.Draw(gameTime);

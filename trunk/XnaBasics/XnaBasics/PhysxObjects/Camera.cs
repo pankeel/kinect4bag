@@ -38,7 +38,7 @@ namespace JiggleGame
             heightOver2 = game.Window.ClientBounds.Height / 2;
             aspectRatio = (float)game.Window.ClientBounds.Width / (float)game.Window.ClientBounds.Height;
             UpdateProjection();
-            Mouse.SetPosition(widthOver2, heightOver2);
+            //Mouse.SetPosition(widthOver2, heightOver2);
         }
 
         /// <summary>

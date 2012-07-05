@@ -127,6 +127,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GestureTracker.cs" />
     <Compile Include="GUI\GameControls.cs" />
     <Compile Include="GUI\Globals.cs" />
     <Compile Include="GUI\Layer.cs" />
@@ -141,7 +142,7 @@
     <Compile Include="GUI\Widgets\FPS.cs" />
     <Compile Include="ModelRender\AvatarAnimator.cs" />
     <Compile Include="AvateeringXNA.cs" />
-    <Compile Include="CoordinateCross.cs" />
+    <Compile Include="Utils\CoordinateCross.cs" />
     <Compile Include="Filters\BoneOrientationConstraints.cs" />
     <Compile Include="Filters\BoneOrientationDoubleExponentialFilter.cs" />
     <Compile Include="Filters\NativeMethods.cs" />
@@ -153,8 +154,8 @@
     <Compile Include="Filters\SkeletonJointsSensorTiltCorrection.cs" />
     <Compile Include="Filters\TimedLerp.cs" />
     <Compile Include="Filters\Timer.cs" />
-    <Compile Include="GridXZ.cs" />
-    <Compile Include="KinectHelper.cs" />
+    <Compile Include="Utils\GridXZ.cs" />
+    <Compile Include="Utils\KinectHelper.cs" />
     <Compile Include="ModelRender\BodyRender.cs" />
     <Compile Include="ModelRender\ClothRender.cs" />
     <Compile Include="ModelRender\LegRender.cs" />
@@ -165,7 +166,7 @@
     <Compile Include="ModelRender\TrousersRender.cs" />
     <Compile Include="ModelRender\SkeletonStreamRenderer.cs" />
     <Compile Include="DepthStreamRenderer.cs" />
-    <Compile Include="KinectChooser.cs" />
+    <Compile Include="Utils\KinectChooser.cs" />
     <Compile Include="ModelViewer\ArcBallCamera.cs" />
     <Compile Include="ModelViewer\BoundingBoxRenderer.cs" />
     <Compile Include="ModelViewer\BoundingSphereRenderer.cs" />
@@ -191,7 +192,7 @@
     <Compile Include="ModelViewer\Utils.cs" />
     <Compile Include="ModelViewer\ViewModeLabel.cs" />
     <Compile Include="ModelViewer\WorldAxes.cs" />
-    <Compile Include="Object2D.cs" />
+    <Compile Include="Utils\Object2D.cs" />
     <Compile Include="PhysxObjects\BowlingPin.cs" />
     <Compile Include="PhysxObjects\BoxObject.cs" />
     <Compile Include="PhysxObjects\Camera.cs" />
@@ -213,7 +214,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GUI\SimpleButton.cs" />
     <Compile Include="GUI\SimpleGUI.cs" />
-    <Compile Include="RotationHelper.cs" />
+    <Compile Include="Utils\RotationHelper.cs" />
+    <Compile Include="Utils\SkeletonTransformHelper.cs" />
+    <Compile Include="VirtualTryonGame.cs" />
     <Compile Include="XnaBasicsGame.cs" />
   </ItemGroup>
   <ItemGroup>

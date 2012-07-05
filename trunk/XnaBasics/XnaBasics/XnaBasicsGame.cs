@@ -272,13 +272,13 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             //Components.Add(this.ui);
 
             // Add XUI Component
-            _G.Game = this;
+            //_G.Game = this;
 
             // add core components
             Components.Add(new GamerServicesComponent(this));
 
             // add layers
-            UiLayer = new UiLayer(this);
+            //UiLayer = new UiLayer(this);
             _G.UI = UiLayer;
 
             // add other components
@@ -435,6 +435,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             if (null != this.chooser && null != this.chooser.Sensor && this.chooser.Sensor.IsRunning && KinectStatus.Connected == this.chooser.Sensor.Status)
             {
                 nominalVerticalFieldOfView = this.chooser.Sensor.DepthStream.NominalVerticalFieldOfView;
+                
             }
 
             this.projection = Matrix.CreatePerspectiveFieldOfView(

@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Kinect;
+using JiggleGame;
 
 namespace Microsoft.Samples.Kinect.XnaBasics
 {
@@ -37,7 +38,10 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Update(GameTime gameTime)
         {
+            // Update Camera Setting
             base.Update(gameTime);
+
+
         }
 
         /// <summary>
@@ -85,35 +89,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             return world;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="skeleton"></param>
-        /// <returns></returns>
-        protected override Matrix CreateViewMatrix(Skeleton skeleton)
-        {
-            return Matrix.CreateLookAt(
-                   new Vector3(0.0f, 0.0f, 0.0f),
-                   new Vector3(0.0f, 0.0f, 1.0f),
-                   Vector3.Down);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="skeleton"></param>
-        /// <returns></returns>
-        protected override Matrix CreateProjectionMatrix(Skeleton skeleton)
-        {
-            float nominalVerticalFieldOfView = 45.6f;
-
-            Matrix projection = Matrix.CreatePerspectiveFieldOfView(
-                (nominalVerticalFieldOfView * (float)Math.PI / 180.0f),
-                this.Game.GraphicsDevice.Viewport.AspectRatio,
-                1.0f,
-                20000.0f
-            );
-            return projection;
-        }
+  
         /// <summary>
         /// This method draws the skeleton frame data.
         /// </summary>
@@ -122,20 +98,20 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         {
             // If the joint texture isn't loaded, load it now
             
-            if (this.trackedSkeleton == null)
+            if (this.TrackedSkeleton == null)
             {
                 return;
             }
 
             // Now draw the bag at the left hand joint
-            if (trackedSkeleton.Joints[JointType.ShoulderCenter].TrackingState == JointTrackingState.Tracked)
+            if (TrackedSkeleton.Joints[JointType.ShoulderCenter].TrackingState == JointTrackingState.Tracked)
             {
 
-                GestureTracker.Update(trackedSkeleton);
+                GestureTracker.Update(TrackedSkeleton);
                 // Render the 3D model skinned mesh with Skinned Effect.
-                Matrix world = this.CreateWorldMatrix(trackedSkeleton),
-                    view = this.CreateViewMatrix(trackedSkeleton),
-                    projection = this.CreateProjectionMatrix(trackedSkeleton);
+                Matrix world = this.CreateWorldMatrix(TrackedSkeleton),
+                    view = GameCamera.View,
+                    projection = GameCamera.Projection;
                 if (this.Model3DAvatar != null)
                 {
                     bool isSkinnedEffect = true;
