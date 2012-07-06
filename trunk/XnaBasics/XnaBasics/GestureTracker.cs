@@ -6,7 +6,7 @@ using Microsoft.Kinect;
 
 namespace Microsoft.Samples.Kinect.XnaBasics
 {
-    enum Trend{Neutral, Up, Down};
+    enum Trend{Neutral, Up, Down, Zoom};
 
     static class GestureTracker
     {
@@ -33,13 +33,13 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             SkeletonPoint hand_r = skel.Joints[JointType.HandRight].Position;
             SkeletonPoint elbow_r = skel.Joints[JointType.ElbowRight].Position;
 
-            //right hand above hip and moving upward
-            //if (hand_r.Y > elbow_r.Y && hand_r.Y > last_hand_r.Y)
+            //right hand moving upward
             if (hand_r.Y > last_hand_r.Y)
             {
-                double dist = Dist(hand_r, last_hand_r);
-                System.Diagnostics.Debug.WriteLine(dist);
-                if (GestureTracker.trend == Trend.Up && dist>0.12)
+                double velocity = Dist(hand_r, last_hand_r) / (ts - last_ts);
+                //System.Diagnostics.Debug.WriteLine(ts+"~"+last_ts+":"+velocity);
+
+                if (GestureTracker.trend == Trend.Up && velocity>0.003)
                 {
                     GestureTracker.counter++;
                 }
@@ -49,12 +49,12 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     GestureTracker.trend = Trend.Up;
                 }
             }
-            //else if (hand_r.Y < elbow_r.Y && hand_r.Y < last_hand_r.Y) //right hand below hip and moving downward
+            //right hand moving downward
             else if (hand_r.Y < last_hand_r.Y)
             {
-                double dist = Dist(hand_r, last_hand_r);
-                System.Diagnostics.Debug.WriteLine(dist);
-                if (GestureTracker.trend == Trend.Down && dist > 0.12)
+                double velocity = Dist(hand_r, last_hand_r) / (ts - last_ts);
+                //System.Diagnostics.Debug.WriteLine(dist);
+                if (GestureTracker.trend == Trend.Down && velocity > 0.003)
                 {
                     GestureTracker.counter++;
                 }
