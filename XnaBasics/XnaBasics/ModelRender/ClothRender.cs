@@ -71,7 +71,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         public override void Initialize()
         {
             base.Initialize();
-            /*
+            
             mCloth = new CGePhysX();
             mCloth.OnInit();
             string filePath = Path.GetFullPath("..\\..\\..\\Media\\yifu.obj");
@@ -96,7 +96,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 vertexData = new VertexPositionColor[nVertices];
             }
 
-             */
+             
              this.effect = new BasicEffect(this.GraphicsDevice);
 
         }
@@ -143,7 +143,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Draw(GameTime gameTime)
         {
-            /*
+
             //GraphicsDevice.Clear(Color.Green);
 
             // Update
@@ -184,7 +184,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 pass.Apply();
                 this.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, nVertices, 0, nIndices / 3);
             }
-            */
+
         }
 
     }
