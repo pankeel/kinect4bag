@@ -178,7 +178,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             {
                 return;
             }
-            /*
+
             if (this.needToRedrawBackBuffer)
             {
                 // Set the backbuffer and clear
@@ -206,7 +206,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 // No need to re-render the back buffer until we get new data
                 this.needToRedrawBackBuffer = false;
             }
-            */
             // Draw the scaled texture
 
             this.SharedSpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
