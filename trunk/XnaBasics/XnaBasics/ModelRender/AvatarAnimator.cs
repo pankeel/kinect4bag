@@ -664,7 +664,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         protected override void LoadContent()
         {
             Model avatar = null;
-            avatar = this.Game.Content.Load<Model>("dude");
+            avatar = this.Game.Content.Load<Model>("yifu_bone2");
 
              
             
