@@ -197,7 +197,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             //}
 
             // Set the world position of the avatar
-            //this.SetAvatarRootWorldPosition(skeleton, ref boneTransforms);
+            this.SetAvatarRootWorldPosition(skeleton, ref boneTransforms);
 
             // Calculate the Avatar world transforms from the relative bone transforms of Kinect skeleton
             this.UpdateWorldTransforms(Matrix.Identity);
@@ -211,7 +211,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // Always look at the skeleton root
             if (bone.StartJoint == JointType.HipCenter && bone.EndJoint == JointType.HipCenter)
             {
-
                 // Unless in seated mode, the hip center is special - it is the root of the NuiSkeleton and describes the skeleton orientation in the world
                 // (camera) coordinate system. All other bones/joint orientations in the hierarchy have hip center as one of their parents.
                 // However, if in seated mode, the shoulder center then holds the skeleton orientation in the world (camera) coordinate system.
@@ -220,20 +219,18 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
                 Matrix hipOrientation = KinectHelper.Matrix4ToXNAMatrix(bone.HierarchicalRotation.Matrix);
                 Vector3 hipRotation = RotationHelper.GetInstance().MatrixToEulerAngleVector3(hipOrientation);
-                //DebugText += String.Format("hipCenter:(x={0},y={1},z={2})\n", hipRotation.X, hipRotation.Y, hipRotation.Z);
+               
                 // ensure pure rotation, as we set world translation from the Kinect camera below
 
                 int hipCenterIndex = 0;
-                //this.nuiJointToAvatarBoneIndex.TryGetValue(JointType.HipCenter, out hipCenterIndex);
                 Matrix hipCenter = boneTransforms[hipCenterIndex];
 
                 hipCenter.Translation = Vector3.Zero;
                 Matrix invPelvis = Matrix.Invert(hipCenter);
 
+                //Matrix combined = (invBindRoot * hipOrientation) * invPelvis;
 
-                Matrix combined = (invBindRoot * hipOrientation) * invPelvis;
-
-                //this.ReplaceBoneMatrix(JointType.HipCenter, combined, true, ref boneTransforms);
+                //this.ReplaceBoneMatrix(JointType.HipCenter, Matrix.Identity, true, ref boneTransforms);
             }
             else if (bone.EndJoint == JointType.ShoulderCenter)
             {
@@ -273,7 +270,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 // Note for the spine and shoulder center rotations, we could also try to spread the angle
                 // over all the Avatar skeleton spine joints, causing a more curved back, rather than apply
                 // it all to one joint, as we do here.
-                //this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
             }
             else if (bone.EndJoint == JointType.Head)
             {
@@ -285,7 +282,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 tempMat = Matrix.CreateFromQuaternion(avatarRotation);
 
                 // Set the corresponding matrix in the avatar using the translation table we specified
-                //this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
+                this.ReplaceBoneMatrix(bone.EndJoint, tempMat, false, ref boneTransforms);
             }
             // Mirror View for the People Model's Left Arm, the real people's Right Arm
             else if (bone.EndJoint == JointType.ElbowLeft || bone.EndJoint == JointType.WristLeft)
@@ -503,12 +500,9 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             // set root translation
             boneTransforms[0].Translation = worldTransform.Translation;
+            
         }
 
-        /// <summary>
-        /// The "Dude" model is defined in centimeters, so re-scale the Kinect translation.
-        /// </summary>
-        private static readonly Vector3 SkeletonTranslationScaleFactor = new Vector3(40.0f, 40.0f, 40.0f);
         /// <summary>
         /// Helper used to get the world translation for the root.
         /// </summary>
@@ -517,27 +511,61 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <returns>Returns a Matrix containing the translation.</returns>
         private Matrix GetModelWorldTranslation(JointCollection joints, bool seatedMode)
         {
-            Vector3 transVec = Vector3.Zero;
+            SkeletonPoint transRootVec3 = new SkeletonPoint(); 
 
             if (seatedMode && joints[JointType.ShoulderCenter].TrackingState != JointTrackingState.NotTracked)
             {
-                transVec = KinectHelper.SkeletonPointToVector3(joints[JointType.ShoulderCenter].Position);
+                transRootVec3 = joints[JointType.ShoulderCenter].Position;
             }
             else
             {
                 if (joints[JointType.HipCenter].TrackingState != JointTrackingState.NotTracked)
                 {
-                    transVec = KinectHelper.SkeletonPointToVector3(joints[JointType.HipCenter].Position);
+                    transRootVec3 = joints[JointType.HipCenter].Position;
                 }
                 else if (joints[JointType.ShoulderCenter].TrackingState != JointTrackingState.NotTracked)
                 {
                     // finally try shoulder center if this is tracked while hip center is not
-                    transVec = KinectHelper.SkeletonPointToVector3(joints[JointType.ShoulderCenter].Position);
+                    transRootVec3 = joints[JointType.ShoulderCenter].Position;
                 }
             }
 
-            // Here we scale the translation, as the "Dude" avatar mesh is defined in centimeters, and the Kinect skeleton joint positions in meters.
-            return Matrix.CreateTranslation(transVec * SkeletonTranslationScaleFactor);
+            float screenZValue = 0.0f;
+            #region Calculate Real Length 
+            {
+                
+                if (joints[JointType.HipCenter].TrackingState != JointTrackingState.NotTracked
+                    && joints[JointType.ShoulderCenter].TrackingState != JointTrackingState.NotTracked)
+                {
+                    SkeletonPoint hipCenterPoint = joints[JointType.HipCenter].Position, shoulderCenterPoint =  joints[JointType.ShoulderCenter].Position;
+                    DepthImagePoint hipCenterDepthPoint = Chooser.Sensor.MapSkeletonPointToDepth(hipCenterPoint, Chooser.Sensor.DepthStream.Format),
+                        shoulderCenterDepthPoint = Chooser.Sensor.MapSkeletonPointToDepth(shoulderCenterPoint, Chooser.Sensor.DepthStream.Format);
+                    float dLengthDepthHipShoulder = Vector2.Distance(new Vector2(hipCenterDepthPoint.X,hipCenterDepthPoint.Y), new Vector2(shoulderCenterDepthPoint.X,shoulderCenterDepthPoint.Y));
+                    float dLengthHipShoulder = Vector2.Distance(new Vector2(hipCenterPoint.X, hipCenterPoint.Y), new Vector2(shoulderCenterPoint.X,shoulderCenterPoint.Y));
+                    float horizonDepth = (hipCenterPoint.Z + shoulderCenterPoint.Z) / 2;
+
+                    Vector3 modelEndVec3 = new Vector3();
+                    for (int i=1;i<6;i++)
+                    {
+                        modelEndVec3 += boneTransforms[i].Translation;
+                    }
+                    float modelLengthHipShoulder = Vector3.Distance(new Vector3(0,0,0), modelEndVec3);
+                    float fzModel = horizonDepth / dLengthHipShoulder * modelLengthHipShoulder;
+                    float fzScreenModel = fzModel * dLengthDepthHipShoulder / modelLengthHipShoulder;
+                    screenZValue = fzScreenModel;
+                    
+                }
+
+            }
+            #endregion 
+            Vector3 certainVector = KinectHelper.SkeletonPointToVector3(transRootVec3);
+            ColorImagePoint colorPtr = Chooser.Sensor.MapSkeletonPointToColor(transRootVec3, Chooser.Sensor.ColorStream.Format);
+            DepthImagePoint deptImagePoint = Chooser.Sensor.MapSkeletonPointToDepth(transRootVec3, Chooser.Sensor.DepthStream.Format);
+            certainVector.Z = 0.0f;
+            certainVector.Y = 0.0f;
+            Vector3 test = boneTransforms[0].Translation - certainVector * 40.0f;
+            test.Z = -screenZValue;
+            return Matrix.CreateTranslation(test);
         }
 
         /// <summary>

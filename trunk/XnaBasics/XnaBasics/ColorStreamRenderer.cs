@@ -178,7 +178,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             {
                 return;
             }
-
+            /*
             if (this.needToRedrawBackBuffer)
             {
                 // Set the backbuffer and clear
@@ -195,10 +195,10 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 // Draw the skeleton
                 //this.skeletonStream.Draw(gameTime, cloth);
                 this.skeletonStream.Draw(gameTime);
-                // Draw the bag 3d model
-                this.bagRender.Draw(gameTime);
-                this.bodyRender.Draw(gameTime);
-                this.legRender.Draw(gameTime);
+                // Draw the bag 3d model To the Render Target Color Stream
+                //this.bagRender.Draw(gameTime);
+                //this.bodyRender.Draw(gameTime);
+                //this.legRender.Draw(gameTime);
                 
                 // Reset the render target and prepare to draw scaled image
                 this.Game.GraphicsDevice.SetRenderTargets(null);
@@ -206,16 +206,16 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 // No need to re-render the back buffer until we get new data
                 this.needToRedrawBackBuffer = false;
             }
-
+            */
             // Draw the scaled texture
 
-            this.SharedSpriteBatch.Begin(SpriteSortMode.Texture,BlendState.AlphaBlend);
+            this.SharedSpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
             this.SharedSpriteBatch.Draw(
                 this.backBuffer,
                 new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y),
                 Color.White);
             this.SharedSpriteBatch.End();
-            
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             base.Draw(gameTime);
         }
 

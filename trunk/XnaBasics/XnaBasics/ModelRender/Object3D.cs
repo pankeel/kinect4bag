@@ -54,12 +54,13 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             }
         }
 
-
-        public Camera GameCamera
+        
+        public Camera KinectCamera
         {
             get
             {
-                return (Camera)Game.Services.GetService(typeof(Camera));
+                List<Camera> kinectCamera = (List<Camera>)Game.Services.GetService(typeof(List<Camera>));
+                return kinectCamera[0];
             }
         }
 
@@ -127,8 +128,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             base.Draw(gameTime);
             // Render the 3D model skinned mesh with Skinned Effect.
             Matrix world = this.CreateWorldMatrix(TrackedSkeleton),
-                view = GameCamera.View,
-                projection = GameCamera.Projection;
+                view = KinectCamera.View,
+                projection = KinectCamera.Projection;
             if (this.Model3DAvatar != null)
             {
                 foreach (ModelMesh mesh in this.Model3DAvatar.Meshes)

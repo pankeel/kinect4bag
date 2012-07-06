@@ -141,7 +141,6 @@
     <Compile Include="GUI\SideBar.cs" />
     <Compile Include="GUI\Widgets\FPS.cs" />
     <Compile Include="ModelRender\AvatarAnimator.cs" />
-    <Compile Include="AvateeringXNA.cs" />
     <Compile Include="Utils\CoordinateCross.cs" />
     <Compile Include="Filters\BoneOrientationConstraints.cs" />
     <Compile Include="Filters\BoneOrientationDoubleExponentialFilter.cs" />

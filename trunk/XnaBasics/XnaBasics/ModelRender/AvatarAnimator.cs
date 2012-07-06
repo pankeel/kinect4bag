@@ -506,6 +506,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // Mesh Draw Method
             foreach (ModelMesh mesh in this.currentModel.Meshes)
             {
+                
                 //VertexPositionNormalTexture[] mmp = new VertexPositionNormalTexture[mesh.MeshParts[0].VertexBuffer.VertexCount];
                 //mesh.MeshParts[0].VertexBuffer.GetData<VertexPositionNormalTexture>(mmp);
                 foreach (SkinnedEffect effect in mesh.Effects)
@@ -515,14 +516,17 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     effect.World = world;
                     effect.View = view;
                     effect.Projection = projection;
-
+                    
                     effect.EnableDefaultLighting();
 
                     effect.SpecularColor = new Vector3(0.25f);
                     effect.SpecularPower = 16;
                 }
-
-                mesh.Draw();
+                if (GraphicsDevice.DepthStencilState == DepthStencilState.Default)
+                {
+                    mesh.Draw();
+                }
+                
             }
             /*GraphicsDevice device = this.Game.GraphicsDevice;
             foreach (ModelMesh mesh in this.currentModel.Meshes)
@@ -660,7 +664,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         protected override void LoadContent()
         {
             Model avatar = null;
-            avatar = this.Game.Content.Load<Model>("yifu_bone2");
+            avatar = this.Game.Content.Load<Model>("dude");
 
              
             

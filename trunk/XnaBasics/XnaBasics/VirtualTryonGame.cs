@@ -15,6 +15,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
     using Microsoft.Xna.Framework.GamerServices;
     using JiggleGame.PhysicObjects;
     using JigLibX.Physics;
+    using JiggleGame;
 
     /// <summary>
     /// The main Xna game implementation.
@@ -114,7 +115,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         private Model CapsuleModel;
         private PhysicsSystem physicSystem;
 
-        private JiggleGame.Camera camera;
+        private Camera camera;
         /// <summary>
         /// Initializes a new instance of the XnaBasics class.
         /// </summary>
@@ -212,11 +213,21 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             _G.GameInput = new GameInput((int)E_GameButton.Count, (int)E_GameAxis.Count);
             GameControls.Setup(); // initialise mappings
 
-            camera = new JiggleGame.Camera(this);
+            camera = new Camera(this);
             camera.Position = Vector3.Down * 12;
-            this.Services.AddService(typeof(JiggleGame.Camera), this.camera);
-            this.Components.Add(camera);
+            this.Services.AddService(typeof(Camera), this.camera);
 
+            List<Camera> kinectCamera = new List<Camera>();
+            kinectCamera.Add(new Camera(this));
+            kinectCamera[0].Position = Vector3.Zero;
+            kinectCamera[0].View = Matrix.CreateLookAt(
+                   new Vector3(0.0f, 0.0f, 0.0f),
+                   new Vector3(0.0f, 0.0f, 1.0f),
+                   Vector3.Down);
+            this.Services.AddService(typeof(List<Camera>), kinectCamera);
+
+            this.Components.Add(camera);
+            
             base.Initialize();
 
             

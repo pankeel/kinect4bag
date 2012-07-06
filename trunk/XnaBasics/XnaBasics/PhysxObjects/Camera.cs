@@ -16,7 +16,11 @@ namespace JiggleGame
 
         private Vector3 position = new Vector3(0,0,0);
         private Vector2 angles = Vector2.Zero;
-
+        public Vector2 Angles
+        {
+            get { return angles; }
+            set { angles = value; }
+        }
         private int widthOver2;
         private int heightOver2;
 
@@ -44,7 +48,7 @@ namespace JiggleGame
         /// <summary>
         /// Gets camera view matrix.
         /// </summary>
-        public Matrix View { get { return view; } }
+        public Matrix View { get { return view; } set { view = value; } }
         /// <summary>
         /// Gets or sets camera projection matrix.
         /// </summary>

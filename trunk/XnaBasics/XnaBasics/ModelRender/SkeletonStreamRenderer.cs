@@ -121,91 +121,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         }
 
 
-
-        /// <summary>
-        /// This method draws the skeleton frame data.
-        /// </summary>
-        /// <param name="gameTime">The elapsed game time.</param>
-        //public override void Draw(GameTime gameTime)
-        public void Draw(GameTime gameTime, Texture2D tex)
-        {
-            // If the joint texture isn't loaded, load it now
-            if (null == this.jointTexture)
-            {
-                this.LoadContent();
-            }
-
-            // If we don't have data, lets leave
-            if (null == skeletonData || null == this.mapMethod)
-            {
-                return;
-            }
-
-            if (false == this.initialized)
-            {
-                this.Initialize();
-            }
-
-            this.SharedSpriteBatch.Begin();
-
-            Skeleton tracked_skel = null;
-
-            foreach (var skeleton in skeletonData)
-            {
-                if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
-                    if (skeleton.Joints[JointType.Head].TrackingState == JointTrackingState.Tracked)
-                    {
-                        tracked_skel = skeleton;
-                        break;
-                    }
-
-            }
-
-            if (tracked_skel != null)
-            {
-                //GestureTracker.Update(tracked_skel);
-
-                Vector2 hand_r_v = mapMethod(tracked_skel.Joints[JointType.HandRight].Position);
-                Vector2 hand_l_v = mapMethod(tracked_skel.Joints[JointType.HandLeft].Position);
-                int actual_width = this.Game.GraphicsDevice.DisplayMode.Width;
-                int actual_height = this.Game.GraphicsDevice.DisplayMode.Height;
-
-
-                int original_width = (int)this.Size.X;
-                int original_height = (int)this.Size.Y;
-                Microsoft.Xna.Framework.Input.Mouse.SetPosition((int)hand_r_v.X * actual_width / original_width, (int)hand_r_v.Y * actual_height / original_height);
-
-                XnaBasics.RightHand.X = hand_r_v.X * actual_width / original_width;
-                XnaBasics.RightHand.Y = hand_r_v.Y * actual_height / original_height;
-                XnaBasics.LeftHand.X = hand_l_v.X * actual_width / original_width;
-                XnaBasics.LeftHand.Y = hand_l_v.Y * actual_height / original_height;
-
-                if (tex != null)
-                {
-                    SkeletonPoint shoulder_l = tracked_skel.Joints[JointType.ShoulderLeft].Position;
-                    SkeletonPoint shoulder_r = tracked_skel.Joints[JointType.ShoulderRight].Position;
-                    SkeletonPoint shoulder_c = tracked_skel.Joints[JointType.ShoulderCenter].Position;
-                    SkeletonPoint hip_c = tracked_skel.Joints[JointType.HipCenter].Position;
-
-                    Vector2 shoulder_c_v = mapMethod(shoulder_c);
-                    Vector2 shoulder_l_v = mapMethod(shoulder_l);
-                    Vector2 shoulder_r_v = mapMethod(shoulder_r);
-                    Vector2 hip_c_v = mapMethod(hip_c);
-
-                    float skel_height = hip_c_v.Y - shoulder_c_v.Y;
-                    float skel_width = shoulder_r_v.X - shoulder_l_v.X;
-
-                    //this.SharedSpriteBatch.Draw(tex,
-                    //            new Rectangle((int)(shoulder_l_v.X - 0.5 * skel_width), (int)shoulder_c_v.Y,
-                    //                (int)(skel_width * 2), (int)(skel_height * 1.5)),
-                    //            Color.White);
-                }
-            }
-
-            this.SharedSpriteBatch.End();
-
-            base.Draw(gameTime);
-        }
         /// <summary>
         /// This method draws the skeleton frame data.
         /// </summary>
@@ -236,31 +151,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 switch (skeleton.TrackingState)
                 {
                     case SkeletonTrackingState.Tracked:
-                        // Draw Bones
-                        /*this.DrawBone(skeleton.Joints, JointType.Head, JointType.ShoulderCenter);
-                        this.DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.ShoulderLeft);
-                        this.DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.ShoulderRight);
-                        this.DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.Spine);
-                        this.DrawBone(skeleton.Joints, JointType.Spine, JointType.HipCenter);
-                        this.DrawBone(skeleton.Joints, JointType.HipCenter, JointType.HipLeft);
-                        this.DrawBone(skeleton.Joints, JointType.HipCenter, JointType.HipRight);
 
-                        this.DrawBone(skeleton.Joints, JointType.ShoulderLeft, JointType.ElbowLeft);
-                        this.DrawBone(skeleton.Joints, JointType.ElbowLeft, JointType.WristLeft);
-                        this.DrawBone(skeleton.Joints, JointType.WristLeft, JointType.HandLeft);
-
-                        this.DrawBone(skeleton.Joints, JointType.ShoulderRight, JointType.ElbowRight);
-                        this.DrawBone(skeleton.Joints, JointType.ElbowRight, JointType.WristRight);
-                        this.DrawBone(skeleton.Joints, JointType.WristRight, JointType.HandRight);
-
-                        this.DrawBone(skeleton.Joints, JointType.HipLeft, JointType.KneeLeft);
-                        this.DrawBone(skeleton.Joints, JointType.KneeLeft, JointType.AnkleLeft);
-                        this.DrawBone(skeleton.Joints, JointType.AnkleLeft, JointType.FootLeft);
-
-                        this.DrawBone(skeleton.Joints, JointType.HipRight, JointType.KneeRight);
-                        this.DrawBone(skeleton.Joints, JointType.KneeRight, JointType.AnkleRight);
-                        this.DrawBone(skeleton.Joints, JointType.AnkleRight, JointType.FootRight);
-                        */
                         // Now draw the joints
                         FileStream fs = new FileStream("Skeleton.txt", FileMode.Append, FileAccess.Write, FileShare.None);
                         StreamWriter mStreamWriter = new StreamWriter(fs);
@@ -274,29 +165,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                             rightShoulder.Position.X,
                             rightShoulder.Position.Y,
                             rightShoulder.Position.Z);
-                        foreach (Joint j in skeleton.Joints)
-                        {
 
-                            if (j.JointType != JointType.HandLeft)
-                                continue;
-
-                            Color jointColor = Color.LightYellow;
-                            if (j.TrackingState != JointTrackingState.Tracked)
-                            {
-                                jointColor = Color.Yellow;
-                            }
-                            Vector2 posVector2 = this.mapMethod(j.Position);
-                            this.SharedSpriteBatch.Draw(
-                                this.jointTexture,
-                                posVector2,
-                                null,
-                                jointColor,
-                                0.0f,
-                                this.jointOrigin,
-                                1.0f,
-                                SpriteEffects.None,
-                                0.0f);
-                        }
                         
                         mStreamWriter.WriteLine(content);
                         mStreamWriter.Flush();
@@ -304,19 +173,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                         fs.Close();
                         fs.Dispose();
                         break;
-                    case SkeletonTrackingState.PositionOnly:
-                        // If we are only tracking position, draw a blue dot
-                        this.SharedSpriteBatch.Draw(
-                                this.jointTexture,
-                                this.mapMethod(skeleton.Position),
-                                null,
-                                Color.Blue,
-                                0.0f,
-                                this.jointOrigin,
-                                1.0f,
-                                SpriteEffects.None,
-                                0.0f);
-                        break;
+
                 }
             }
 
@@ -326,43 +183,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             base.Draw(gameTime);
         }
 
-        /// <summary>
-        /// This method loads the textures and sets the origin values.
-        /// </summary>
-        protected override void LoadContent()
-        {
-            base.LoadContent();
 
-            this.jointTexture = Game.Content.Load<Texture2D>("Joint");
-            this.jointOrigin = new Vector2(this.jointTexture.Width / 2, this.jointTexture.Height / 2);
 
-            this.boneTexture = Game.Content.Load<Texture2D>("Bone");
-            this.boneOrigin = new Vector2(0.5f, 0.0f);
-        }
-
-        /// <summary>
-        /// This method draws a bone.
-        /// </summary>
-        /// <param name="joints">The joint data.</param>
-        /// <param name="startJoint">The starting joint.</param>
-        /// <param name="endJoint">The ending joint.</param>
-        private void DrawBone(JointCollection joints, JointType startJoint, JointType endJoint)
-        {
-            Vector2 start = this.mapMethod(joints[startJoint].Position);
-            Vector2 end = this.mapMethod(joints[endJoint].Position);
-            Vector2 diff = end - start;
-            Vector2 scale = new Vector2(1.0f, diff.Length() / this.boneTexture.Height);
-
-            float angle = (float)Math.Atan2(diff.Y, diff.X) - MathHelper.PiOver2;
-
-            Color color = Color.LightGreen;
-            if (joints[startJoint].TrackingState != JointTrackingState.Tracked ||
-                joints[endJoint].TrackingState != JointTrackingState.Tracked)
-            {
-                color = Color.Gray;
-            }
-
-            this.SharedSpriteBatch.Draw(this.boneTexture, start, null, color, angle, this.boneOrigin, scale, SpriteEffects.None, 1.0f);
-        }
     }
 }
