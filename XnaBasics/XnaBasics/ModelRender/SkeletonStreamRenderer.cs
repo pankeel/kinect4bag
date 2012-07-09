@@ -73,6 +73,27 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             : base(game)
         {
             this.mapMethod = map;
+
+            this.Chooser.Sensor.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(Sensor_SkeletonFrameReady);
+        }
+
+        public void Sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+        {
+            using (var skeletonFrame = e.OpenSkeletonFrame())
+            {
+                // Reallocate if necessary
+                if (skeletonFrame != null)
+                {
+                    if (null == skeletonData || skeletonData.Length != skeletonFrame.SkeletonArrayLength)
+                    {
+                        skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+                    }
+
+                    skeletonFrame.CopySkeletonDataTo(skeletonData);
+                }
+
+
+            }
         }
 
         /// <summary>
@@ -93,31 +114,31 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         {
             base.Update(gameTime);
 
-            // If the sensor is not found, not running, or not connected, stop now
-            if (null == this.Chooser.Sensor ||
-                false == this.Chooser.Sensor.IsRunning ||
-                KinectStatus.Connected != this.Chooser.Sensor.Status)
-            {
-                return;
-            }
-            // Update Skeleton Frame 
-            using (var skeletonFrame = this.Chooser.Sensor.SkeletonStream.OpenNextFrame(0))
-            {
-                // Sometimes we get a null frame back if no data is ready
-                if (null == skeletonFrame)
-                {
-                    return;
-                }
+            //// If the sensor is not found, not running, or not connected, stop now
+            //if (null == this.Chooser.Sensor ||
+            //    false == this.Chooser.Sensor.IsRunning ||
+            //    KinectStatus.Connected != this.Chooser.Sensor.Status)
+            //{
+            //    return;
+            //}
+            //// Update Skeleton Frame 
+            //using (var skeletonFrame = this.Chooser.Sensor.SkeletonStream.OpenNextFrame(0))
+            //{
+            //    // Sometimes we get a null frame back if no data is ready
+            //    if (null == skeletonFrame)
+            //    {
+            //        return;
+            //    }
 
-                // Reallocate if necessary
-                if (null == skeletonData || skeletonData.Length != skeletonFrame.SkeletonArrayLength)
-                {
-                    skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
-                }
+            //    // Reallocate if necessary
+            //    if (null == skeletonData || skeletonData.Length != skeletonFrame.SkeletonArrayLength)
+            //    {
+            //        skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+            //    }
 
-                skeletonFrame.CopySkeletonDataTo(skeletonData);
+            //    skeletonFrame.CopySkeletonDataTo(skeletonData);
 
-            }
+            //}
         }
 
 
