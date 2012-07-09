@@ -3,17 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Kinect;
+using Microsoft.Xna.Framework;
 
 namespace Microsoft.Samples.Kinect.XnaBasics
 {
-    enum Trend{Neutral, Up, Down, Zoom};
+    /// <summary>
+    /// The delegate method for new certain Gesture Tracked
+    /// if certain gesture is tracked, the call the function 
+    /// OnGesturetracked(this,null)
+    /// </summary>
+    /// <param name="sender">should be "this" value</param>
+    /// <param name="e">should be null at present</param>
+    public delegate void GestureTracked(object sender, EventArgs e);
+    public enum Trend{Neutral, Up, Down, Zoom};
 
-    static class GestureTracker
+    public class GestureTracker
     {
+        public GestureTracked OnGestureTracked;
         public static int counter;
         public static Trend trend;
         public static SkeletonPoint last_hand_r;
         public static double last_ts;
+
+        public GestureTracker(Game game, GestureTracked gestureTrackedFunction)
+        {
+            this.OnGestureTracked = gestureTrackedFunction;
+        }
 
         public static void Reset() {
             GestureTracker.counter = 0;
