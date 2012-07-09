@@ -37,7 +37,7 @@ namespace Microsoft.Samples.Kinect.Avateering
             //ModelViewer.App app = new ModelViewer.App();
             //app.Run();
             //using (XnaBasics.AvateeringXNA game = new XnaBasics.AvateeringXNA())
-            //using (XnaBasics.XnaBasics game = new XnaBasics.XnaBasics())
+            
             //using (JiggleGame.JiggleGame game = new JiggleGame.JiggleGame())
             using (XnaBasics.VirtualTryonGame game = new XnaBasics.VirtualTryonGame())
             {

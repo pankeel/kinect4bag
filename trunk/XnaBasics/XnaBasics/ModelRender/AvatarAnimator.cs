@@ -38,10 +38,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// </summary>
         private bool skeletonDetected;
 
-        /// <summary>
-        /// The 3D avatar mesh.
-        /// </summary>
-        private Model currentModel;
+
 
         /// <summary>
         /// This is the coordinate cross we use to draw the local axes of the model.
@@ -256,7 +253,10 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.boneOrientationFilter.Init(boneOrientationSmoothparameters);
         }
 
-
+        /// <summary>
+        /// The 3D avatar mesh.
+        /// </summary>
+        private Model currentModel;
         /// <summary>
         /// Gets or sets the Avatar 3D model to animate.
         /// </summary>
@@ -479,14 +479,14 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // Draw the actual avatar
             if (this.bSupress)
                 return;
-
+            if (!this.skeletonDetected)
+                return;
 
             if (null != this.Avatar )
             {
                 // Reset the DepthStencilState to avoid the transparent of the 3d model
                 GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-                Matrix view = GameCamera.View * Matrix.CreateTranslation(new Vector3(0.0f,0.0f,-50f)), projection = GameCamera.Projection;
-                //this.Draw(gameTime, Matrix.CreateTranslation(new Vector3(0.0f,0.0f, -50.0f)), view, projection);
+                Matrix view = GameCamera.View, projection = GameCamera.Projection;
                 this.Draw(gameTime, Matrix.Identity, view, projection);
             }
             base.Draw(gameTime);
@@ -500,7 +500,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <param name="projection">The projection matrix.</param>
         public void Draw(GameTime gameTime, Matrix world, Matrix view, Matrix projection)
         {
-            if (this.currentModel == null)
+            if (this.currentModel == null )
                 return;
             // Render the 3D model skinned mesh with Skinned Effect.
             // Mesh Draw Method
@@ -512,7 +512,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 foreach (SkinnedEffect effect in mesh.Effects)
                 {
                     effect.SetBoneTransforms(this.skeletonTransformHelper.SkinTransforms);
-
+                    
                     effect.World = world;
                     effect.View = view;
                     effect.Projection = projection;
@@ -522,11 +522,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                     effect.SpecularColor = new Vector3(0.25f);
                     effect.SpecularPower = 16;
                 }
-                if (GraphicsDevice.DepthStencilState == DepthStencilState.Default)
-                {
-                    mesh.Draw();
-                }
                 
+                mesh.Draw();
             }
             /*GraphicsDevice device = this.Game.GraphicsDevice;
             foreach (ModelMesh mesh in this.currentModel.Meshes)

@@ -124,6 +124,30 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
         /// <summary>
         /// This function configures the mapping between the Nui Skeleton bones/joints and the Avatar bones/joints
+        /// 0 = root node
+        /// 1 = pelvis
+        /// 2 = spine
+        /// 3 = spine1
+        /// 4 = spine2
+        /// 5 = shoulder Center
+        /// 6 = neck
+        /// 7 = head
+        /// 8 = Left clavicle (joint between spine and shoulder)
+        /// 9 = Left upper arm (joint at left shoulder)
+        /// 10 = Left forearm
+        /// 11 = Left hand
+        /// 12 = Right clavicle (joint between spine and shoulder)
+        /// 13 = Right upper arm (joint at left shoulder)
+        /// 14 = Right forearm
+        /// 15 = Right hand
+        /// 16 = Left Thigh
+        /// 17 = Left Knee
+        /// 18 = Left Ankle
+        /// 19 = Left Ball
+        /// 20 = Right Thigh
+        /// 21 = Right Knee
+        /// 22 = Right Ankle
+        /// 23 = Right Ball
         /// </summary>
         public void BuildJointHierarchy()
         {
@@ -530,41 +554,60 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 }
             }
 
-            float screenZValue = 0.0f;
+            float modelZvalue = 0.0f;
             #region Calculate Real Length 
             {
                 
                 if (joints[JointType.HipCenter].TrackingState != JointTrackingState.NotTracked
-                    && joints[JointType.ShoulderCenter].TrackingState != JointTrackingState.NotTracked)
+                    && joints[JointType.ShoulderCenter].TrackingState != JointTrackingState.NotTracked
+                    && joints[JointType.Head].TrackingState != JointTrackingState.NotTracked)
                 {
                     SkeletonPoint hipCenterPoint = joints[JointType.HipCenter].Position, shoulderCenterPoint =  joints[JointType.ShoulderCenter].Position;
+                    SkeletonPoint headPoint = joints[JointType.Head].Position;
+                    hipCenterPoint.Z = headPoint.Z;
+                    shoulderCenterPoint.Z = headPoint.Z;
                     DepthImagePoint hipCenterDepthPoint = Chooser.Sensor.MapSkeletonPointToDepth(hipCenterPoint, Chooser.Sensor.DepthStream.Format),
                         shoulderCenterDepthPoint = Chooser.Sensor.MapSkeletonPointToDepth(shoulderCenterPoint, Chooser.Sensor.DepthStream.Format);
                     float dLengthDepthHipShoulder = Vector2.Distance(new Vector2(hipCenterDepthPoint.X,hipCenterDepthPoint.Y), new Vector2(shoulderCenterDepthPoint.X,shoulderCenterDepthPoint.Y));
-                    float dLengthHipShoulder = Vector2.Distance(new Vector2(hipCenterPoint.X, hipCenterPoint.Y), new Vector2(shoulderCenterPoint.X,shoulderCenterPoint.Y));
-                    float horizonDepth = (hipCenterPoint.Z + shoulderCenterPoint.Z) / 2;
+
+                    float dLengthHipShoulder = Vector3.Distance(new Vector3(hipCenterPoint.X, hipCenterPoint.Y, hipCenterPoint.Z), new Vector3(shoulderCenterPoint.X, shoulderCenterPoint.Y, shoulderCenterPoint.Z));
+                    float dRealZvalue = (hipCenterPoint.Z + shoulderCenterPoint.Z) / 2;
 
                     Vector3 modelEndVec3 = new Vector3();
-                    for (int i=1;i<6;i++)
+                    for (int i=1;i<5;i++)
                     {
                         modelEndVec3 += boneTransforms[i].Translation;
                     }
                     float modelLengthHipShoulder = Vector3.Distance(new Vector3(0,0,0), modelEndVec3);
-                    float fzModel = horizonDepth / dLengthHipShoulder * modelLengthHipShoulder;
-                    float fzScreenModel = fzModel * dLengthDepthHipShoulder / modelLengthHipShoulder;
-                    screenZValue = fzScreenModel;
-                    
+
+                    modelZvalue = dRealZvalue / dLengthHipShoulder * modelLengthHipShoulder;
                 }
 
             }
             #endregion 
             Vector3 certainVector = KinectHelper.SkeletonPointToVector3(transRootVec3);
-            ColorImagePoint colorPtr = Chooser.Sensor.MapSkeletonPointToColor(transRootVec3, Chooser.Sensor.ColorStream.Format);
+            
             DepthImagePoint deptImagePoint = Chooser.Sensor.MapSkeletonPointToDepth(transRootVec3, Chooser.Sensor.DepthStream.Format);
-            certainVector.Z = 0.0f;
-            certainVector.Y = 0.0f;
-            Vector3 test = boneTransforms[0].Translation - certainVector * 40.0f;
-            test.Z = -screenZValue;
+            //
+            // (x,y) in kinect world space is equal ratio 
+            // to the virtual world for the camera space
+            //
+            Vector3 test = new Vector3();
+            if (Chooser.Sensor.DepthStream.Format == DepthImageFormat.Resolution640x480Fps30)
+            {
+                 //modelZvalue
+                float viewportWidth = 2 * (float)Math.Tan(28.5f/180.0f*Math.PI) * modelZvalue,
+                     viewportHeight = 2 * (float)Math.Tan(21.5f/180.0f*Math.PI) * modelZvalue,
+                     ratioX = deptImagePoint.X / 640.0f,
+                     ratioY = deptImagePoint.Y / 480.0f,
+                     posX = viewportWidth / 2 - viewportWidth * ratioX, 
+                     posY = viewportHeight * ratioY - viewportHeight / 2;
+                test.X = posX;
+                test.Y = posY;
+            }
+
+            test.Z = -modelZvalue;
+
             return Matrix.CreateTranslation(test);
         }
 
