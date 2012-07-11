@@ -29,7 +29,6 @@ namespace JiggleGame
         private float nearPlaneDistance = 0.1f;
         private float farPlaneDistance = 10000.0f;
 
-        private MouseState prevMouseState = new MouseState();
 
         /// <summary>
         /// Initializes new camera component.
@@ -122,46 +121,14 @@ namespace JiggleGame
 
         }
 
-
+        /// <summary>
+        /// Handle the mouse position for arcball
+        /// change camera view
+        /// </summary>
+        /// <param name="amountOfMovement"></param>
         private void ProcessInput(float amountOfMovement)
         {
-            Vector3 moveVector = new Vector3();
 
-            KeyboardState keys = Keyboard.GetState();
-            if (keys.IsKeyDown(Keys.D))
-                moveVector.X += amountOfMovement;
-            if (keys.IsKeyDown(Keys.A))
-                moveVector.X -= amountOfMovement;
-            if (keys.IsKeyDown(Keys.S))
-                moveVector.Z += amountOfMovement;
-            if (keys.IsKeyDown(Keys.W))
-                moveVector.Z -= amountOfMovement;
-
-            Matrix cameraRotation = Matrix.CreateRotationX(angles.X) * Matrix.CreateRotationY(angles.Y);
-            position += Vector3.Transform(moveVector, cameraRotation);
-
-            MouseState currentMouseState = Mouse.GetState();
-
-            if (currentMouseState.RightButton == ButtonState.Pressed && prevMouseState.RightButton == ButtonState.Released)
-            {
-                Mouse.SetPosition(widthOver2, heightOver2);
-            }
-            else if (currentMouseState.RightButton == ButtonState.Pressed)
-            {
-                if (currentMouseState.X != widthOver2)
-                    angles.Y -= amountOfMovement / 80.0f * (currentMouseState.X - widthOver2);
-                if (currentMouseState.Y != heightOver2)
-                    angles.X -= amountOfMovement / 80.0f * (currentMouseState.Y - heightOver2);
-
-                if (angles.X > 1.4) angles.X = 1.4f;
-                if (angles.X < -1.4) angles.X = -1.4f;
-                if (angles.Y > Math.PI) angles.Y -= 2 * (float)Math.PI;
-                if (angles.Y < -Math.PI) angles.Y += 2 * (float)Math.PI;
-
-                Mouse.SetPosition(widthOver2, heightOver2);
-            }
-
-            prevMouseState = currentMouseState;
         }
 
         private void UpdateProjection()
@@ -172,7 +139,7 @@ namespace JiggleGame
         private void UpdateView()
         {
             Matrix cameraRotation = Matrix.CreateRotationX(angles.X) * Matrix.CreateRotationY(angles.Y);
-            Vector3 targetPos = position + Vector3.Transform(Vector3.Forward, cameraRotation);
+            Vector3 targetPos = position + Vector3.Transform(Vector3.Backward, cameraRotation);
 
             Vector3 upVector = Vector3.Transform(Vector3.Up, cameraRotation);
 

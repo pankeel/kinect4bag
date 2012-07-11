@@ -354,7 +354,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             for (int i = 0; i < 31; ++i )
             {
-                //drawBox(gBoxPosition[i], gCollRadius[i]);
+                drawBox(gBoxPosition[i], gCollRadius[i]);
             }
         }
 

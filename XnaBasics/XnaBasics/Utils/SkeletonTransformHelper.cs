@@ -327,21 +327,11 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 Quaternion avatarRotation = new Quaternion(kinectRotation.Y, -kinectRotation.X, kinectRotation.Z, kinectRotation.W); // transform from Kinect to avatar coordinate system
 
                 tempMat = Matrix.CreateFromQuaternion(avatarRotation);
-                //if (bone.EndJoint == JointType.ElbowLeft)
-                //{
-                //    tempMat =tempMat*
-                //        Matrix.CreateRotationX(0.2f) *
-                //        Matrix.CreateRotationY(-0.2f) *
-                //        Matrix.CreateRotationZ(-0.7f);
-                //}
-                //Debug according to the keyboard input
-                if (bone.EndJoint == JointType.ElbowLeft && this.isDebug)
+                if (bone.EndJoint == JointType.ElbowLeft)
                 {
-                    tempMat = tempMat
-                        * Matrix.CreateRotationX(this.debugRotationVector.X)
-                        * Matrix.CreateRotationY(this.debugRotationVector.Y)
-                        * Matrix.CreateRotationZ(this.debugRotationVector.Z);
+                    tempMat *= Matrix.CreateFromYawPitchRoll(0.0f, 0.0f, -0.7f);
                 }
+
                 // Set the corresponding matrix in the avatar using the translation table we specified.
                 // Note for the spine and shoulder center rotations, we could also try to spread the angle
                 // over all the Avatar skeleton spine joints, causing a more curved back, rather than apply
@@ -554,8 +544,9 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 }
             }
 
-            float modelZvalue = 0.0f;
+            
             #region Calculate Real Length 
+            float modelZvalue = 0.0f;
             {
                 
                 if (joints[JointType.HipCenter].TrackingState != JointTrackingState.NotTracked
@@ -592,15 +583,19 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             // (x,y) in kinect world space is equal ratio 
             // to the virtual world for the camera space
             //
+            // Vector3 translationVector = new Vector3(deptImagePoint.X, deptImagePoint.Y, 50);
+
+            //return Matrix.CreateTranslation(translationVector);
+
             Vector3 test = new Vector3();
             if (Chooser.Sensor.DepthStream.Format == DepthImageFormat.Resolution640x480Fps30)
             {
-                 //modelZvalue
-                float viewportWidth = 2 * (float)Math.Tan(28.5f/180.0f*Math.PI) * modelZvalue,
-                     viewportHeight = 2 * (float)Math.Tan(21.5f/180.0f*Math.PI) * modelZvalue,
+                //modelZvalue
+                float viewportWidth = 2 * (float)Math.Tan(28.5f / 180.0f * Math.PI) * modelZvalue,
+                     viewportHeight = 2 * (float)Math.Tan(21.5f / 180.0f * Math.PI) * modelZvalue,
                      ratioX = deptImagePoint.X / 640.0f,
                      ratioY = deptImagePoint.Y / 480.0f,
-                     posX = viewportWidth / 2 - viewportWidth * ratioX, 
+                     posX = viewportWidth / 2 - viewportWidth * ratioX,
                      posY = viewportHeight * ratioY - viewportHeight / 2;
                 test.X = posX;
                 test.Y = posY;

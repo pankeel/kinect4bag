@@ -26,7 +26,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         /// <summary>
         /// This is used to adjust the window size.
         /// </summary>
-        private int Width = 1024;
+        private int Width = 800;
         private int Height = 600;
 
         /// <summary>
@@ -51,11 +51,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         private readonly GraphicsDeviceManager graphics;
         private UiLayer UiLayer;
         public bool IsRunningSlowly;
-
-        /// <summary>
-        /// Viewing Camera arc.
-        /// </summary>
-        private float cameraArc = 0;
 
 
         /// <summary>
@@ -117,6 +112,10 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
         private Camera camera;
         /// <summary>
+        /// 
+        /// </summary>
+        private readonly SkeletonStreamRenderer skeletonStream;
+        /// <summary>
         /// Initializes a new instance of the XnaBasics class.
         /// </summary>
         public VirtualTryonGame()
@@ -162,7 +161,10 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.Components.Add(this.chooser);
 
             this.clothRender = new ClothRender(this);
-            this.Components.Add(this.clothRender);
+            //this.Components.Add(this.clothRender);
+
+            this.skeletonStream = new SkeletonStreamRenderer(this,null);
+            this.Components.Add(this.skeletonStream);
         }
 
         /// <summary>
@@ -197,7 +199,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
             // Create the avatar animator
             this.animator = new AvatarAnimator(this);
-            this.Components.Add(this.animator);
+            //this.Components.Add(this.animator);
 
             // Add XUI Component
             _G.Game = this;
@@ -214,7 +216,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             GameControls.Setup(); // initialise mappings
 
             camera = new Camera(this);
-            camera.Position = Vector3.Down * 12;
+            camera.Position = Vector3.Forward * 12;
+            
             this.Services.AddService(typeof(Camera), this.camera);
 
             List<Camera> kinectCamera = new List<Camera>();

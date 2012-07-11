@@ -378,7 +378,7 @@ namespace JiggleGame
         {
             KeyboardState keyState = Keyboard.GetState();
             MouseState mouseState = Mouse.GetState();
-
+            
             if (keyState.IsKeyDown(Keys.Escape))
                 this.Exit();
 
