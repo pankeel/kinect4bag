@@ -214,8 +214,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
                 }
             }
-            SpriteFont spriteFont = Game.Content.Load<SpriteFont>("Segoe16");
-            this.SharedSpriteBatch.DrawString(spriteFont,"SXsss", new Vector2(10,10),Color.Red);
+            //SpriteFont spriteFont = Game.Content.Load<SpriteFont>("Segoe16");
+            //this.SharedSpriteBatch.DrawString(spriteFont,"SXsss", new Vector2(10,10),Color.Red);
 
             this.SharedSpriteBatch.End();
 

@@ -161,7 +161,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.Components.Add(this.chooser);
 
             this.clothRender = new ClothRender(this);
-            //this.Components.Add(this.clothRender);
+            this.Components.Add(this.clothRender);
 
             this.skeletonStream = new SkeletonStreamRenderer(this,null);
             this.Components.Add(this.skeletonStream);
