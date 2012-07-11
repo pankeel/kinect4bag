@@ -73,8 +73,11 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             : base(game)
         {
             this.mapMethod = map;
-
-            this.Chooser.Sensor.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(Sensor_SkeletonFrameReady);
+            if (this.Chooser.LastStatus == KinectStatus.Connected)
+            {
+                this.Chooser.Sensor.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(Sensor_SkeletonFrameReady);
+            }
+            
         }
 
         public void Sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
