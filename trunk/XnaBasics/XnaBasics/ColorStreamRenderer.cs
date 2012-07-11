@@ -15,11 +15,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
     /// </summary>
     public class ColorStreamRenderer : Object2D
     {
-        /// <summary>
-        /// This child responsible for rendering the color stream's skeleton.
-        /// </summary>
-        private readonly SkeletonStreamRenderer skeletonStream;
-        
+       
         /// <summary>
         /// The last frame of color data.
         /// </summary>
@@ -85,7 +81,6 @@ namespace Microsoft.Samples.Kinect.XnaBasics
         public ColorStreamRenderer(Game game)
             : base(game)
         {
-            this.skeletonStream = new SkeletonStreamRenderer(game, this.SkeletonToColorMap);
             this.bagRender = new BagRender(game);
             this.bodyRender = new BodyRender(game);
             this.legRender = new LegRender(game);
@@ -157,8 +152,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             this.bodyRender.Update(gameTime);
             this.legRender.Update(gameTime);
             
-            // Update the skeleton renderer
-            this.skeletonStream.Update(gameTime);
+            
         }
 
         /// <summary>
@@ -192,9 +186,7 @@ namespace Microsoft.Samples.Kinect.XnaBasics
                 this.SharedSpriteBatch.Draw(this.colorTexture, Vector2.Zero, Color.White);
                 this.SharedSpriteBatch.End();
 
-                // Draw the skeleton
-                //this.skeletonStream.Draw(gameTime, cloth);
-                this.skeletonStream.Draw(gameTime);
+                
                 // Draw the bag 3d model To the Render Target Color Stream
                 //this.bagRender.Draw(gameTime);
                 //this.bodyRender.Draw(gameTime);

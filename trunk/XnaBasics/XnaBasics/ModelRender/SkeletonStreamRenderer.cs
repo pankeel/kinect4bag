@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using JiggleGame;
+using System.Text;
 //------------------------------------------------------------------------------
 // <copyright file="SkeletonStreamRenderer.cs" company="Microsoft">
 //     Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -39,30 +40,26 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
         public static Tuple<float, float, float, float> FloorClipPlane;
 
-        /// <summary>
-        /// The origin (center) location of the joint texture.
-        /// </summary>
-        private Vector2 jointOrigin;
 
-        /// <summary>
-        /// The joint texture.
-        /// </summary>
-        private Texture2D jointTexture;
-
-        /// <summary>
-        /// The origin (center) location of the bone texture.
-        /// </summary>
-        private Vector2 boneOrigin;
-        
-        /// <summary>
-        /// The bone texture.
-        /// </summary>
-        private Texture2D boneTexture;
 
         /// <summary>
         /// Whether the rendering has been initialized.
         /// </summary>
         private bool initialized;
+
+        private Skeleton primarySkeleton = null;
+
+        private bool isDrawSkeleton = true;
+
+        protected Camera camera
+        {
+            get
+            {
+                return (Camera)this.Game.Services.GetService(typeof(Camera));
+            }
+        }
+
+        private Model JointModel;
 
         /// <summary>
         /// Initializes a new instance of the SkeletonStreamRenderer class.
@@ -94,6 +91,26 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
                     skeletonFrame.CopySkeletonDataTo(skeletonData);
                 }
+                if (skeletonData != null)
+                {
+                    float zPosition = 3.0f;
+                    primarySkeleton = null;
+                    foreach (Skeleton skeleton in skeletonData)
+                    {
+                        if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
+                        {
+                            if (zPosition > skeleton.Position.Z)
+                            {
+                                zPosition = skeleton.Position.Z;
+                                primarySkeleton = skeleton;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    primarySkeleton = null;
+                }
 
 
             }
@@ -107,58 +124,40 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             base.Initialize();
             this.Size = new Vector2(Game.GraphicsDevice.Viewport.Width, Game.GraphicsDevice.Viewport.Height);
             this.initialized = true;
+            this.JointModel = Game.Content.Load<Model>("box");
         }
 
         /// <summary>
-        /// This method retrieves a new skeleton frame if necessary.
+        /// 
         /// </summary>
-        /// <param name="gameTime">The elapsed game time.</param>
-        public override void Update(GameTime gameTime)
+        /// <param name="transVec"></param>
+        private void DrawJoint(Vector3 transVec)
         {
-            base.Update(gameTime);
+            foreach (ModelMesh mesh in this.JointModel.Meshes)
+            {
+                foreach (BasicEffect effect in mesh.Effects)
+                {
+                    effect.World = Matrix.CreateWorld(transVec, Vector3.Forward, Vector3.Up);
+                    //effect.World = Matrix.Identity;
+                    effect.View = camera.View;
+                    effect.Projection = camera.Projection;
+                    effect.EnableDefaultLighting();
 
-            //// If the sensor is not found, not running, or not connected, stop now
-            //if (null == this.Chooser.Sensor ||
-            //    false == this.Chooser.Sensor.IsRunning ||
-            //    KinectStatus.Connected != this.Chooser.Sensor.Status)
-            //{
-            //    return;
-            //}
-            //// Update Skeleton Frame 
-            //using (var skeletonFrame = this.Chooser.Sensor.SkeletonStream.OpenNextFrame(0))
-            //{
-            //    // Sometimes we get a null frame back if no data is ready
-            //    if (null == skeletonFrame)
-            //    {
-            //        return;
-            //    }
+                    effect.SpecularColor = new Vector3(0.25f);
+                    effect.SpecularPower = 16;
+                }
 
-            //    // Reallocate if necessary
-            //    if (null == skeletonData || skeletonData.Length != skeletonFrame.SkeletonArrayLength)
-            //    {
-            //        skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
-            //    }
-
-            //    skeletonFrame.CopySkeletonDataTo(skeletonData);
-
-            //}
+                mesh.Draw();
+            }
         }
-
-
         /// <summary>
         /// This method draws the skeleton frame data.
         /// </summary>
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Draw(GameTime gameTime)
         {
-            // If the joint texture isn't loaded, load it now
-            if (null == this.jointTexture)
-            {
-                this.LoadContent();
-            }
-
             // If we don't have data, lets leave
-            if (null == skeletonData || null == this.mapMethod)
+            if (null == skeletonData )
             {
                 return;
             }
@@ -166,6 +165,21 @@ namespace Microsoft.Samples.Kinect.XnaBasics
             if (false == this.initialized)
             {
                 this.Initialize();
+            }
+            if (this.primarySkeleton != null)
+            {
+                JointCollection JointCollection = primarySkeleton.Joints;
+                foreach (Joint joint in JointCollection)
+                {
+                    if (joint.TrackingState != JointTrackingState.Tracked)
+                        continue;
+                    DepthImagePoint depthPtr = Chooser.Sensor.MapSkeletonPointToDepth(joint.Position, Chooser.Sensor.DepthStream.Format);
+                    Vector3 transVect = new Vector3(joint.Position.X*10, joint.Position.Y*10, joint.Position.Z*10);
+                    
+                    DrawJoint(transVect);
+                }
+
+                
             }
 
             this.SharedSpriteBatch.Begin();
@@ -200,6 +214,8 @@ namespace Microsoft.Samples.Kinect.XnaBasics
 
                 }
             }
+            SpriteFont spriteFont = Game.Content.Load<SpriteFont>("Segoe16");
+            this.SharedSpriteBatch.DrawString(spriteFont,"SXsss", new Vector2(10,10),Color.Red);
 
             this.SharedSpriteBatch.End();
 
