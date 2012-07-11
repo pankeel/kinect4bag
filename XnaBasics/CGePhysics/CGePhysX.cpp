@@ -151,11 +151,12 @@ void CGePhysX::createCloth( const char* clothName, float clothScale,
     float* clothOffset, float* clothRotate)
 {
     // compute root transform and positions of all the bones
-    PxTransform rootPose(PxVec3(0,0,0), PxQuat::createIdentity());
+    //PxTransform rootPose(PxVec3(0,0,0), PxQuat::createIdentity());
+    PxTransform rootPose(PxVec3(0,0,0), PxQuat(0,1,0,0));
 
     PxClothMeshDesc meshDesc;
     meshDesc.setToDefault();
-    
+
     PxVec3 offset(0.0f);
     if (clothOffset)
         offset = PxVec3(clothOffset[0], clothOffset[1], clothOffset[2]);
@@ -297,8 +298,8 @@ PxCloth* CGePhysX::createClothFromMeshDesc( PxClothMeshDesc &meshDesc, const PxT
 
     // damp global particle velocity to 90% every 0.1 seconds
     //cloth->setDampingCoefficient(0.1f); // damp local particle velocity
-    //cloth->setDampingCoefficient(1.f); // damp local particle velocity
-    cloth->setDampingCoefficient(0.6f); // damp local particle velocity
+    cloth->setDampingCoefficient(1.f); // damp local particle velocity
+    //cloth->setDampingCoefficient(0.6f); // damp local particle velocity
     cloth->setDragCoefficient(0.1f); // transfer frame velocity
 
     // reduce effect of local frame acceleration
